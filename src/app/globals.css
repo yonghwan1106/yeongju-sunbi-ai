@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #fdf8f0;
+  --color-primary-100: #faefd8;
+  --color-primary-200: #f3d9a8;
+  --color-primary-300: #e9be72;
+  --color-primary-400: #dda043;
+  --color-primary-500: #c8822a;
+  --color-primary-600: #a8651e;
+  --color-primary-700: #884e18;
+  --color-primary-800: #6e3d17;
+  --color-primary-900: #5a3215;
+
+  --color-accent-50: #eef0f7;
+  --color-accent-100: #d5daee;
+  --color-accent-200: #aab5dd;
+  --color-accent-300: #7a8fc8;
+  --color-accent-400: #556cb5;
+  --color-accent-500: #3a529e;
+  --color-accent-600: #2d4085;
+  --color-accent-700: #25336b;
+  --color-accent-800: #1e2855;
+  --color-accent-900: #171e40;
+
+  --color-earth-50: #f9f5ef;
+  --color-earth-100: #f0e8d8;
+  --color-earth-200: #e0cfb2;
+  --color-earth-300: #ccb285;
+  --color-earth-400: #b8965e;
+  --color-earth-500: #9e7b47;
+  --color-earth-600: #7e6139;
+  --color-earth-700: #614a2c;
+  --color-earth-800: #4d3b24;
+  --color-earth-900: #3d2f1d;
+
+  --color-cream: #faf6ef;
+  --color-ivory: #f5ede0;
+  --color-parchment: #ede0c8;
+  --color-charcoal: #2c2416;
+  --color-ink: #1a1208;
+
+  --color-background: var(--color-cream);
+  --color-foreground: var(--color-charcoal);
+
+  --font-sans: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+
+  --shadow-warm-sm: 0 1px 3px 0 rgb(139 90 43 / 0.12), 0 1px 2px -1px rgb(139 90 43 / 0.08);
+  --shadow-warm-md: 0 4px 6px -1px rgb(139 90 43 / 0.10), 0 2px 4px -2px rgb(139 90 43 / 0.08);
+  --shadow-warm-lg: 0 10px 15px -3px rgb(139 90 43 / 0.10), 0 4px 6px -4px rgb(139 90 43 / 0.08);
+  --shadow-warm-xl: 0 20px 25px -5px rgb(139 90 43 / 0.12), 0 8px 10px -6px rgb(139 90 43 / 0.08);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-primary-50);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-300);
+  border-radius: 9999px;
+  border: 2px solid var(--color-primary-50);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-500);
+}
+
+/* Selection color */
+::selection {
+  background-color: rgb(200 130 42 / 0.25);
+  color: var(--color-ink);
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Traditional pattern overlay utility */
+.pattern-bg {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8822a' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Ink brush border utility */
+.border-brush {
+  border-image: none;
+  border-bottom: 2px solid;
+  border-color: rgb(200 130 42 / 0.35);
+}
+
+/* Smooth transitions for interactive elements */
+a,
+button {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease,
+    box-shadow 0.2s ease, transform 0.15s ease;
+}
