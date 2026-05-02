@@ -1,4 +1,4 @@
-import { streamText, tool, stepCountIs } from "ai";
+import { streamText, tool, stepCountIs, convertToModelMessages, type UIMessage } from "ai";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
 import { buildAgentSystemPrompt } from "@/lib/rag/heritage-context";
@@ -18,7 +18,7 @@ export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
+    const { messages }: { messages: UIMessage[] } = await req.json();
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return new Response(JSON.stringify({ error: "messages array is required" }), {
@@ -28,11 +28,12 @@ export async function POST(req: Request) {
     }
 
     const systemPrompt = buildAgentSystemPrompt();
+    const modelMessages = await convertToModelMessages(messages);
 
     const result = streamText({
       model: minimax("MiniMax-M2"),
       system: systemPrompt,
-      messages,
+      messages: modelMessages,
       maxOutputTokens: 2048,
       temperature: 0.7,
       stopWhen: stepCountIs(5),
