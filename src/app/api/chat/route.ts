@@ -5,6 +5,9 @@ import { buildAgentSystemPrompt } from "@/lib/rag/heritage-context";
 import { heritageData, getHeritageById } from "@/data/heritage";
 import { getYeongjuWeather } from "@/lib/api/weather-api";
 import { searchTourSpots } from "@/lib/api/tour-api";
+import { searchHeritage as fetchCHA } from "@/lib/api/heritage-api";
+import { searchYeongjuRelics } from "@/lib/api/museum-api";
+import { searchEncykorea } from "@/lib/api/encykorea-api";
 
 const minimax = createAnthropic({
   apiKey: process.env.MINIMAX_API_KEY,
@@ -78,12 +81,30 @@ export async function POST(req: Request) {
             }
 
             if (results.length === 0) {
-              return { found: false, message: "해당 조건에 맞는 문화유산을 찾지 못했습니다.", data: [] };
+              return { found: false, message: "해당 조건에 맞는 문화유산을 찾지 못했습니다.", data: [], externalSources: [] };
+            }
+
+            // 문화재청 API 실호출: 결과 1건이고 한국어 문화재명이 포함된 경우 보강
+            let chaEnrichment: { ccbaKdcdNm?: string; ccbaCpno?: string } = {};
+            const hasKoreanHeritageName = /[가-힣]{2,}/.test(query);
+            if (results.length === 1 && hasKoreanHeritageName) {
+              try {
+                const chaResults = await fetchCHA({ ccbaCtcd: "37", ccbaMnm1: query });
+                if (chaResults && chaResults.length > 0) {
+                  chaEnrichment = {
+                    ccbaKdcdNm: chaResults[0].ccbaKdcd,
+                    ccbaCpno: chaResults[0].ccbaCpno,
+                  };
+                }
+              } catch {
+                // API 실패 시 정적 데이터만 반환 (안전 폴백)
+              }
             }
 
             return {
               found: true,
               count: results.length,
+              externalSources: ["문화재청 국가문화유산포털"],
               data: results.map((h) => ({
                 id: h.id,
                 name: h.name,
@@ -98,6 +119,7 @@ export async function POST(req: Request) {
                 fee: h.visitInfo.fee,
                 closedDays: h.visitInfo.closedDays,
                 tags: h.tags,
+                ...(results.length === 1 ? chaEnrichment : {}),
               })),
             };
           },
@@ -275,6 +297,75 @@ export async function POST(req: Request) {
                 relatedHeritage: heritage?.name || "영주 문화유산",
               },
               tip: "정답을 맞추면 영주 문화유산에 대한 이해가 더 깊어집니다!",
+            };
+          },
+        }),
+
+        searchMuseum: tool({
+          description:
+            "국립중앙박물관 e-Museum에서 영주 관련 유물·소장품을 검색합니다. 부석사 불상, 안향 초상, 의상대사 진영 등 영주와 연관된 박물관 소장 유물 정보를 조회할 때 사용합니다.",
+          inputSchema: z.object({
+            keyword: z
+              .string()
+              .optional()
+              .describe("검색 키워드 (예: 부석사, 안향, 불상, 초상화)"),
+          }),
+          execute: async ({ keyword }) => {
+            const result = await searchYeongjuRelics(keyword);
+            if (!result.found) {
+              return {
+                found: false,
+                message: "해당 키워드와 관련된 영주 유물을 찾지 못했습니다.",
+                data: [],
+              };
+            }
+            return {
+              found: true,
+              count: result.count,
+              source: result.source,
+              data: result.data.map((r) => ({
+                id: r.id,
+                name: r.name,
+                nameEn: r.nameEn,
+                category: r.category,
+                period: r.period,
+                material: r.material,
+                description: r.description,
+                location: r.location,
+                relatedPlace: r.relatedPlace,
+              })),
+            };
+          },
+        }),
+
+        searchEncyclopedia: tool({
+          description:
+            "한국학중앙연구원 한국민족문화대백과사전에서 영주 관련 인물·역사·풍속·유래를 검색합니다. 퇴계 이황, 안향, 의상대사, 선묘 전설, 선비정신, 죽령 옛길 등 역사·문화적 배경 정보가 필요할 때 사용합니다.",
+          inputSchema: z.object({
+            keyword: z.string().describe("검색 키워드 (예: 퇴계, 안향, 선비정신, 죽령, 의상대사)"),
+          }),
+          execute: async ({ keyword }) => {
+            const result = searchEncykorea(keyword);
+            if (!result.found) {
+              return {
+                found: false,
+                message: "해당 키워드와 관련된 백과 항목을 찾지 못했습니다.",
+                data: [],
+              };
+            }
+            return {
+              found: true,
+              count: result.count,
+              source: result.source,
+              data: result.data.map((e) => ({
+                id: e.id,
+                title: e.title,
+                category: e.category,
+                era: e.era,
+                summary: e.summary,
+                content: e.content,
+                relatedKeywords: e.relatedKeywords,
+              })),
             };
           },
         }),

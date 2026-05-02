@@ -12,11 +12,12 @@ const DATA_SOURCES = [
   "문화재청 국가문화유산포털",
   "한국관광공사 Tour API",
   "기상청 단기예보 API",
-  "유네스코 세계유산 자료",
+  "국립중앙박물관 e-Museum",
+  "한국민족문화대백과사전",
 ];
 
 // Tool names defined in route.ts
-const TOOL_NAMES = ["searchHeritage", "getWeather", "searchTourSpots", "planTourCourse", "generateQuiz"];
+const TOOL_NAMES = ["searchHeritage", "getWeather", "searchTourSpots", "planTourCourse", "generateQuiz", "searchMuseum", "searchEncyclopedia"];
 
 export default function ChatPage() {
   const { messages, sendMessage, status } = useChat({
@@ -120,6 +121,8 @@ export default function ChatPage() {
                   { icon: "🌤️", label: "실시간 날씨", desc: "기상청 API 연동" },
                   { icon: "🍽️", label: "맛집·숙박 탐색", desc: "관광공사 API 연동" },
                   { icon: "🗺️", label: "맞춤 코스 생성", desc: "다단계 자율 추론" },
+                  { icon: "🏺", label: "유물 검색", desc: "국립중앙박물관 연동" },
+                  { icon: "📖", label: "백과 검색", desc: "한국학중앙연구원 연동" },
                 ].map((cap) => (
                   <div
                     key={cap.label}
