@@ -1,5 +1,5 @@
 import { streamText, tool, stepCountIs, convertToModelMessages, type UIMessage } from "ai";
-import { createAnthropic } from "@ai-sdk/anthropic";
+import { anthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
 import { buildAgentSystemPrompt } from "@/lib/rag/heritage-context";
 import { heritageData, getHeritageById } from "@/data/heritage";
@@ -9,10 +9,6 @@ import { searchHeritage as fetchCHA } from "@/lib/api/heritage-api";
 import { searchYeongjuRelics } from "@/lib/api/museum-api";
 import { searchEncykorea } from "@/lib/api/encykorea-api";
 
-const minimax = createAnthropic({
-  apiKey: process.env.MINIMAX_API_KEY,
-  baseURL: "https://api.minimax.io/anthropic/v1",
-});
 
 export const runtime = "nodejs";
 
@@ -31,10 +27,10 @@ export async function POST(req: Request) {
     const modelMessages = await convertToModelMessages(messages);
 
     const result = streamText({
-      model: minimax("MiniMax-M2"),
+      model: anthropic("claude-haiku-4-5-20251001"),
       system: systemPrompt,
       messages: modelMessages,
-      maxOutputTokens: 2048,
+      maxOutputTokens: 2000,
       temperature: 0.7,
       stopWhen: stepCountIs(5),
       tools: {
