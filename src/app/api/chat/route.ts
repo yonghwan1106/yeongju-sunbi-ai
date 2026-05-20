@@ -3,11 +3,13 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
 import { buildAgentSystemPrompt } from "@/lib/rag/heritage-context";
 import { heritageData, getHeritageById } from "@/data/heritage";
+import { findCuratedCourse } from "@/data/courses";
 import { getYeongjuWeather } from "@/lib/api/weather-api";
 import { searchTourSpots } from "@/lib/api/tour-api";
 import { searchHeritage as fetchCHA } from "@/lib/api/heritage-api";
 import { searchYeongjuRelics } from "@/lib/api/museum-api";
 import { searchEncykorea } from "@/lib/api/encykorea-api";
+import { findCanonicalAnswer } from "@/data/canonical-qa";
 
 
 export const runtime = "nodejs";
@@ -21,6 +23,55 @@ export async function POST(req: Request) {
         status: 400,
         headers: { "Content-Type": "application/json" },
       });
+    }
+
+    // --- Canonical Q&A cache: instant response for 5 demo-critical questions ---
+    const lastUserMessage = [...messages].reverse().find((m) => m.role === "user");
+    const lastUserText = lastUserMessage
+      ? lastUserMessage.parts
+          .filter((p): p is { type: "text"; text: string } => p.type === "text")
+          .map((p) => p.text)
+          .join(" ")
+      : "";
+
+    const canonical = findCanonicalAnswer(lastUserText);
+    if (canonical) {
+      const citationText =
+        "\n\n**출처:** " +
+        canonical.citations.map((c) => (c.url ? `[${c.name}](${c.url})` : c.name)).join(" · ");
+      const fullAnswer = canonical.answer + citationText;
+      const encoder = new TextEncoder();
+      const chunkSize = 80;
+      const stream = new ReadableStream({
+        async start(controller) {
+          for (let i = 0; i < fullAnswer.length; i += chunkSize) {
+            const chunk = fullAnswer.slice(i, i + chunkSize);
+            // AI SDK UIMessage stream format: text delta
+            controller.enqueue(
+              encoder.encode(`0:${JSON.stringify(chunk)}\n`)
+            );
+            await new Promise((resolve) => setTimeout(resolve, 20));
+          }
+          // finish reason
+          controller.enqueue(encoder.encode(`d:{"finishReason":"stop","usage":{"promptTokens":0,"completionTokens":0}}\n`));
+          controller.close();
+        },
+      });
+      return new Response(stream, {
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+          "x-vercel-ai-data-stream": "v1",
+        },
+      });
+    }
+    // --- End canonical cache ---
+
+    // --- API key guard: fail fast before any Anthropic SDK call ---
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return new Response(
+        JSON.stringify({ error: "ANTHROPIC_API_KEY가 설정되지 않았습니다. Vercel 환경변수를 확인하세요." }),
+        { status: 500, headers: { "Content-Type": "application/json; charset=utf-8" } }
+      );
     }
 
     const systemPrompt = buildAgentSystemPrompt();
@@ -213,6 +264,39 @@ export async function POST(req: Request) {
             weather: z.string().optional().describe("현재 날씨 상황 (getWeather 결과 참고)"),
           }),
           execute: async ({ duration, preference, weather }) => {
+            // Curated-first: prefer hand-picked course when duration/theme matches
+            const curated = findCuratedCourse({ duration, theme: preference });
+            if (curated) {
+              let weatherNote = "";
+              if (weather) {
+                if (weather.includes("비") || weather.includes("눈"))
+                  weatherNote = "비/눈 예보가 있으니 실내 명소(박물관·서원·향교) 위주로 동선을 조정하세요.";
+                else if (weather.includes("맑음"))
+                  weatherNote = "날씨가 좋아 야외 산책·외나무다리·소백산 트레킹에 적합합니다!";
+              }
+              return {
+                curated: true,
+                source: "영주선비AI 큐레이션 코스",
+                duration: curated.duration,
+                theme: curated.theme,
+                course: {
+                  id: curated.id,
+                  name: curated.name,
+                  description: curated.description,
+                  spots: curated.spots.map((s) => ({
+                    name: s.name,
+                    address: s.location.address,
+                    description: s.description,
+                  })),
+                  highlights: curated.highlights ?? [],
+                  season: curated.season ?? [],
+                  transport: curated.transport ?? "",
+                },
+                weatherNote,
+                hint: "/courses 페이지에서 모든 큐레이션 코스를 확인할 수 있습니다.",
+              };
+            }
+
             const courses: Record<string, { name: string; spots: string[]; tip: string }[]> = {
               반나절: [
                 { name: "선비문화 핵심 코스", spots: ["소수서원", "선비촌", "소수서원 주변 카페"], tip: "소수서원과 선비촌은 도보 5분 거리입니다." },

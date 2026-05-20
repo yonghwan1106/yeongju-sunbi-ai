@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Bot, User } from "lucide-react";
+import { Bot, User, Copy, Check } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -18,6 +19,14 @@ function formatTime(date?: Date): string {
 
 export default function ChatMessage({ role, content, timestamp }: ChatMessageProps) {
   const isUser = role === "user";
+  const [copied, setCopied] = useState(false);
+
+  function handleCopy() {
+    navigator.clipboard.writeText(content).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    }).catch(() => {/* ignore */});
+  }
 
   return (
     <motion.div
@@ -41,16 +50,27 @@ export default function ChatMessage({ role, content, timestamp }: ChatMessagePro
         )}
 
         <div
-          className={`rounded-2xl px-4 py-3 text-sm leading-relaxed
+          className={`relative rounded-2xl px-4 py-3 text-sm leading-relaxed
             ${isUser
               ? "bg-amber-600 text-white rounded-tr-sm"
               : "bg-stone-100 text-stone-800 rounded-tl-sm border border-stone-200"
             }`}
         >
+          {!isUser && (
+            <button
+              type="button"
+              onClick={handleCopy}
+              aria-label="응답 복사"
+              className="absolute top-2 right-2 p-1 rounded-md text-stone-400 hover:text-stone-600
+                hover:bg-stone-200 transition-colors"
+            >
+              {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
+            </button>
+          )}
           {isUser ? (
             <p className="whitespace-pre-wrap">{content}</p>
           ) : (
-            <div className="prose-chat">
+            <div className="prose-chat pr-5">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{

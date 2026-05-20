@@ -3,10 +3,12 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useRef, useEffect, useState } from "react";
-import { Send, Bot, Loader2, Database, Cpu } from "lucide-react";
+import { Send, Bot, Loader2, Database, Cpu, Trash2 } from "lucide-react";
 import ChatMessage from "@/components/chat/ChatMessage";
 import SuggestedQuestions from "@/components/chat/SuggestedQuestions";
 import ToolInvocationDisplay from "@/components/chat/ToolInvocationDisplay";
+import ShareButton from "@/components/chat/ShareButton";
+import { loadMessages, saveMessages, clearMessages } from "@/lib/utils/chat-storage";
 
 const DATA_SOURCES = [
   "문화재청 국가문화유산포털",
@@ -20,7 +22,7 @@ const DATA_SOURCES = [
 const TOOL_NAMES = ["searchHeritage", "getWeather", "searchTourSpots", "planTourCourse", "generateQuiz", "searchMuseum", "searchEncyclopedia"];
 
 export default function ChatPage() {
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, status, setMessages } = useChat({
     transport: new DefaultChatTransport({ api: "/api/chat" }),
   });
   const [input, setInput] = useState("");
@@ -30,12 +32,24 @@ export default function ChatPage() {
   const mainRef = useRef<HTMLElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // Load persisted messages on client mount (skip SSR)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = loadMessages();
+    if (saved && saved.length > 0) {
+      setMessages(saved);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Auto-scroll to latest message (only when messages exist — prevents window scroll on initial mount)
   useEffect(() => {
     if (messages.length === 0) return;
     const main = mainRef.current;
     if (!main) return;
     main.scrollTo({ top: main.scrollHeight, behavior: "smooth" });
+    // Persist to localStorage on every messages change
+    saveMessages(messages);
   }, [messages]);
 
   // Auto-resize textarea
@@ -58,6 +72,11 @@ export default function ChatPage() {
     sendMessage({ text: question });
   }
 
+  function handleClearChat() {
+    clearMessages();
+    setMessages([]);
+  }
+
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -73,7 +92,7 @@ export default function ChatPage() {
   const showWelcome = messages.length === 0;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] bg-stone-50">
+    <div className="flex flex-col h-[calc(100vh-8rem)] md:h-[calc(100vh-4rem)] bg-stone-50">
       {/* Header */}
       <header className="flex-shrink-0 bg-white border-b border-stone-200 px-4 py-3">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
@@ -86,15 +105,38 @@ export default function ChatPage() {
             </h1>
             <p className="text-xs text-stone-500">영주선비AI · Tool-Use AI Agent</p>
           </div>
-          <div className="ml-auto flex items-center gap-1.5 text-xs text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            에이전트 활성
+          <div className="ml-auto flex items-center gap-2">
+            <ShareButton />
+            {messages.length > 0 && (
+              <button
+                type="button"
+                onClick={handleClearChat}
+                aria-label="대화 초기화"
+                className="flex items-center gap-1 text-xs text-stone-400 hover:text-red-500
+                  hover:bg-red-50 border border-transparent hover:border-red-200
+                  rounded-lg px-2 py-1.5 transition-colors"
+              >
+                <Trash2 size={13} />
+                초기화
+              </button>
+            )}
+            <div className="flex items-center gap-1.5 text-xs text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              에이전트 활성
+            </div>
           </div>
         </div>
       </header>
 
       {/* Messages */}
-      <main ref={mainRef} className="flex-1 overflow-y-auto min-h-0">
+      <main
+        ref={mainRef}
+        className="flex-1 overflow-y-auto min-h-0"
+        role="log"
+        aria-live="polite"
+        aria-relevant="additions"
+        aria-label="대화 내용"
+      >
         <div className="max-w-2xl mx-auto px-4 py-6 space-y-5">
           {showWelcome ? (
             <div className="space-y-6">
@@ -248,15 +290,16 @@ export default function ChatPage() {
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
+            aria-label={isLoading ? "전송 중" : "메시지 전송"}
             className="flex-shrink-0 w-10 h-10 rounded-xl bg-amber-600 text-white
               flex items-center justify-center
               hover:bg-amber-700 disabled:opacity-40 disabled:cursor-not-allowed
               transition-colors active:scale-95"
           >
             {isLoading ? (
-              <Loader2 size={16} className="animate-spin" />
+              <Loader2 size={16} className="animate-spin" aria-hidden="true" />
             ) : (
-              <Send size={16} />
+              <Send size={16} aria-hidden="true" />
             )}
           </button>
         </form>
