@@ -84,12 +84,23 @@ export default function HomePage() {
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24">
           <div className="max-w-3xl">
-            {/* Badge */}
+            {/* Contest Badge */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--color-primary-200)] bg-[var(--color-primary-50)] px-4 py-1.5 text-xs font-semibold text-[var(--color-primary-700)] mb-6"
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--color-accent-300)] bg-gradient-to-r from-[var(--color-accent-50)] to-[var(--color-primary-50)] px-4 py-1.5 text-xs font-bold text-[var(--color-accent-700)] mb-3 shadow-[var(--shadow-warm-sm)]"
+            >
+              <Award size={13} className="text-[var(--color-accent-600)]" />
+              2026 영주시 공공데이터 활용 창업경진대회 출품작
+            </motion.div>
+
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.05 }}
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--color-primary-200)] bg-[var(--color-primary-50)] px-4 py-1.5 text-xs font-semibold text-[var(--color-primary-700)] mb-6 ml-0 sm:ml-2"
             >
               <Globe size={13} />
               유네스코 세계유산 2개 보유 도시
