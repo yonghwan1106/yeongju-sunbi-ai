@@ -85,14 +85,16 @@ export default function QuizCard({
             className={getOptionStyle(index)}
             onClick={() => !showAnswer && onSelect(index)}
             disabled={showAnswer}
+            aria-label={option}
+            aria-pressed={selectedIndex === index}
           >
-            <span className={getLabelStyle(index)}>{optionLabels[index]}</span>
+            <span className={getLabelStyle(index)} aria-hidden="true">{optionLabels[index]}</span>
             <span className="flex-1">{option}</span>
             {showAnswer && index === question.correctIndex && (
-              <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0" />
+              <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0" aria-hidden="true" />
             )}
             {showAnswer && selectedIndex === index && index !== question.correctIndex && (
-              <XCircle className="w-5 h-5 text-red-500 shrink-0" />
+              <XCircle className="w-5 h-5 text-red-500 shrink-0" aria-hidden="true" />
             )}
           </button>
         ))}
@@ -106,6 +108,8 @@ export default function QuizCard({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
+            role="status"
+            aria-live="polite"
             className={`rounded-xl p-4 border flex gap-3 ${
               selectedIndex === question.correctIndex
                 ? "bg-emerald-50 border-emerald-200"
@@ -116,6 +120,7 @@ export default function QuizCard({
               className={`w-5 h-5 shrink-0 mt-0.5 ${
                 selectedIndex === question.correctIndex ? "text-emerald-600" : "text-amber-600"
               }`}
+              aria-hidden="true"
             />
             <div>
               <p

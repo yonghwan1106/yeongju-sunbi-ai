@@ -91,7 +91,7 @@ export default function HomePage() {
               transition={{ duration: 0.5 }}
               className="inline-flex items-center gap-2 rounded-full border border-[var(--color-accent-300)] bg-gradient-to-r from-[var(--color-accent-50)] to-[var(--color-primary-50)] px-4 py-1.5 text-xs font-bold text-[var(--color-accent-700)] mb-3 shadow-[var(--shadow-warm-sm)]"
             >
-              <Award size={13} className="text-[var(--color-accent-600)]" />
+              <Award size={13} className="text-[var(--color-accent-600)]" aria-hidden="true" />
               2026 영주시 공공데이터 활용 창업경진대회 출품작
             </motion.div>
 
@@ -102,7 +102,7 @@ export default function HomePage() {
               transition={{ duration: 0.5, delay: 0.05 }}
               className="inline-flex items-center gap-2 rounded-full border border-[var(--color-primary-200)] bg-[var(--color-primary-50)] px-4 py-1.5 text-xs font-semibold text-[var(--color-primary-700)] mb-6 ml-0 sm:ml-2"
             >
-              <Globe size={13} />
+              <Globe size={13} aria-hidden="true" />
               유네스코 세계유산 2개 보유 도시
               <span className="ml-1 rounded-full bg-[var(--color-primary-500)] px-2 py-0.5 text-white text-[10px]">
                 영주

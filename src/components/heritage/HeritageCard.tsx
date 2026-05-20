@@ -118,7 +118,7 @@ export default function HeritageCard({ heritage }: HeritageCardProps) {
               key={tag}
               className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--color-primary-50)] text-[var(--color-primary-700)] text-xs rounded-full"
             >
-              <Tag className="w-2.5 h-2.5" />
+              <Tag className="w-2.5 h-2.5" aria-hidden="true" />
               {tag}
             </span>
           ))}
@@ -126,7 +126,7 @@ export default function HeritageCard({ heritage }: HeritageCardProps) {
 
         {/* Location */}
         <div className="flex items-center gap-1 mt-1 text-xs text-[var(--color-charcoal)] opacity-60">
-          <MapPin className="w-3 h-3 shrink-0" />
+          <MapPin className="w-3 h-3 shrink-0" aria-hidden="true" />
           <span className="truncate">{heritage.location.address}</span>
         </div>
       </div>

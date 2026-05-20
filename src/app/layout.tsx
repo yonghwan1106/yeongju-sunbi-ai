@@ -3,6 +3,7 @@ import { Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import BottomNav from "@/components/layout/BottomNav";
 
 const notoSansKr = Noto_Sans_KR({
   subsets: ["latin"],
@@ -13,6 +14,7 @@ const notoSansKr = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://yeongju-sunbi-ai.vercel.app"),
   title: "영주선비AI - AI 문화유산 해설 플랫폼",
   description:
     "유네스코 세계유산 부석사·소수서원을 비롯한 영주의 천년 문화유산을 AI가 생생하게 해설해드립니다. 공공데이터 기반 대화형 AI 해설사, 선비문화 퀴즈, 디지털 스탬프투어를 만나보세요.",
@@ -41,7 +43,8 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col antialiased">
         <Header />
-        <div className="flex-1">{children}</div>
+        <div className="flex-1 pb-16 md:pb-0">{children}</div>
+        <BottomNav />
         <Footer />
       </body>
     </html>
