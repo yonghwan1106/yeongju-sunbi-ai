@@ -27,11 +27,15 @@ export default function ChatPage() {
   const isLoading = status === "submitted" || status === "streaming";
 
   const bottomRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Auto-scroll to latest message
+  // Auto-scroll to latest message (only when messages exist — prevents window scroll on initial mount)
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messages.length === 0) return;
+    const main = mainRef.current;
+    if (!main) return;
+    main.scrollTo({ top: main.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
   // Auto-resize textarea
@@ -90,7 +94,7 @@ export default function ChatPage() {
       </header>
 
       {/* Messages */}
-      <main className="flex-1 overflow-y-auto">
+      <main ref={mainRef} className="flex-1 overflow-y-auto min-h-0">
         <div className="max-w-2xl mx-auto px-4 py-6 space-y-5">
           {showWelcome ? (
             <div className="space-y-6">
