@@ -12,8 +12,9 @@ const publicDataSources = [
 const footerLinks = [
   { href: "/heritage", label: "문화유산" },
   { href: "/chat", label: "AI 해설사" },
+  { href: "/data-sources", label: "공공데이터" },
   { href: "/quiz", label: "선비 퀴즈" },
-  { href: "/stamp", label: "스탬프투어" },
+  { href: "/stamp-tour", label: "스탬프투어" },
 ];
 
 export default function Footer() {
@@ -30,6 +31,7 @@ export default function Footer() {
                   href={src.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={`${src.name} (새 창에서 열기)`}
                   className="underline underline-offset-2 hover:text-[var(--color-primary-300)] transition-colors"
                 >
                   {src.name}
@@ -90,10 +92,11 @@ export default function Footer() {
                     href={src.url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`${src.name} (새 창에서 열기)`}
                     className="inline-flex items-center gap-1 text-sm text-[var(--color-earth-300)] hover:text-[var(--color-primary-300)] transition-colors"
                   >
                     {src.name}
-                    <ExternalLink size={11} className="opacity-60" />
+                    <ExternalLink size={11} className="opacity-60" aria-hidden="true" />
                   </a>
                 </li>
               ))}
@@ -109,6 +112,7 @@ export default function Footer() {
               href="https://www.data.go.kr"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="공공데이터포털 data.go.kr (새 창에서 열기)"
               className="underline hover:text-[var(--color-primary-300)] transition-colors"
             >
               data.go.kr
