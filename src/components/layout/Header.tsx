@@ -9,6 +9,7 @@ import { Menu, X, Landmark } from "lucide-react";
 const navLinks = [
   { href: "/", label: "홈" },
   { href: "/heritage", label: "문화유산" },
+  { href: "/courses", label: "추천 코스" },
   { href: "/chat", label: "AI 해설사" },
   { href: "/quiz", label: "퀴즈" },
   { href: "/stamp-tour", label: "스탬프투어" },
