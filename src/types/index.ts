@@ -21,6 +21,8 @@ export interface Heritage {
   };
   tags: string[];
   stampId?: string;
+  year?: number;
+  relatedFigures?: string[];
 }
 
 // 퀴즈 관련 타입
@@ -137,4 +139,7 @@ export interface CourseRecommendation {
   spots: Heritage[];
   theme: "역사탐방" | "건축감상" | "선비체험" | "자연힐링" | "가족나들이";
   description: string;
+  season?: string[];
+  highlights?: string[];
+  transport?: string;
 }

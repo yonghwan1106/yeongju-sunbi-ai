@@ -29,6 +29,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${heritage.name} - 영주선비AI`,
     description: heritage.description,
+    openGraph: {
+      title: `${heritage.name} | 영주선비AI`,
+      description: heritage.description,
+      type: "article",
+      images: [
+        {
+          url: `/og/${heritage.id}.jpg`,
+          width: 1200,
+          height: 630,
+          alt: heritage.name,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${heritage.name} | 영주선비AI`,
+      description: heritage.description,
+      images: [`/og/${heritage.id}.jpg`],
+    },
   };
 }
 

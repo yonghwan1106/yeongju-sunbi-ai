@@ -2,10 +2,14 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Landmark, Search } from "lucide-react";
+import { Landmark, Search, GitBranch, Network } from "lucide-react";
 import { heritageData } from "@/data/heritage";
 import { Heritage } from "@/types";
 import HeritageCard from "@/components/heritage/HeritageCard";
+import LineageTimeline from "@/components/heritage/LineageTimeline";
+import SunbiNetworkGraph from "@/components/heritage/SunbiNetworkGraph";
+
+type LineageView = "timeline" | "network";
 
 type FilterCategory = "전체" | Heritage["category"];
 
@@ -20,6 +24,8 @@ const FILTER_TABS: { label: string; value: FilterCategory }[] = [
 export default function HeritagePage() {
   const [activeFilter, setActiveFilter] = useState<FilterCategory>("전체");
   const [searchQuery, setSearchQuery] = useState("");
+  const [lineageView, setLineageView] = useState<LineageView>("timeline");
+  const [selectedFigureId, setSelectedFigureId] = useState<string | null>(null);
 
   const filtered = heritageData.filter((h) => {
     const matchesFilter =
@@ -92,6 +98,71 @@ export default function HeritagePage() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* 선비 계보 — 타임라인 / 네트워크 */}
+      <section className="max-w-5xl mx-auto px-4 pt-8 sm:pt-12">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3"
+        >
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-[var(--color-ink)]">
+              영주 선비 계보 — 인물과 유산의 천 년
+            </h2>
+            <p className="mt-1 text-sm text-[var(--color-charcoal)] opacity-70">
+              부석사 창건(676)부터 풍기인삼박물관(2008)까지, 영주 학맥을 빚어낸
+              인물과 유산의 연결을 한눈에 살펴보세요.
+            </p>
+          </div>
+
+          <div
+            role="tablist"
+            aria-label="선비 계보 보기 방식"
+            className="inline-flex bg-[var(--color-ivory)] border border-[var(--color-parchment)] rounded-full p-1 self-start sm:self-end shrink-0"
+          >
+            <button
+              role="tab"
+              aria-selected={lineageView === "timeline"}
+              onClick={() => setLineageView("timeline")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                lineageView === "timeline"
+                  ? "bg-[var(--color-primary-600)] text-white shadow-sm"
+                  : "text-[var(--color-charcoal)] hover:bg-[var(--color-primary-100)]"
+              }`}
+            >
+              <GitBranch className="w-3.5 h-3.5" />
+              타임라인 보기
+            </button>
+            <button
+              role="tab"
+              aria-selected={lineageView === "network"}
+              onClick={() => setLineageView("network")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                lineageView === "network"
+                  ? "bg-[var(--color-primary-600)] text-white shadow-sm"
+                  : "text-[var(--color-charcoal)] hover:bg-[var(--color-primary-100)]"
+              }`}
+            >
+              <Network className="w-3.5 h-3.5" />
+              네트워크 보기
+            </button>
+          </div>
+        </motion.div>
+
+        {lineageView === "timeline" ? (
+          <LineageTimeline
+            selectedFigureId={selectedFigureId}
+            onSelectFigure={setSelectedFigureId}
+          />
+        ) : (
+          <SunbiNetworkGraph
+            selectedFigureId={selectedFigureId}
+            onSelectFigure={setSelectedFigureId}
+          />
+        )}
       </section>
 
       {/* Grid */}
