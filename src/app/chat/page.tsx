@@ -8,7 +8,6 @@ import ChatMessage from "@/components/chat/ChatMessage";
 import SuggestedQuestions from "@/components/chat/SuggestedQuestions";
 import ToolInvocationDisplay from "@/components/chat/ToolInvocationDisplay";
 import ShareButton from "@/components/chat/ShareButton";
-import { loadMessages, saveMessages, clearMessages } from "@/lib/utils/chat-storage";
 
 const DATA_SOURCES = [
   "문화재청 국가문화유산포털",
@@ -32,24 +31,12 @@ export default function ChatPage() {
   const mainRef = useRef<HTMLElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Load persisted messages on client mount (skip SSR)
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const saved = loadMessages();
-    if (saved && saved.length > 0) {
-      setMessages(saved);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   // Auto-scroll to latest message (only when messages exist — prevents window scroll on initial mount)
   useEffect(() => {
     if (messages.length === 0) return;
     const main = mainRef.current;
     if (!main) return;
     main.scrollTo({ top: main.scrollHeight, behavior: "smooth" });
-    // Persist to localStorage on every messages change
-    saveMessages(messages);
   }, [messages]);
 
   // Auto-resize textarea
@@ -73,7 +60,6 @@ export default function ChatPage() {
   }
 
   function handleClearChat() {
-    clearMessages();
     setMessages([]);
   }
 
