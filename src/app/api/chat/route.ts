@@ -13,6 +13,8 @@ import { findCanonicalAnswer } from "@/data/canonical-qa";
 
 
 export const runtime = "nodejs";
+// 서울 리전 고정: cha.go.kr(국가유산청)가 해외 클라우드 IP를 차단하므로 한국 리전에서 실행
+export const preferredRegion = "icn1";
 
 export async function POST(req: Request) {
   try {
