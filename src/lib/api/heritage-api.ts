@@ -3,7 +3,7 @@
  * https://www.cha.go.kr/html/HtmlPage.do?pg=/openapi/openApiPage.jsp
  */
 
-const HERITAGE_API_BASE = "http://www.cha.go.kr/cha/SearchKindOpenapiList.do";
+const HERITAGE_API_BASE = "https://www.cha.go.kr/cha/SearchKindOpenapiList.do";
 const API_KEY = process.env.HERITAGE_API_KEY || "";
 
 interface HeritageSearchParams {
@@ -94,7 +94,7 @@ export async function getHeritageDetail(ccbaKdcd: string, ccbaAsno: string, ccba
 
   try {
     const response = await fetch(
-      `http://www.cha.go.kr/cha/SearchKindOpenapiDt.do?${params}`,
+      `https://www.cha.go.kr/cha/SearchKindOpenapiDt.do?${params}`,
       { next: { revalidate: 86400 } }
     );
 
