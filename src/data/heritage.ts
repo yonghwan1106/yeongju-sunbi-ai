@@ -77,7 +77,7 @@ export const heritageData: Heritage[] = [
       lat: 36.9352,
       lng: 128.6318,
     },
-    images: ["/images/sunbichon-main.png"],
+    images: ["/images/sunbichon-real.webp"],
     visitInfo: {
       hours: "09:00 ~ 18:00",
       fee: "성인 3,000원 / 청소년 2,000원 / 어린이 1,500원",
@@ -106,7 +106,7 @@ export const heritageData: Heritage[] = [
       lat: 36.8567,
       lng: 128.7144,
     },
-    images: ["/images/museom-main.png"],
+    images: ["/images/museom-real.png"],
     visitInfo: {
       hours: "상시 개방",
       fee: "무료",

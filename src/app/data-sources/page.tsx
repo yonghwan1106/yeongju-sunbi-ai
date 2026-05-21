@@ -275,7 +275,7 @@ export default function DataSourcesPage() {
             <li>영주향교 — 포모사, Wikimedia Commons (CC BY-SA 4.0)</li>
             <li>소수박물관 — 한국관광공사 TourAPI (공공누리 제1유형)</li>
             <li>풍기인삼 — Eugene Kim, Wikimedia Commons (CC BY 2.5)</li>
-            <li className="opacity-60">선비촌·무섬마을 — 자체 제작 일러스트레이션</li>
+            <li>선비촌·무섬마을 — 별도 제공 사진</li>
           </ul>
         </div>
 
