@@ -1,4 +1,4 @@
-import { streamText, tool, stepCountIs, convertToModelMessages, type UIMessage } from "ai";
+import { streamText, tool, stepCountIs, convertToModelMessages, createUIMessageStream, createUIMessageStreamResponse, type UIMessage } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
 import { buildAgentSystemPrompt } from "@/lib/rag/heritage-context";
@@ -40,29 +40,22 @@ export async function POST(req: Request) {
         "\n\n**출처:** " +
         canonical.citations.map((c) => (c.url ? `[${c.name}](${c.url})` : c.name)).join(" · ");
       const fullAnswer = canonical.answer + citationText;
-      const encoder = new TextEncoder();
       const chunkSize = 80;
-      const stream = new ReadableStream({
-        async start(controller) {
+      const stream = createUIMessageStream({
+        execute: async ({ writer }) => {
+          writer.write({ type: "text-start", id: "0" });
           for (let i = 0; i < fullAnswer.length; i += chunkSize) {
-            const chunk = fullAnswer.slice(i, i + chunkSize);
-            // AI SDK UIMessage stream format: text delta
-            controller.enqueue(
-              encoder.encode(`0:${JSON.stringify(chunk)}\n`)
-            );
+            writer.write({
+              type: "text-delta",
+              id: "0",
+              delta: fullAnswer.slice(i, i + chunkSize),
+            });
             await new Promise((resolve) => setTimeout(resolve, 20));
           }
-          // finish reason
-          controller.enqueue(encoder.encode(`d:{"finishReason":"stop","usage":{"promptTokens":0,"completionTokens":0}}\n`));
-          controller.close();
+          writer.write({ type: "text-end", id: "0" });
         },
       });
-      return new Response(stream, {
-        headers: {
-          "Content-Type": "text/plain; charset=utf-8",
-          "x-vercel-ai-data-stream": "v1",
-        },
-      });
+      return createUIMessageStreamResponse({ stream });
     }
     // --- End canonical cache ---
 
