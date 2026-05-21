@@ -6,15 +6,12 @@ import { heritageData, getHeritageById } from "@/data/heritage";
 import { findCuratedCourse } from "@/data/courses";
 import { getYeongjuWeather } from "@/lib/api/weather-api";
 import { searchTourSpots } from "@/lib/api/tour-api";
-import { searchHeritage as fetchCHA } from "@/lib/api/heritage-api";
 import { searchYeongjuRelics } from "@/lib/api/museum-api";
 import { searchEncykorea } from "@/lib/api/encykorea-api";
 import { findCanonicalAnswer } from "@/data/canonical-qa";
 
 
 export const runtime = "nodejs";
-// 서울 리전 고정: cha.go.kr(국가유산청)가 해외 클라우드 IP를 차단하므로 한국 리전에서 실행
-export const preferredRegion = "icn1";
 
 export async function POST(req: Request) {
   try {
@@ -127,23 +124,6 @@ export async function POST(req: Request) {
               return { found: false, message: "해당 조건에 맞는 문화유산을 찾지 못했습니다.", data: [], externalSources: [] };
             }
 
-            // 문화재청 API 실호출: 결과 1건이고 한국어 문화재명이 포함된 경우 보강
-            let chaEnrichment: { ccbaKdcdNm?: string; ccbaCpno?: string } = {};
-            const hasKoreanHeritageName = /[가-힣]{2,}/.test(query);
-            if (results.length === 1 && hasKoreanHeritageName) {
-              try {
-                const chaResults = await fetchCHA({ ccbaCtcd: "37", ccbaMnm1: query });
-                if (chaResults && chaResults.length > 0) {
-                  chaEnrichment = {
-                    ccbaKdcdNm: chaResults[0].ccbaKdcd,
-                    ccbaCpno: chaResults[0].ccbaCpno,
-                  };
-                }
-              } catch {
-                // API 실패 시 정적 데이터만 반환 (안전 폴백)
-              }
-            }
-
             return {
               found: true,
               count: results.length,
@@ -162,7 +142,6 @@ export async function POST(req: Request) {
                 fee: h.visitInfo.fee,
                 closedDays: h.visitInfo.closedDays,
                 tags: h.tags,
-                ...(results.length === 1 ? chaEnrichment : {}),
               })),
             };
           },
