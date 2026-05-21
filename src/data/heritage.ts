@@ -19,7 +19,7 @@ export const heritageData: Heritage[] = [
       lat: 36.9944,
       lng: 128.6825,
     },
-    images: ["/images/buseoksa-main.png"],
+    images: ["/images/buseoksa-real.jpg"],
     visitInfo: {
       hours: "08:00 ~ 18:00 (동절기 17:00)",
       fee: "성인 2,000원 / 청소년 1,500원 / 어린이 1,000원",
@@ -48,7 +48,7 @@ export const heritageData: Heritage[] = [
       lat: 36.9337,
       lng: 128.6333,
     },
-    images: ["/images/sosuseowon-main.png"],
+    images: ["/images/sosuseowon-real.jpg"],
     visitInfo: {
       hours: "09:00 ~ 18:00 (동절기 17:00)",
       fee: "성인 3,000원 / 청소년 2,000원 / 어린이 1,000원",
@@ -133,7 +133,7 @@ export const heritageData: Heritage[] = [
       lat: 36.9575,
       lng: 128.4864,
     },
-    images: ["/images/sobaeksan-main.png"],
+    images: ["/images/sobaeksan-real.jpg"],
     visitInfo: {
       hours: "일출 1시간 전 ~ 일몰 시",
       fee: "무료",
@@ -162,7 +162,7 @@ export const heritageData: Heritage[] = [
       lat: 36.9415,
       lng: 128.6195,
     },
-    images: ["/images/sosu-museum-main.png"],
+    images: ["/images/sosu-museum-real.jpg"],
     visitInfo: {
       hours: "09:00 ~ 18:00 (동절기 17:00)",
       fee: "성인 3,000원 / 청소년 2,000원 / 어린이 1,000원 (소수서원 통합권)",
@@ -191,7 +191,7 @@ export const heritageData: Heritage[] = [
       lat: 36.8056,
       lng: 128.6235,
     },
-    images: ["/images/yeongju-hyanggyo-main.png"],
+    images: ["/images/yeongju-hyanggyo-real.jpg"],
     visitInfo: {
       hours: "상시 개방 (외부)",
       fee: "무료",
@@ -220,7 +220,7 @@ export const heritageData: Heritage[] = [
       lat: 36.8754,
       lng: 128.5238,
     },
-    images: ["/images/punggi-ginseng-main.png"],
+    images: ["/images/punggi-ginseng-real.jpg"],
     visitInfo: {
       hours: "09:00 ~ 18:00 (월요일 휴관)",
       fee: "무료",

@@ -260,6 +260,25 @@ export default function DataSourcesPage() {
           })}
         </div>
 
+        {/* 문화유산 사진 출처 */}
+        <div className="mt-12 rounded-2xl bg-white border border-[var(--color-parchment)] p-6 sm:p-8">
+          <h2 className="text-base font-bold text-[var(--color-ink)] mb-1">
+            문화유산 사진 출처
+          </h2>
+          <p className="text-sm text-[var(--color-charcoal)] opacity-60 mb-4">
+            문화유산 페이지의 실제 사진은 자유 이용 라이선스 저작물을 사용했습니다.
+          </p>
+          <ul className="space-y-1.5 text-sm text-[var(--color-charcoal)] leading-relaxed">
+            <li>부석사 — Bernard Gagnon, Wikimedia Commons (CC0)</li>
+            <li>소수서원 — Jjw, Wikimedia Commons (CC BY-SA 3.0)</li>
+            <li>소백산 — Seonghyeon5836, Wikimedia Commons (CC BY-SA 4.0)</li>
+            <li>영주향교 — 포모사, Wikimedia Commons (CC BY-SA 4.0)</li>
+            <li>소수박물관 — 한국관광공사 TourAPI (공공누리 제1유형)</li>
+            <li>풍기인삼 — Eugene Kim, Wikimedia Commons (CC BY 2.5)</li>
+            <li className="opacity-60">선비촌·무섬마을 — 자체 제작 일러스트레이션</li>
+          </ul>
+        </div>
+
         {/* Footer CTA */}
         <div className="mt-12 rounded-2xl bg-[var(--color-earth-800)] text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/15">
