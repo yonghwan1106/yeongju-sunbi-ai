@@ -18,15 +18,13 @@ const InsightsSchema = z.object({
   themes: z.array(
     z.object({
       name: z.string().describe("주제 이름 (예: 교통·주차, 식당·맛집)"),
-      count: z.number().int().describe("해당 주제 추정 질문 수"),
+      count: z.number().describe("해당 주제 추정 질문 수 (정수)"),
       example: z.string().describe("대표 예시 질문 1개"),
     })
   ),
   unmetNeeds: z
     .array(z.string())
-    .min(0)
-    .max(5)
-    .describe("관광객이 자주 묻지만 충분히 답되지 않는 미충족 수요"),
+    .describe("관광객이 자주 묻지만 충분히 답되지 않는 미충족 수요 3~5개"),
   summary: z.string().describe("관광정책 담당자용 2~3문장 수요신호 요약"),
 });
 
