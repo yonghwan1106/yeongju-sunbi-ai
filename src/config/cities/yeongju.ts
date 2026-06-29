@@ -32,7 +32,7 @@ export const yeongjuCity: CityConfig = {
     contestLabel: "2026 영주시 공공데이터 활용 창업경진대회 출품작",
   },
   persona: "영주선비AI 에이전트",
-  weatherGrid: { nx: 71, ny: 122 },
+  weatherGrid: { nx: 89, ny: 111 },
   areaCode: "35",
   tourMobileApp: "YeongjuSunbiAI",
   govUrl: "https://www.yeongju.go.kr",
