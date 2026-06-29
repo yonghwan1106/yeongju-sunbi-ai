@@ -15,6 +15,7 @@ const navLinks = [
   { href: "/quiz", label: "퀴즈" },
   { href: "/stamp-tour", label: "스탬프투어" },
   { href: "/dashboard", label: "대시보드" },
+  { href: "/insights", label: "인사이트" },
 ];
 
 export default function Header() {
