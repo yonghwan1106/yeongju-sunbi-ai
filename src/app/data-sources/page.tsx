@@ -105,12 +105,12 @@ const sources: DataSource[] = [
     providerEn: "Academy of Korean Studies (AKS)",
     endpoint: "http://encykorea.aks.ac.kr/openapi",
     providerUrl: "https://www.aks.ac.kr",
-    accessType: "Static",
+    accessType: "REST",
     icon: <BookOpen className="w-6 h-6" />,
     iconBg: "bg-rose-100 text-rose-700",
     accentColor: "border-rose-400",
     usage:
-      `${_dsCity.name} 선비문화 인물 백과 항목을 검색합니다. 현재 정적 큐레이션 항목으로 서비스하며, 한국학 전문 출처로 AI 답변의 학술적 신뢰성을 보강합니다.`,
+      `${_dsCity.name} 관련 인물·역사·풍속 항목을 한국학중앙연구원 민족문화대백과 OpenAPI(헤더 인증)로 실시간 검색합니다. 한국학 전문 출처로 AI 답변의 학술적 신뢰성을 보강하며, 장애 시 검증된 정적 항목으로 폴백합니다.`,
     tools: ["searchEncyclopedia"],
     example: `${_fig1}이 누구인가요?`,
   },
@@ -151,7 +151,7 @@ export default function DataSourcesPage() {
             </h1>
             <p className="text-base sm:text-lg text-white/80 max-w-2xl leading-relaxed">
               {_dsCity.brand.title}는 5개 정부·공공기관의 데이터를 활용해 답변합니다.
-              문화재청·기상청·한국관광공사는 실시간 API로, 국립중앙박물관·민족문화대백과는
+              문화재청·기상청·한국관광공사·민족문화대백과는 실시간 API로, 국립중앙박물관은
               검증된 정적 큐레이션으로 — 모든 답변에 출처를 명시합니다.
             </p>
             <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-5 py-3 text-sm text-white/90 mt-2">
@@ -176,7 +176,7 @@ export default function DataSourcesPage() {
       {/* Cards grid */}
       <section className="max-w-5xl mx-auto px-4 py-12 sm:py-16">
         <p className="text-sm text-[var(--color-charcoal)] opacity-60 mb-8 text-center">
-          총 5개 공공기관 데이터 연동 · 실시간 API 3 + 검증 큐레이션 2
+          총 5개 공공기관 데이터 연동 · 실시간 API 4 + 검증 큐레이션 1
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
