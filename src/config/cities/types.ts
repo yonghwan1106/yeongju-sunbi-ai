@@ -35,6 +35,8 @@ export interface CityConfig {
   sigunguCode?: string;
   /** TourAPI MobileApp 파라미터 */
   tourMobileApp: string;
+  /** 지자체 공식 누리집 URL (예: "https://www.yeongju.go.kr") */
+  govUrl?: string;
   /** AI 채팅 추천 질문 목록 */
   suggestedQuestions: string[];
   dataPack: CityDataPack;

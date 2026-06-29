@@ -13,7 +13,18 @@ import type { CourseRecommendation, QuizQuestion } from "@/types";
 import type { CanonicalQA } from "@/data/canonical-qa";
 
 // 모듈 초기화 시점(빌드 타임)에 한 번만 평가된다
-const _pack = getActiveCity().dataPack;
+const _city = getActiveCity();
+const _pack = _city.dataPack;
+
+// ── 도시 편의 헬퍼 ───────────────────────────────────────────────────────────
+/** 활성 도시명 (예: "영주", "안동") */
+export const cityName = _city.name;
+/** 활성 도시 브랜드 정보 */
+export const cityBrand = _city.brand;
+/** 활성 dataPack 문화유산 이름 배열 — 프롬프트·키워드 생성용 */
+export const landmarks: string[] = _pack.heritage.map((h) => h.name);
+/** 활성 dataPack 인물 이름 배열 — 프롬프트·키워드 생성용 */
+export const figureNames: string[] = _pack.figures.map((f) => f.name);
 
 // ── 데이터 배열 ──────────────────────────────────────────────────────────────
 export const heritageData = _pack.heritage;

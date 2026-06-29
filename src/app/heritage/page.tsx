@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Landmark, Search, GitBranch, Network } from "lucide-react";
 import { heritageData } from "@/data/active";
+import { getActiveCity } from "@/config/city";
 import { Heritage } from "@/types";
 import HeritageCard from "@/components/heritage/HeritageCard";
 import LineageTimeline from "@/components/heritage/LineageTimeline";
@@ -22,6 +23,7 @@ const FILTER_TABS: { label: string; value: FilterCategory }[] = [
 ];
 
 export default function HeritagePage() {
+  const city = getActiveCity();
   const [activeFilter, setActiveFilter] = useState<FilterCategory>("전체");
   const [searchQuery, setSearchQuery] = useState("");
   const [lineageView, setLineageView] = useState<LineageView>("timeline");
@@ -54,13 +56,13 @@ export default function HeritagePage() {
           >
             <div className="flex items-center gap-2 bg-white/15 rounded-full px-4 py-1.5 text-sm font-medium">
               <Landmark className="w-4 h-4" />
-              영주시 문화유산
+              {city.name}시 문화유산
             </div>
             <h1 className="text-3xl sm:text-5xl font-bold leading-tight">
-              영주 문화유산
+              {city.name} 문화유산
             </h1>
             <p className="text-base sm:text-lg text-white/80 max-w-xl leading-relaxed">
-              유네스코 세계유산부터 숨겨진 명소까지, 선비의 고장 영주가 품은
+              유네스코 세계유산부터 숨겨진 명소까지, 선비의 고장 {city.name}이(가) 품은
               소중한 문화유산을 만나보세요.
             </p>
 
@@ -110,10 +112,10 @@ export default function HeritagePage() {
         >
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-[var(--color-ink)]">
-              영주 선비 계보 — 인물과 유산의 천 년
+              {city.name} 선비 계보 — 인물과 유산의 천 년
             </h2>
             <p className="mt-1 text-sm text-[var(--color-charcoal)] opacity-70">
-              부석사 창건(676)부터 풍기인삼박물관(2008)까지, 영주 학맥을 빚어낸
+              {city.dataPack.figures[0] ? `${city.dataPack.figures[0].bornYear}년` : "고대"}부터 현대까지, {city.name} 학맥을 빚어낸
               인물과 유산의 연결을 한눈에 살펴보세요.
             </p>
           </div>

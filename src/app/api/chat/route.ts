@@ -2,7 +2,7 @@ import { streamText, tool, stepCountIs, convertToModelMessages, createUIMessageS
 import { anthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
 import { buildAgentSystemPrompt } from "@/lib/rag/heritage-context";
-import { heritageData, getHeritageById, findCuratedCourse, findCanonicalAnswer } from "@/data/active";
+import { heritageData, quizData, getHeritageById, findCuratedCourse, findCanonicalAnswer } from "@/data/active";
 import { getYeongjuWeather } from "@/lib/api/weather-api";
 import { searchTourSpots } from "@/lib/api/tour-api";
 import { searchYeongjuRelics } from "@/lib/api/museum-api";
@@ -125,9 +125,9 @@ export async function POST(req: Request) {
       tools: {
         searchHeritage: tool({
           description:
-            "영주시 문화유산을 검색합니다. 부석사, 소수서원, 선비촌, 무섬마을, 소백산 등의 정보를 조회할 수 있습니다. 사용자가 특정 문화유산에 대해 질문하거나, 영주 관광지를 알고 싶을 때 사용합니다.",
+            `${_activeCity.name}시 문화유산을 검색합니다. ${heritageData.slice(0, 4).map((h) => h.name).join(", ")} 등의 정보를 조회할 수 있습니다. 사용자가 특정 문화유산에 대해 질문하거나, ${_activeCity.name} 관광지를 알고 싶을 때 사용합니다.`,
           inputSchema: z.object({
-            query: z.string().describe("검색할 문화유산 이름 또는 키워드 (예: 부석사, 유네스코, 서원)"),
+            query: z.string().describe(`검색할 문화유산 이름 또는 키워드 (예: ${heritageData[0]?.name ?? "유산"}, 유네스코, 서원)`),
             category: z
               .enum(["유네스코", "국보", "보물", "사적", "명승", "천연기념물", "민속문화재", "전체"])
               .optional()
@@ -195,7 +195,7 @@ export async function POST(req: Request) {
 
         getWeather: tool({
           description:
-            "영주시의 현재 날씨 정보를 조회합니다. 기온, 하늘 상태, 강수, 습도, 바람, 방문 추천 메시지를 반환합니다. 사용자가 날씨를 묻거나 관광 코스를 추천받을 때 먼저 호출합니다.",
+            `${_activeCity.name}시의 현재 날씨 정보를 조회합니다. 기온, 하늘 상태, 강수, 습도, 바람, 방문 추천 메시지를 반환합니다. 사용자가 날씨를 묻거나 관광 코스를 추천받을 때 먼저 호출합니다.`,
           inputSchema: z.object({
             reason: z.string().optional().describe("날씨를 조회하는 이유 (예: 여행 계획, 코스 추천)"),
           }),
@@ -205,7 +205,7 @@ export async function POST(req: Request) {
               return {
                 available: false,
                 message: "현재 기상청 API에서 날씨 정보를 가져올 수 없습니다.",
-                fallback: "영주시는 내륙 산간 지역으로 일교차가 크니 겉옷을 준비하시는 것이 좋습니다.",
+                fallback: `${_activeCity.name}시는 일교차가 클 수 있으니 겉옷을 준비하시는 것이 좋습니다.`,
               };
             }
             return {
@@ -223,7 +223,7 @@ export async function POST(req: Request) {
 
         searchTourSpots: tool({
           description:
-            "영주시 주변 관광지, 맛집, 숙박, 축제 정보를 한국관광공사 Tour API에서 검색합니다. 사용자가 맛집, 숙소, 행사 등을 물을 때 사용합니다.",
+            `${_activeCity.name}시 주변 관광지, 맛집, 숙박, 축제 정보를 한국관광공사 Tour API에서 검색합니다. 사용자가 맛집, 숙소, 행사 등을 물을 때 사용합니다.`,
           inputSchema: z.object({
             keyword: z.string().optional().describe("검색 키워드 (예: 맛집, 한우, 숙박)"),
             type: z
@@ -250,8 +250,8 @@ export async function POST(req: Request) {
             if (!results || results.length === 0) {
               return {
                 found: false,
-                message: `"${keyword || type || "영주"}" 관련 관광 정보를 찾지 못했습니다.`,
-                suggestion: "영주시 문화유산(부석사, 소수서원 등)에 대해 대신 안내해 드릴까요?",
+                message: `"${keyword || type || _activeCity.name}" 관련 관광 정보를 찾지 못했습니다.`,
+                suggestion: `${_activeCity.name}시 문화유산(${heritageData.slice(0, 2).map((h) => h.name).join(", ")} 등)에 대해 대신 안내해 드릴까요?`,
               };
             }
 
@@ -272,7 +272,7 @@ export async function POST(req: Request) {
 
         planTourCourse: tool({
           description:
-            "날씨, 시간, 선호도를 종합하여 영주시 맞춤 관광 코스를 생성합니다. 사용자가 하루 코스, 반나절 코스, 여행 일정 등을 요청할 때 사용합니다. 이 도구를 호출하기 전에 getWeather와 searchHeritage를 먼저 호출하여 정보를 수집하세요.",
+            `날씨, 시간, 선호도를 종합하여 ${_activeCity.name}시 맞춤 관광 코스를 생성합니다. 사용자가 하루 코스, 반나절 코스, 여행 일정 등을 요청할 때 사용합니다. 이 도구를 호출하기 전에 getWeather와 searchHeritage를 먼저 호출하여 정보를 수집하세요.`,
           inputSchema: z.object({
             duration: z
               .enum(["반나절", "하루", "1박2일"])
@@ -292,7 +292,7 @@ export async function POST(req: Request) {
                 if (weather.includes("비") || weather.includes("눈"))
                   weatherNote = "비/눈 예보가 있으니 실내 명소(박물관·서원·향교) 위주로 동선을 조정하세요.";
                 else if (weather.includes("맑음"))
-                  weatherNote = "날씨가 좋아 야외 산책·외나무다리·소백산 트레킹에 적합합니다!";
+                  weatherNote = "날씨가 좋아 야외 문화유산 탐방에 적합합니다!";
               }
               return {
                 curated: true,
@@ -317,17 +317,19 @@ export async function POST(req: Request) {
               };
             }
 
+            // 폴백 코스: 활성 dataPack.heritage 이름을 기반으로 생성
+            const top = heritageData.slice(0, 5).map((h) => h.name);
             const courses: Record<string, { name: string; spots: string[]; tip: string }[]> = {
               반나절: [
-                { name: "선비문화 핵심 코스", spots: ["소수서원", "선비촌", "소수서원 주변 카페"], tip: "소수서원과 선비촌은 도보 5분 거리입니다." },
-                { name: "부석사 집중 코스", spots: ["부석사", "부석사 앞 먹거리촌"], tip: "석양 시간에 맞춰 방문하면 무량수전 석양을 감상할 수 있습니다." },
+                { name: `${_activeCity.name} 핵심 코스`, spots: [top[0], top[1]].filter(Boolean), tip: "주요 명소 위주로 둘러보세요." },
+                { name: `${_activeCity.name} 심층 탐방`, spots: [top[2] ?? top[0]].filter(Boolean), tip: "한 곳을 깊이 탐방해 보세요." },
               ],
               하루: [
-                { name: "영주 핵심 역사 코스", spots: ["소수서원", "선비촌", "점심(영주한우)", "부석사", "무섬마을(석양)"], tip: "오전에 서원·선비촌, 오후에 부석사, 석양에 무섬마을 추천" },
-                { name: "자연+문화 융합 코스", spots: ["소백산 죽령옛길", "점심(풍기인삼갈비)", "소수서원", "선비촌"], tip: "오전에 죽령옛길 트레킹(2시간), 오후에 문화유산 탐방" },
+                { name: `${_activeCity.name} 핵심 역사 코스`, spots: [...top.slice(0, 3), "점심", ...top.slice(3)].filter(Boolean), tip: "오전·오후로 나눠 탐방하세요." },
+                { name: "자연+문화 융합 코스", spots: [top[4] ?? top[0], "점심", top[0], top[1]].filter(Boolean), tip: "자연과 문화를 함께 즐겨보세요." },
               ],
               "1박2일": [
-                { name: "영주 완전정복 코스", spots: ["Day1: 소수서원 → 선비촌 → 점심(한우) → 부석사 → 석양감상", "Day2: 소백산 죽령옛길 → 점심(인삼갈비) → 무섬마을 → 영주시장"], tip: "선비촌 한옥 숙박을 추천합니다." },
+                { name: `${_activeCity.name} 완전정복 코스`, spots: [`Day1: ${top.slice(0, 3).join(" → ")}`, `Day2: ${top.slice(3).join(" → ") || top[0]}`].filter(Boolean), tip: "전통 한옥 숙박을 추천합니다." },
               ],
             };
 
@@ -356,27 +358,18 @@ export async function POST(req: Request) {
 
         generateQuiz: tool({
           description:
-            "영주시 문화유산 관련 퀴즈를 동적으로 생성합니다. 사용자가 퀴즈, 문제, 테스트를 요청하거나 문화유산에 대해 재미있게 배우고 싶어할 때 사용합니다.",
+            `${_activeCity.name}시 문화유산 관련 퀴즈를 동적으로 생성합니다. 사용자가 퀴즈, 문제, 테스트를 요청하거나 문화유산에 대해 재미있게 배우고 싶어할 때 사용합니다.`,
           inputSchema: z.object({
-            heritageId: z.string().optional().describe("특정 문화유산 ID (buseoksa, sosuseowon, sunbichon, museom, sobaeksan)"),
+            heritageId: z.string().optional().describe(`특정 문화유산 ID (${heritageData.slice(0, 5).map((h) => h.id).join(", ")})`),
             difficulty: z.enum(["easy", "medium", "hard"]).optional().describe("난이도"),
           }),
           execute: async ({ heritageId, difficulty }) => {
             const target = heritageId ? getHeritageById(heritageId) : null;
             const diff = difficulty || "medium";
 
-            const quizPool = [
-              { heritage: "buseoksa", difficulty: "easy" as const, question: "부석사를 창건한 승려는 누구일까요?", options: ["원효대사", "의상대사", "지눌", "혜초"], correctIndex: 1, explanation: "부석사는 신라 문무왕 16년(676년) 의상대사가 창건한 화엄종의 근본도량입니다." },
-              { heritage: "buseoksa", difficulty: "medium" as const, question: "부석사 무량수전의 건축 특징인 '배흘림기둥'은 어떤 형태인가요?", options: ["기둥 상단이 넓은 형태", "기둥 중간이 볼록한 형태", "기둥이 나선형인 형태", "기둥이 사각형인 형태"], correctIndex: 1, explanation: "배흘림기둥은 기둥 중간이 볼록한 엔타시스(entasis) 기법으로, 그리스 파르테논 신전에서도 발견됩니다." },
-              { heritage: "buseoksa", difficulty: "hard" as const, question: "추사 김정희가 부석사에 남긴 글씨는 무엇인가요?", options: ["무량수전", "천하제일장락", "부석사", "화엄도량"], correctIndex: 1, explanation: "'천하제일장락(天下第一長樂)' — 천하에서 가장 즐거운 곳이라는 뜻입니다." },
-              { heritage: "sosuseowon", difficulty: "easy" as const, question: "소수서원은 한국 최초의 무엇인가요?", options: ["사찰", "서원", "향교", "성균관"], correctIndex: 1, explanation: "소수서원은 1543년 풍기군수 주세붕이 설립한 한국 최초의 서원입니다." },
-              { heritage: "sosuseowon", difficulty: "medium" as const, question: "'소수(紹修)'라는 사액을 조정에 건의한 인물은?", options: ["주세붕", "퇴계 이황", "율곡 이이", "안향"], correctIndex: 1, explanation: "퇴계 이황이 풍기군수 시절 조정에 건의하여 '소수서원'이라는 사액을 받았습니다." },
-              { heritage: "museom", difficulty: "easy" as const, question: "무섬마을의 '무섬(水島)'은 어떤 뜻인가요?", options: ["산 위의 마을", "물 위의 섬", "숲 속의 마을", "바람의 섬"], correctIndex: 1, explanation: "삼면이 내성천으로 둘러싸여 '물 위의 섬'이라는 뜻의 무섬(水島)이라 불립니다." },
-              { heritage: "sobaeksan", difficulty: "medium" as const, question: "소백산의 주봉인 비로봉의 해발 높이는?", options: ["1,239m", "1,339m", "1,439m", "1,539m"], correctIndex: 2, explanation: "소백산 비로봉은 해발 1,439m로, 매년 5~6월 철쭉 군락이 장관입니다." },
-            ];
-
-            let filtered = quizPool;
-            if (target) filtered = quizPool.filter((q) => q.heritage === target.id);
+            // 활성 dataPack의 퀴즈를 사용 (도시별로 자동 전환됨)
+            let filtered = [...quizData];
+            if (target) filtered = quizData.filter((q) => q.heritageId === target.id);
             if (diff !== "medium") {
               const diffFiltered = filtered.filter((q) => q.difficulty === diff);
               if (diffFiltered.length > 0) filtered = diffFiltered;
@@ -384,9 +377,13 @@ export async function POST(req: Request) {
 
             const selected = filtered.length > 0
               ? filtered[Math.floor(Math.random() * filtered.length)]
-              : quizPool[Math.floor(Math.random() * quizPool.length)];
+              : quizData[Math.floor(Math.random() * quizData.length)];
 
-            const heritage = getHeritageById(selected.heritage);
+            if (!selected) {
+              return { quiz: null, tip: "현재 퀴즈 데이터를 불러올 수 없습니다." };
+            }
+
+            const heritage = getHeritageById(selected.heritageId);
 
             return {
               quiz: {
@@ -397,26 +394,26 @@ export async function POST(req: Request) {
                 explanation: selected.explanation,
                 relatedHeritage: heritage?.name || `${_activeCity.name} 문화유산`,
               },
-              tip: "정답을 맞추면 영주 문화유산에 대한 이해가 더 깊어집니다!",
+              tip: `정답을 맞추면 ${_activeCity.name} 문화유산에 대한 이해가 더 깊어집니다!`,
             };
           },
         }),
 
         searchMuseum: tool({
           description:
-            "국립중앙박물관 e-Museum에서 영주 관련 유물·소장품을 검색합니다. 부석사 불상, 안향 초상, 의상대사 진영 등 영주와 연관된 박물관 소장 유물 정보를 조회할 때 사용합니다.",
+            `국립중앙박물관 e-Museum에서 ${_activeCity.name} 관련 유물·소장품을 검색합니다. ${_activeCity.name}과 연관된 박물관 소장 유물 정보를 조회할 때 사용합니다.`,
           inputSchema: z.object({
             keyword: z
               .string()
               .optional()
-              .describe("검색 키워드 (예: 부석사, 안향, 불상, 초상화)"),
+              .describe(`검색 키워드 (예: ${heritageData[0]?.name ?? _activeCity.name}, 불상, 초상화)`),
           }),
           execute: async ({ keyword }) => {
-            const result = await searchYeongjuRelics(keyword);
+            const result = await searchYeongjuRelics(keyword, _activeCity.dataPack.museumRelics);
             if (!result.found) {
               return {
                 found: false,
-                message: "해당 키워드와 관련된 영주 유물을 찾지 못했습니다.",
+                message: `해당 키워드와 관련된 ${_activeCity.name} 유물을 찾지 못했습니다.`,
                 data: [],
               };
             }
@@ -441,12 +438,12 @@ export async function POST(req: Request) {
 
         searchEncyclopedia: tool({
           description:
-            "한국학중앙연구원 한국민족문화대백과사전에서 영주 관련 인물·역사·풍속·유래를 검색합니다. 퇴계 이황, 안향, 의상대사, 선묘 전설, 선비정신, 죽령 옛길 등 역사·문화적 배경 정보가 필요할 때 사용합니다.",
+            `한국학중앙연구원 한국민족문화대백과사전에서 ${_activeCity.name} 관련 인물·역사·풍속·유래를 검색합니다. ${_activeCity.dataPack.encyData.slice(0, 3).map((e) => e.title).join(", ")} 등 역사·문화적 배경 정보가 필요할 때 사용합니다.`,
           inputSchema: z.object({
-            keyword: z.string().describe("검색 키워드 (예: 퇴계, 안향, 선비정신, 죽령, 의상대사)"),
+            keyword: z.string().describe(`검색 키워드 (예: ${_activeCity.dataPack.figures.slice(0, 3).map((f) => f.name).join(", ")})`),
           }),
           execute: async ({ keyword }) => {
-            const result = searchEncykorea(keyword);
+            const result = searchEncykorea(keyword, _activeCity.dataPack.encyData);
             if (!result.found) {
               return {
                 found: false,

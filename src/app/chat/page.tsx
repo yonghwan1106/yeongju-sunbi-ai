@@ -209,7 +209,7 @@ export default function ChatPage() {
               {/* Agent capabilities */}
               <div className="grid grid-cols-2 gap-2">
                 {[
-                  { icon: "🏛️", label: "문화유산 검색", desc: "부석사·소수서원 등" },
+                  { icon: "🏛️", label: "문화유산 검색", desc: `${city.dataPack.heritage.slice(0, 2).map((h) => h.name).join("·")} 등` },
                   { icon: "🌤️", label: "실시간 날씨", desc: "기상청 API 연동" },
                   { icon: "🍽️", label: "맛집·숙박 탐색", desc: "관광공사 API 연동" },
                   { icon: "🗺️", label: "맞춤 코스 생성", desc: "다단계 자율 추론" },

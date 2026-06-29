@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { Share2 } from "lucide-react";
+import { getActiveCity } from "@/config/city";
 
 export default function ShareButton() {
+  const city = getActiveCity();
   const [toast, setToast] = useState<string | null>(null);
 
   function showToast(msg: string) {
@@ -17,8 +19,8 @@ export default function ShareButton() {
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
         await navigator.share({
-          title: "영주선비AI 에이전트",
-          text: "공공데이터 기반 영주 문화유산 AI 안내 서비스",
+          title: `${city.brand.title} 에이전트`,
+          text: `공공데이터 기반 ${city.name} 문화유산 AI 안내 서비스`,
           url,
         });
         return;

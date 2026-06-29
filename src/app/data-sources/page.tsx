@@ -10,10 +10,13 @@ import {
   Database,
   Zap,
 } from "lucide-react";
+import { getActiveCity } from "@/config/city";
+
+const _dsCity = getActiveCity();
 
 export const metadata: Metadata = {
-  title: "공공데이터 활용 내역 | 영주선비AI",
-  description: "영주선비AI가 활용하는 5개 정부·공공기관 데이터 출처",
+  title: `공공데이터 활용 내역 | ${_dsCity.brand.title}`,
+  description: `${_dsCity.brand.title}가 활용하는 5개 정부·공공기관 데이터 출처`,
 };
 
 interface DataSource {
@@ -31,6 +34,9 @@ interface DataSource {
   example: string;
 }
 
+const _top1 = _dsCity.dataPack.heritage[0]?.name ?? _dsCity.name;
+const _fig1 = _dsCity.dataPack.figures[0]?.name ?? "주요 인물";
+
 const sources: DataSource[] = [
   {
     id: 1,
@@ -43,9 +49,9 @@ const sources: DataSource[] = [
     iconBg: "bg-amber-100 text-amber-700",
     accentColor: "border-amber-400",
     usage:
-      "영주 지역 8개 유산의 메타데이터(국보 지정 번호, 시대, 위치, 종류)를 국가문화유산포털 기준으로 정리한 정적 큐레이션 데이터셋으로 제공합니다. AI 해설사가 유산 검색 시 이 데이터를 근거로 답변하고 문화재청을 출처로 표기합니다. (실시간 API는 클라우드 IP 차단 이슈로 현재 미사용)",
+      `${_dsCity.name} 지역 ${_dsCity.dataPack.heritage.length}개 유산의 메타데이터(국보 지정 번호, 시대, 위치, 종류)를 국가문화유산포털 기준으로 정리한 정적 큐레이션 데이터셋으로 제공합니다. AI 해설사가 유산 검색 시 이 데이터를 근거로 답변하고 문화재청을 출처로 표기합니다. (실시간 API는 클라우드 IP 차단 이슈로 현재 미사용)`,
     tools: ["searchHeritage"],
-    example: "부석사 무량수전의 국보 지정 정보를 알려주세요",
+    example: `${_top1} 관련 국보 지정 정보를 알려주세요`,
   },
   {
     id: 2,
@@ -58,9 +64,9 @@ const sources: DataSource[] = [
     iconBg: "bg-emerald-100 text-emerald-700",
     accentColor: "border-emerald-400",
     usage:
-      "영주 시내 관광지·맛집·숙박·축제 5개 콘텐츠 타입을 실시간으로 검색합니다. 코스 추천 시 인접 명소를 자동 보강하며, 최신 행사·축제 정보를 반영하여 계절별 맞춤 추천을 제공합니다.",
+      `${_dsCity.name} 시내 관광지·맛집·숙박·축제 5개 콘텐츠 타입을 실시간으로 검색합니다. 코스 추천 시 인접 명소를 자동 보강하며, 최신 행사·축제 정보를 반영하여 계절별 맞춤 추천을 제공합니다.`,
     tools: ["searchTourSpots", "planTourCourse"],
-    example: "부석사 근처 한식당 추천",
+    example: `${_top1} 근처 한식당 추천`,
   },
   {
     id: 3,
@@ -74,9 +80,9 @@ const sources: DataSource[] = [
     iconBg: "bg-sky-100 text-sky-700",
     accentColor: "border-sky-400",
     usage:
-      "영주(NX=71, NY=122) 좌표 기준 3시간 단위 단기예보를 실시간으로 조회합니다. 방문 추천 코스에 날씨 변수를 반영하여 우천·강설 시 실내 대안 코스를 자동 제시합니다.",
+      `${_dsCity.name}(NX=${_dsCity.weatherGrid.nx}, NY=${_dsCity.weatherGrid.ny}) 좌표 기준 3시간 단위 단기예보를 실시간으로 조회합니다. 방문 추천 코스에 날씨 변수를 반영하여 우천·강설 시 실내 대안 코스를 자동 제시합니다.`,
     tools: ["getWeather"],
-    example: "오늘 영주 날씨 어때요? 부석사 가도 될까요",
+    example: `오늘 ${_dsCity.name} 날씨 어때요? ${_top1} 가도 될까요`,
   },
   {
     id: 4,
@@ -89,9 +95,9 @@ const sources: DataSource[] = [
     iconBg: "bg-violet-100 text-violet-700",
     accentColor: "border-violet-400",
     usage:
-      "영주 출토 또는 관련 유물(소수서원 백운동기 필사본, 안향 영정 등)을 검색합니다. 큐레이션된 정적 데이터를 fallback으로 항상 보유하여 API 장애 시에도 핵심 유물 정보를 안정적으로 제공합니다.",
+      `${_dsCity.name} 출토 또는 관련 유물을 검색합니다. 큐레이션된 정적 데이터를 fallback으로 항상 보유하여 API 장애 시에도 핵심 유물 정보를 안정적으로 제공합니다.`,
     tools: ["searchMuseum"],
-    example: "소수서원과 관련된 박물관 유물을 찾아주세요",
+    example: `${_top1}과 관련된 박물관 유물을 찾아주세요`,
   },
   {
     id: 5,
@@ -104,9 +110,9 @@ const sources: DataSource[] = [
     iconBg: "bg-rose-100 text-rose-700",
     accentColor: "border-rose-400",
     usage:
-      "영주 선비문화 인물(안향, 주세붕, 이황, 의상대사 등) 백과 항목을 검색합니다. 현재 정적 큐레이션 8개 항목으로 서비스하며, 한국학 전문 출처로 AI 답변의 학술적 신뢰성을 보강합니다.",
+      `${_dsCity.name} 선비문화 인물 백과 항목을 검색합니다. 현재 정적 큐레이션 항목으로 서비스하며, 한국학 전문 출처로 AI 답변의 학술적 신뢰성을 보강합니다.`,
     tools: ["searchEncyclopedia"],
-    example: "안향이 누구인가요?",
+    example: `${_fig1}이 누구인가요?`,
   },
 ];
 
@@ -144,7 +150,7 @@ export default function DataSourcesPage() {
               공공데이터 활용 내역
             </h1>
             <p className="text-base sm:text-lg text-white/80 max-w-2xl leading-relaxed">
-              영주선비AI는 5개 정부·공공기관의 데이터를 활용해 답변합니다.
+              {_dsCity.brand.title}는 5개 정부·공공기관의 데이터를 활용해 답변합니다.
               기상청·한국관광공사는 실시간 API로, 문화재청·국립중앙박물관·민족문화대백과는
               검증된 정적 큐레이션으로 — 모든 답변에 출처를 명시합니다.
             </p>
@@ -260,24 +266,26 @@ export default function DataSourcesPage() {
           })}
         </div>
 
-        {/* 문화유산 사진 출처 */}
-        <div className="mt-12 rounded-2xl bg-white border border-[var(--color-parchment)] p-6 sm:p-8">
-          <h2 className="text-base font-bold text-[var(--color-ink)] mb-1">
-            문화유산 사진 출처
-          </h2>
-          <p className="text-sm text-[var(--color-charcoal)] opacity-60 mb-4">
-            문화유산 페이지의 실제 사진은 자유 이용 라이선스 저작물을 사용했습니다.
-          </p>
-          <ul className="space-y-1.5 text-sm text-[var(--color-charcoal)] leading-relaxed">
-            <li>부석사 — Bernard Gagnon, Wikimedia Commons (CC0)</li>
-            <li>소수서원 — Jjw, Wikimedia Commons (CC BY-SA 3.0)</li>
-            <li>소백산 — Seonghyeon5836, Wikimedia Commons (CC BY-SA 4.0)</li>
-            <li>영주향교 — 포모사, Wikimedia Commons (CC BY-SA 4.0)</li>
-            <li>소수박물관 — 한국관광공사 TourAPI (공공누리 제1유형)</li>
-            <li>풍기인삼 — Eugene Kim, Wikimedia Commons (CC BY 2.5)</li>
-            <li>선비촌·무섬마을 — 별도 제공 사진</li>
-          </ul>
-        </div>
+        {/* 문화유산 사진 출처 — 영주 빌드 전용 */}
+        {_dsCity.id === "yeongju" && (
+          <div className="mt-12 rounded-2xl bg-white border border-[var(--color-parchment)] p-6 sm:p-8">
+            <h2 className="text-base font-bold text-[var(--color-ink)] mb-1">
+              문화유산 사진 출처
+            </h2>
+            <p className="text-sm text-[var(--color-charcoal)] opacity-60 mb-4">
+              문화유산 페이지의 실제 사진은 자유 이용 라이선스 저작물을 사용했습니다.
+            </p>
+            <ul className="space-y-1.5 text-sm text-[var(--color-charcoal)] leading-relaxed">
+              <li>부석사 — Bernard Gagnon, Wikimedia Commons (CC0)</li>
+              <li>소수서원 — Jjw, Wikimedia Commons (CC BY-SA 3.0)</li>
+              <li>소백산 — Seonghyeon5836, Wikimedia Commons (CC BY-SA 4.0)</li>
+              <li>영주향교 — 포모사, Wikimedia Commons (CC BY-SA 4.0)</li>
+              <li>소수박물관 — 한국관광공사 TourAPI (공공누리 제1유형)</li>
+              <li>풍기인삼 — Eugene Kim, Wikimedia Commons (CC BY 2.5)</li>
+              <li>선비촌·무섬마을 — 별도 제공 사진</li>
+            </ul>
+          </div>
+        )}
 
         {/* Footer CTA */}
         <div className="mt-12 rounded-2xl bg-[var(--color-earth-800)] text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">

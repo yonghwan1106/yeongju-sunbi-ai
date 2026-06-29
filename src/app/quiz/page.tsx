@@ -15,6 +15,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { quizData, getQuizByDifficulty, getRandomQuiz } from "@/data/active";
+import { getActiveCity } from "@/config/city";
 import { getSessionId, getClassCode, setClassCode } from "@/lib/utils/session";
 import { QuizQuestion } from "@/types";
 import QuizCard from "@/components/quiz/QuizCard";
@@ -33,6 +34,7 @@ interface AnswerRecord {
 const TIMER_SECONDS = 30;
 
 export default function QuizPage() {
+  const city = getActiveCity();
   const [screen, setScreen] = useState<Screen>("start");
   const [difficulty, setDifficulty] = useState<Difficulty>("all");
   const [questionCount, setQuestionCount] = useState<QuestionCount>(5);
@@ -190,7 +192,7 @@ export default function QuizPage() {
                 선비문화 퀴즈 챌린지
               </h1>
               <p className="text-[var(--color-charcoal)] opacity-70 text-sm leading-relaxed">
-                영주의 문화유산과 선비 정신을 퀴즈로 배워보세요.
+                {city.name}의 문화유산과 선비 정신을 퀴즈로 배워보세요.
                 <br />
                 문제를 풀고 나만의 선비 등급을 받아보세요!
               </p>

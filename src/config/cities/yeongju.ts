@@ -35,6 +35,7 @@ export const yeongjuCity: CityConfig = {
   weatherGrid: { nx: 71, ny: 122 },
   areaCode: "35",
   tourMobileApp: "YeongjuSunbiAI",
+  govUrl: "https://www.yeongju.go.kr",
   suggestedQuestions: [
     "부석사 무량수전의 배흘림기둥은 왜 특별한가요?",
     "소수서원이 한국 최초의 서원인 이유는?",

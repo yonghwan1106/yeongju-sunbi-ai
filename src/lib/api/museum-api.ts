@@ -1,8 +1,9 @@
 /**
  * 국립중앙박물관 e-Museum API 클라이언트
  * 공식 엔드포인트: https://www.emuseum.go.kr/openapi/relicSearchList
- * API 키 없을 경우 영주 관련 정적 폴백 데이터 반환
+ * API 키 없을 경우 도시별 정적 폴백 데이터 반환
  */
+import { getActiveCity } from "@/config/city";
 
 export interface MuseumRelic {
   id: string;
@@ -126,7 +127,7 @@ export async function searchYeongjuRelics(keyword?: string, fallback?: MuseumRel
     try {
       const params = new URLSearchParams({
         serviceKey: apiKey,
-        keyword: keyword || "영주",
+        keyword: keyword || getActiveCity().name,
         pageNo: "1",
         numOfRows: "10",
         type: "json",
@@ -154,7 +155,7 @@ export async function searchYeongjuRelics(keyword?: string, fallback?: MuseumRel
           size: item.size ?? "",
           description: item.description ?? "",
           location: item.museumName ?? "국립중앙박물관",
-          relatedPlace: "영주",
+          relatedPlace: getActiveCity().name,
           source: "국립중앙박물관 e-Museum",
         }));
 

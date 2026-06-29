@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { heritageData, figuresData } from "@/data/active";
+import { getActiveCity } from "@/config/city";
 
 interface LineageTimelineProps {
   selectedFigureId: string | null;
@@ -22,6 +23,7 @@ export default function LineageTimeline({
   selectedFigureId,
   onSelectFigure,
 }: LineageTimelineProps) {
+  const city = getActiveCity();
   const [hoveredHeritage, setHoveredHeritage] = useState<string | null>(null);
 
   // 인물 정렬: 출생 연도 오름차순
@@ -81,7 +83,7 @@ export default function LineageTimeline({
         viewBox={`0 0 ${width} ${height}`}
         className="w-full min-w-[720px] h-auto"
         role="img"
-        aria-label="영주 선비 인물 계보 타임라인"
+        aria-label={`${city.name} 선비 인물 계보 타임라인`}
       >
         {/* 세기 그리드 */}
         {centuries.map((y) => (

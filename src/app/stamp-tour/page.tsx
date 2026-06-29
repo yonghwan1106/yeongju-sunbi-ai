@@ -33,7 +33,7 @@ const STAMP_GRADIENTS: Record<string, string> = {
 const BADGES: Omit<BadgeInfo, "unlocked">[] = [
   { id: "b1", name: "첫 발걸음", description: "첫 번째 스탬프 수집", icon: "🌱", requiredCount: 1 },
   { id: "b2", name: "탐방가", description: "3개 스탬프 수집", icon: "🗺️", requiredCount: 3 },
-  { id: "b3", name: "영주 선비", description: "모든 스탬프 수집", icon: "🏆", requiredCount: 5 },
+  { id: "b3", name: `${getActiveCity().name} 선비`, description: "모든 스탬프 수집", icon: "🏆", requiredCount: 5 },
 ];
 
 // Map heritageData to stamp spots (first 5), including coordinates
@@ -49,6 +49,7 @@ const stampSpots = heritageData.slice(0, 5).map((h) => ({
 type Mode = "gps" | "demo";
 
 export default function StampTourPage() {
+  const city = getActiveCity();
   const [collectedIds, setCollectedIds] = useState<Set<string>>(new Set());
   const [mounted, setMounted] = useState(false);
   const [mode, setMode] = useState<Mode>("demo");
@@ -179,7 +180,7 @@ export default function StampTourPage() {
                 id="gps-modal-desc"
                 className="text-sm text-[var(--color-charcoal)] leading-relaxed"
               >
-                영주 현장에서는 GPS로 검증됩니다.
+                {city.name} 현장에서는 GPS로 검증됩니다.
                 <br />
                 지금은 <strong>체험 모드</strong>로 진행합니다.
               </p>
@@ -204,12 +205,12 @@ export default function StampTourPage() {
             디지털 스탬프투어
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
-            영주 문화유산
+            {city.name} 문화유산
             <br />
             디지털 스탬프투어
           </h1>
           <p className="text-white/80 text-sm leading-relaxed max-w-sm">
-            영주의 다섯 가지 문화유산을 탐방하고 스탬프를 수집하세요.
+            {city.name}의 다섯 가지 문화유산을 탐방하고 스탬프를 수집하세요.
             모든 스탬프를 모으면 특별한 배지가 주어집니다!
           </p>
 
@@ -270,8 +271,8 @@ export default function StampTourPage() {
               }`}
             >
               {mode === "gps"
-                ? "📍 GPS 실시간 검증 모드 (영주 현장 방문 시) — 각 유산 100m 반경 진입 시 체크인이 활성화됩니다."
-                : "🧪 체험 모드 — 영주 현장에서는 GPS 100m 반경으로 자동 검증됩니다. 지금은 모든 체크인 버튼을 직접 누를 수 있습니다."}
+                ? `📍 GPS 실시간 검증 모드 (${city.name} 현장 방문 시) — 각 유산 100m 반경 진입 시 체크인이 활성화됩니다.`
+                : `🧪 체험 모드 — ${city.name} 현장에서는 GPS 100m 반경으로 자동 검증됩니다. 지금은 모든 체크인 버튼을 직접 누를 수 있습니다.`}
             </p>
           </div>
           {/* Always-visible toggle to demo mode */}

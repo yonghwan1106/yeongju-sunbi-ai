@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight, Bot, Target, Map, BookOpen, Globe, Award, ChevronRight } from "lucide-react";
 import { heritageData } from "@/data/active";
+import { getActiveCity } from "@/config/city";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -15,44 +16,7 @@ const fadeUp = {
   }),
 };
 
-const features = [
-  {
-    icon: <Bot size={24} strokeWidth={1.8} />,
-    emoji: "🤖",
-    title: "AI 선비 해설사",
-    desc: "공공데이터 기반 대화형 문화재 해설. 부석사부터 소수서원까지 AI가 숨겨진 이야기를 들려드립니다.",
-    href: "/chat",
-    color: "bg-[var(--color-accent-500)]",
-    light: "bg-[var(--color-accent-50)] text-[var(--color-accent-600)]",
-  },
-  {
-    icon: <Target size={24} strokeWidth={1.8} />,
-    emoji: "🎯",
-    title: "선비문화 퀴즈",
-    desc: "재미있는 퀴즈로 배우는 영주 역사. 의상대사부터 퇴계 이황까지, 나의 선비 지식을 테스트해보세요.",
-    href: "/quiz",
-    color: "bg-[var(--color-primary-500)]",
-    light: "bg-[var(--color-primary-50)] text-[var(--color-primary-600)]",
-  },
-  {
-    icon: <Map size={24} strokeWidth={1.8} />,
-    emoji: "🗺️",
-    title: "디지털 스탬프투어",
-    desc: "5대 명소 방문 인증 & 배지 수집. 부석사·소수서원·선비촌·무섬마을·소백산을 모두 완주해보세요.",
-    href: "/stamp-tour",
-    color: "bg-[var(--color-earth-600)]",
-    light: "bg-[var(--color-earth-50)] text-[var(--color-earth-700)]",
-  },
-  {
-    icon: <BookOpen size={24} strokeWidth={1.8} />,
-    emoji: "📚",
-    title: "문화유산 카드",
-    desc: "아름다운 카드로 보는 영주 문화재. 유네스코 세계유산부터 숨겨진 명소까지 한눈에 만나보세요.",
-    href: "/heritage",
-    color: "bg-[var(--color-accent-700)]",
-    light: "bg-[var(--color-accent-50)] text-[var(--color-accent-700)]",
-  },
-];
+// features는 컴포넌트 안에서 city 파생값으로 구성됩니다
 
 const categoryColors: Record<string, string> = {
   유네스코: "bg-[var(--color-accent-100)] text-[var(--color-accent-700)]",
@@ -60,10 +24,49 @@ const categoryColors: Record<string, string> = {
   명승: "bg-emerald-100 text-emerald-700",
 };
 
-const previewIds = ["buseoksa", "sosuseowon", "museom"];
-
 export default function HomePage() {
-  const previewItems = heritageData.filter((h) => previewIds.includes(h.id));
+  const city = getActiveCity();
+  const top2 = heritageData.slice(0, 2).map((h) => h.name);
+  const previewItems = heritageData.slice(0, 3);
+
+  const features = [
+    {
+      icon: <Bot size={24} strokeWidth={1.8} />,
+      emoji: "🤖",
+      title: "AI 선비 해설사",
+      desc: `공공데이터 기반 대화형 문화재 해설. ${top2.join("·")} 등 AI가 숨겨진 이야기를 들려드립니다.`,
+      href: "/chat",
+      color: "bg-[var(--color-accent-500)]",
+      light: "bg-[var(--color-accent-50)] text-[var(--color-accent-600)]",
+    },
+    {
+      icon: <Target size={24} strokeWidth={1.8} />,
+      emoji: "🎯",
+      title: "선비문화 퀴즈",
+      desc: `재미있는 퀴즈로 배우는 ${city.name} 역사. 나의 선비 지식을 테스트해보세요.`,
+      href: "/quiz",
+      color: "bg-[var(--color-primary-500)]",
+      light: "bg-[var(--color-primary-50)] text-[var(--color-primary-600)]",
+    },
+    {
+      icon: <Map size={24} strokeWidth={1.8} />,
+      emoji: "🗺️",
+      title: "디지털 스탬프투어",
+      desc: `대표 명소 방문 인증 & 배지 수집. ${city.name}의 주요 명소를 모두 완주해보세요.`,
+      href: "/stamp-tour",
+      color: "bg-[var(--color-earth-600)]",
+      light: "bg-[var(--color-earth-50)] text-[var(--color-earth-700)]",
+    },
+    {
+      icon: <BookOpen size={24} strokeWidth={1.8} />,
+      emoji: "📚",
+      title: "문화유산 카드",
+      desc: `아름다운 카드로 보는 ${city.name} 문화재. 유네스코 세계유산부터 숨겨진 명소까지 한눈에 만나보세요.`,
+      href: "/heritage",
+      color: "bg-[var(--color-accent-700)]",
+      light: "bg-[var(--color-accent-50)] text-[var(--color-accent-700)]",
+    },
+  ];
 
   return (
     <div className="overflow-x-hidden">
@@ -92,7 +95,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-2 rounded-full border border-[var(--color-accent-300)] bg-gradient-to-r from-[var(--color-accent-50)] to-[var(--color-primary-50)] px-4 py-1.5 text-xs font-bold text-[var(--color-accent-700)] mb-3 shadow-[var(--shadow-warm-sm)]"
             >
               <Award size={13} className="text-[var(--color-accent-600)]" aria-hidden="true" />
-              2026 영주시 공공데이터 활용 창업경진대회 출품작
+              {city.brand.contestLabel}
             </motion.div>
 
             {/* Badge */}
@@ -105,7 +108,7 @@ export default function HomePage() {
               <Globe size={13} aria-hidden="true" />
               유네스코 세계유산 2개 보유 도시
               <span className="ml-1 rounded-full bg-[var(--color-primary-500)] px-2 py-0.5 text-white text-[10px]">
-                영주
+                {city.name}
               </span>
             </motion.div>
 
@@ -116,7 +119,7 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.18] tracking-tight text-[var(--color-ink)] mb-6"
             >
-              영주의 천년 문화유산,
+              {city.name}의 천년 문화유산,
               <br />
               <span className="text-[var(--color-primary-500)]">AI</span>가 들려주는
               <br />
@@ -130,7 +133,7 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-base sm:text-lg text-[var(--color-earth-600)] leading-relaxed mb-10 max-w-xl"
             >
-              부석사·소수서원 등 유네스코 세계유산과 선비 문화의 고장 영주를
+              {top2.join("·")} 등 유네스코 세계유산과 선비 문화의 고장 {city.name}을(를)
               <strong className="font-semibold text-[var(--color-charcoal)]"> 공공데이터 기반 AI 해설사</strong>가
               생생하게 안내합니다.
             </motion.p>
@@ -202,7 +205,7 @@ export default function HomePage() {
               custom={1}
               className="text-3xl sm:text-4xl font-black text-[var(--color-ink)] leading-tight"
             >
-              영주 문화유산을 더 깊이<br />경험하는 방법
+              {city.name} 문화유산을 더 깊이<br />경험하는 방법
             </motion.h2>
           </motion.div>
 
@@ -257,7 +260,7 @@ export default function HomePage() {
                 custom={1}
                 className="text-3xl sm:text-4xl font-black text-[var(--color-ink)] leading-tight"
               >
-                영주의 대표 명소
+                {city.name}의 대표 명소
               </motion.h2>
             </div>
             <motion.div variants={fadeUp} custom={2}>
@@ -294,7 +297,7 @@ export default function HomePage() {
                       />
                     ) : (
                       <span className="text-5xl opacity-40 group-hover:scale-110 transition-transform duration-300">
-                        {h.id === "buseoksa" ? "🛕" : h.id === "sosuseowon" ? "📜" : "🌉"}
+                        🏛️
                       </span>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/5 to-transparent" />
@@ -359,11 +362,11 @@ export default function HomePage() {
               신뢰할 수 있는 공공데이터로 만든 서비스
             </h2>
             <p className="text-sm text-[var(--color-accent-300)] leading-relaxed max-w-2xl mx-auto">
-              본 서비스는 <strong className="text-white font-semibold">문화재청, 한국관광공사, 기상청, 영주시청, 국토교통부</strong> 등
-              5개 기관의 공공데이터를 활용합니다. 정확하고 최신화된 정보를 바탕으로 영주 문화유산을 소개합니다.
+              본 서비스는 <strong className="text-white font-semibold">문화재청, 한국관광공사, 기상청, {city.name}시청, 국토교통부</strong> 등
+              5개 기관의 공공데이터를 활용합니다. 정확하고 최신화된 정보를 바탕으로 {city.name} 문화유산을 소개합니다.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-2">
-              {["문화재청 문화재정보", "한국관광공사 관광정보", "기상청 날씨정보", "영주시 지역정보", "국토교통부 지도정보"].map(
+              {["문화재청 문화재정보", "한국관광공사 관광정보", "기상청 날씨정보", `${city.name}시 지역정보`, "국토교통부 지도정보"].map(
                 (src) => (
                   <span
                     key={src}
@@ -392,7 +395,7 @@ export default function HomePage() {
               지금 바로 AI 선비 해설사와<br />대화를 시작해보세요
             </h2>
             <p className="text-sm text-[var(--color-primary-100)] mb-8">
-              부석사의 무량수전, 소수서원의 선비정신… 궁금한 것은 무엇이든 물어보세요.
+              {top2[0]}, {top2[1]}… 궁금한 것은 무엇이든 물어보세요.
             </p>
             <Link
               href="/chat"

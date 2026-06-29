@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import { Map } from "lucide-react";
 import { coursesData } from "@/data/active";
 import CourseCard from "@/components/courses/CourseCard";
+import { getActiveCity } from "@/config/city";
+
+const _courseCity = getActiveCity();
 
 export const metadata: Metadata = {
-  title: "추천 코스 | 영주선비AI",
+  title: `추천 코스 | ${_courseCity.brand.title}`,
   description:
-    "AI 선비가 큐레이션한 영주 여행 코스 — 유네스코 반나절부터 가족 2박3일까지, 데이터 기반 영주 관광 코스를 만나보세요.",
+    `AI 선비가 큐레이션한 ${_courseCity.name} 여행 코스 — 유네스코 반나절부터 가족 2박3일까지, 데이터 기반 ${_courseCity.name} 관광 코스를 만나보세요.`,
 };
 
 export default function CoursesPage() {
@@ -22,10 +25,10 @@ export default function CoursesPage() {
               큐레이션 여행 코스
             </div>
             <h1 className="text-3xl sm:text-5xl font-bold leading-tight">
-              AI 선비가 큐레이션한 영주 여행 코스
+              AI 선비가 큐레이션한 {_courseCity.name} 여행 코스
             </h1>
             <p className="text-base sm:text-lg text-white/80 max-w-xl leading-relaxed">
-              반나절부터 2박3일까지, 영주의 유네스코 세계유산·선비촌·소백산을
+              반나절부터 2박3일까지, {_courseCity.name}의 유네스코 세계유산과 선비문화를
               알차게 묶은 코스를 골라 떠나 보세요.
             </p>
           </div>

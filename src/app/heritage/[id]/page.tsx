@@ -1,4 +1,5 @@
 import { heritageData, getHeritageById, getQuizByHeritage } from "@/data/active";
+import { getActiveCity } from "@/config/city";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
@@ -24,12 +25,13 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const heritage = getHeritageById(id);
+  const brandTitle = getActiveCity().brand.title;
   if (!heritage) return { title: "문화유산을 찾을 수 없습니다" };
   return {
-    title: `${heritage.name} - 영주선비AI`,
+    title: `${heritage.name} - ${brandTitle}`,
     description: heritage.description,
     openGraph: {
-      title: `${heritage.name} | 영주선비AI`,
+      title: `${heritage.name} | ${brandTitle}`,
       description: heritage.description,
       type: "article",
       images: [
@@ -43,7 +45,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: "summary_large_image",
-      title: `${heritage.name} | 영주선비AI`,
+      title: `${heritage.name} | ${brandTitle}`,
       description: heritage.description,
       images: [`/og/${heritage.id}.jpg`],
     },

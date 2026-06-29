@@ -34,6 +34,7 @@ export const andongCity: CityConfig = {
   weatherGrid: { nx: 91, ny: 106 },
   areaCode: "35",
   tourMobileApp: "AndongSunbiAI",
+  govUrl: "https://www.andong.go.kr",
   suggestedQuestions: [
     "도산서원은 누가 세웠나요?",
     "하회마을이 유네스코에 등재된 이유는?",
