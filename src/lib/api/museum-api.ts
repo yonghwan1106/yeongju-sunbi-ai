@@ -122,19 +122,20 @@ export async function searchYeongjuRelics(keyword?: string, fallback?: MuseumRel
   source: string;
   apiUsed: boolean;
 }> {
-  const apiKey = process.env.MUSEUM_API_KEY;
+  // e-Museum 인증키 = data.go.kr 키(15104964 활용신청). 전용 키 없으면 공용 data.go.kr 키로 폴백.
+  const apiKey = process.env.MUSEUM_API_KEY || process.env.PUBLIC_DATA_API_KEY;
 
   if (apiKey) {
     try {
       const params = new URLSearchParams({
         serviceKey: apiKey,
-        keyword: keyword || getActiveCity().name,
+        name: keyword || getActiveCity().name,
         pageNo: "1",
         numOfRows: "10",
-        type: "json",
       });
 
       const response = await fetch(`${MUSEUM_API_BASE}?${params}`, {
+        headers: { accept: "application/json" },
         next: { revalidate: 86400 },
       });
 
@@ -142,25 +143,41 @@ export async function searchYeongjuRelics(keyword?: string, fallback?: MuseumRel
         throw new Error(`Museum API error: ${response.status}`);
       }
 
-      const json: MuseumApiResponse = await response.json();
-      const items = json.result ?? [];
+      const json = (await response.json()) as Record<string, unknown>;
+      const code = String(json.resultCode ?? "");
+      // resultCode가 정상(00/0000)이 아니면(예: 4030 미등록) 정적 폴백
+      const rawList =
+        code && code !== "00" && code !== "0000" && code !== "0"
+          ? []
+          : ((json.list ?? json.data ?? json.result ?? json.items ?? []) as Array<Record<string, unknown>>);
 
-      if (items.length > 0) {
-        const data: MuseumRelic[] = items.map((item, idx) => ({
-          id: `museum-api-${idx}`,
-          name: item.relicName ?? "",
-          nameEn: item.relicNameEn ?? "",
-          category: item.categoryName ?? "",
-          period: item.era ?? "",
-          material: item.material ?? "",
-          size: item.size ?? "",
-          description: item.description ?? "",
-          location: item.museumName ?? "국립중앙박물관",
-          relatedPlace: getActiveCity().name,
-          source: "국립중앙박물관 e-Museum",
-        }));
+      if (Array.isArray(rawList) && rawList.length > 0) {
+        const pick = (o: Record<string, unknown>, ...keys: string[]) => {
+          for (const k of keys) {
+            const v = o[k];
+            if (typeof v === "string" && v.trim()) return v.trim();
+          }
+          return "";
+        };
+        const data: MuseumRelic[] = rawList
+          .map((item, idx) => ({
+            id: `museum-api-${idx}`,
+            name: pick(item, "name", "relicName", "relicNm", "title", "nameKr"),
+            nameEn: pick(item, "nameEng", "relicNameEn", "nameEn"),
+            category: pick(item, "mclasName", "categoryName", "category", "indexWord"),
+            period: pick(item, "nationName", "era", "ageName", "period"),
+            material: pick(item, "materialName", "material"),
+            size: pick(item, "sizeInfo", "size", "scale"),
+            description: pick(item, "desc", "description", "relicSummary", "indexWord"),
+            location: pick(item, "museumName2", "museumName", "museumNm") || "국립중앙박물관",
+            relatedPlace: getActiveCity().name,
+            source: "국립중앙박물관 e-Museum",
+          }))
+          .filter((r) => r.name);
 
-        return { found: true, count: data.length, data, source: "국립중앙박물관 e-Museum (API)", apiUsed: true };
+        if (data.length > 0) {
+          return { found: true, count: data.length, data, source: "국립중앙박물관 e-Museum (실시간 조회)", apiUsed: true };
+        }
       }
     } catch (error) {
       console.error("국립중앙박물관 API 호출 실패, 정적 데이터로 폴백:", error);
