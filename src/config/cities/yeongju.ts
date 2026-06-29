@@ -34,6 +34,7 @@ export const yeongjuCity: CityConfig = {
   persona: "영주선비AI 에이전트",
   weatherGrid: { nx: 89, ny: 111 },
   areaCode: "35",
+  sigunguCode: "14",
   tourMobileApp: "YeongjuSunbiAI",
   govUrl: "https://www.yeongju.go.kr",
   suggestedQuestions: [

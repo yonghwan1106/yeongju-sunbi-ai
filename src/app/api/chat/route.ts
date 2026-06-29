@@ -358,7 +358,7 @@ export async function POST(req: Request) {
 
         generateQuiz: tool({
           description:
-            `${_activeCity.name}시 문화유산 관련 퀴즈를 동적으로 생성합니다. 사용자가 퀴즈, 문제, 테스트를 요청하거나 문화유산에 대해 재미있게 배우고 싶어할 때 사용합니다.`,
+            `${_activeCity.name}시 문화유산 관련 퀴즈를 동적으로 생성합니다. 사용자가 퀴즈, 문제, 테스트를 요청하면 난이도를 되묻지 말고 즉시 이 도구를 호출하세요(난이도 미지정 시 medium 기본값으로 바로 생성). 문화유산에 대해 재미있게 배우고 싶어할 때도 사용합니다.`,
           inputSchema: z.object({
             heritageId: z.string().optional().describe(`특정 문화유산 ID (${heritageData.slice(0, 5).map((h) => h.id).join(", ")})`),
             difficulty: z.enum(["easy", "medium", "hard"]).optional().describe("난이도"),

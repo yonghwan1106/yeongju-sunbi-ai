@@ -33,6 +33,7 @@ export const andongCity: CityConfig = {
   persona: "안동선비AI 에이전트",
   weatherGrid: { nx: 91, ny: 106 },
   areaCode: "35",
+  sigunguCode: "11",
   tourMobileApp: "AndongSunbiAI",
   govUrl: "https://www.andong.go.kr",
   suggestedQuestions: [
