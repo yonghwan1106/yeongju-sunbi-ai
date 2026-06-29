@@ -136,7 +136,7 @@ export async function searchYeongjuRelics(keyword?: string, fallback?: MuseumRel
 
       const response = await fetch(`${MUSEUM_API_BASE}?${params}`, {
         headers: { accept: "application/json" },
-        next: { revalidate: 86400 },
+        cache: "no-store",
       });
 
       if (!response.ok) {
