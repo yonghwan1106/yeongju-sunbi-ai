@@ -8,16 +8,34 @@ import { searchTourSpots } from "@/lib/api/tour-api";
 import { searchYeongjuRelics } from "@/lib/api/museum-api";
 import { searchEncykorea } from "@/lib/api/encykorea-api";
 import { getActiveCity } from "@/config/city";
+import { getAdminClient } from "@/lib/supabase";
 
 // 빌드 타임 상수 — NEXT_PUBLIC_CITY_ID 환경변수로 도시 선택
 const _activeCity = getActiveCity();
 
+// PII 스크러버 — 한글 리터럴 없이 숫자·영문·기호 패턴만 사용 (SWC 한글 regex 버그 회피)
+function scrubPii(text: string): string {
+  return text
+    .replace(/\d{2,3}[-\s]?\d{3,4}[-\s]?\d{4}/g, "[PHONE]")
+    .replace(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g, "[EMAIL]")
+    .replace(/\d{6}-[1-4]\d{6}/g, "[SSN]");
+}
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
-    const { messages }: { messages: UIMessage[] } = await req.json();
+    const {
+      messages,
+      noLog = false,
+      sessionId = "",
+      classCode = "",
+    }: {
+      messages: UIMessage[];
+      noLog?: boolean;
+      sessionId?: string;
+      classCode?: string;
+    } = await req.json();
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return new Response(JSON.stringify({ error: "messages array is required" }), {
@@ -34,6 +52,28 @@ export async function POST(req: Request) {
           .map((p) => p.text)
           .join(" ")
       : "";
+
+    // ── 질문 로깅 (fire-and-forget, PII 스크럽) ──────────────────────────────
+    // 스트리밍을 블로킹하지 않음. 실패해도 챗 동작 무관.
+    if (!noLog && lastUserText.trim()) {
+      const admin = getAdminClient();
+      if (admin) {
+        // PromiseLike(Supabase PostgrestBuilder)는 .catch 없음 → async IIFE로 감쌈
+        void (async () => {
+          try {
+            await admin.from("chat_questions").insert({
+              question: scrubPii(lastUserText).slice(0, 500),
+              session_id: sessionId,
+              class_code: classCode,
+              city_id: _activeCity.id,
+            });
+          } catch {
+            // non-fatal
+          }
+        })();
+      }
+    }
+    // ─────────────────────────────────────────────────────────────────────────
 
     const canonical = findCanonicalAnswer(lastUserText);
     if (canonical) {

@@ -2,7 +2,7 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import { Send, Bot, Loader2, Database, Cpu, Trash2, Mic, MicOff } from "lucide-react";
 import ChatMessage from "@/components/chat/ChatMessage";
 import SuggestedQuestions from "@/components/chat/SuggestedQuestions";
@@ -10,6 +10,12 @@ import ToolInvocationDisplay from "@/components/chat/ToolInvocationDisplay";
 import ShareButton from "@/components/chat/ShareButton";
 import { useSpeechToText } from "@/lib/hooks/useSpeech";
 import { getActiveCity } from "@/config/city";
+import {
+  getSessionId,
+  getClassCode,
+  isQuestionLoggingOptedOut,
+  setQuestionLoggingOptOut,
+} from "@/lib/utils/session";
 
 const DATA_SOURCES = [
   "문화재청 국가문화유산포털",
@@ -24,10 +30,35 @@ const TOOL_NAMES = ["searchHeritage", "getWeather", "searchTourSpots", "planTour
 
 export default function ChatPage() {
   const city = getActiveCity();
+
+  // 로깅용 extra body — mount 시 localStorage에서 읽고, 이후 변경도 반영
+  const extraRef = useRef({ noLog: false, sessionId: "", classCode: "" });
+
+  // custom fetch로 extraRef를 매 요청에 주입 (스트리밍 블로킹 없음)
+  const chatTransport = useMemo(
+    () =>
+      new DefaultChatTransport({
+        api: "/api/chat",
+        fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
+          try {
+            const body = JSON.parse((init?.body as string) ?? "{}");
+            return fetch(input, {
+              ...init,
+              body: JSON.stringify({ ...body, ...extraRef.current }),
+            });
+          } catch {
+            return fetch(input, init);
+          }
+        },
+      }),
+    []
+  );
+
   const { messages, sendMessage, status, setMessages } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
+    transport: chatTransport,
   });
   const [input, setInput] = useState("");
+  const [isOptedOut, setIsOptedOut] = useState(false);
   const isLoading = status === "submitted" || status === "streaming";
 
   // 음성 입력(STT) — 인식 결과를 입력창에 주입
@@ -37,6 +68,17 @@ export default function ChatPage() {
     isListening,
     supported: sttSupported,
   } = useSpeechToText((t) => setInput((prev) => (prev ? prev.trim() + " " : "") + t));
+
+  // mount 시 localStorage에서 세션 정보 초기화
+  useEffect(() => {
+    const optedOut = isQuestionLoggingOptedOut();
+    setIsOptedOut(optedOut);
+    extraRef.current = {
+      noLog: optedOut,
+      sessionId: getSessionId(),
+      classCode: getClassCode(),
+    };
+  }, []);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
@@ -84,6 +126,13 @@ export default function ChatPage() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     handleSend();
+  }
+
+  function handleToggleOptOut() {
+    const next = !isOptedOut;
+    setIsOptedOut(next);
+    setQuestionLoggingOptOut(next);
+    extraRef.current = { ...extraRef.current, noLog: next };
   }
 
   const showWelcome = messages.length === 0;
@@ -317,8 +366,17 @@ export default function ChatPage() {
             )}
           </button>
         </form>
-        <p className="max-w-2xl mx-auto text-xs text-stone-400 mt-2 px-1">
-          Enter로 전송 · Shift+Enter로 줄바꿈{sttSupported ? " · 🎤 음성으로 질문" : ""} · 🔊 답변 읽어주기 지원
+        <p className="max-w-2xl mx-auto text-xs text-stone-400 mt-2 px-1 flex flex-wrap gap-x-1 items-center">
+          <span>Enter로 전송 · Shift+Enter로 줄바꿈{sttSupported ? " · 🎤 음성으로 질문" : ""} · 🔊 답변 읽어주기 지원</span>
+          <span>·</span>
+          <button
+            type="button"
+            onClick={handleToggleOptOut}
+            className="underline hover:text-stone-500 transition-colors"
+            title="질문은 도슨트 개선을 위해 익명으로 수집됩니다. 클릭해 켜거나 끌 수 있습니다."
+          >
+            {isOptedOut ? "질문 기록 꺼짐" : "질문 익명 기록 중"}
+          </button>
         </p>
       </footer>
     </div>

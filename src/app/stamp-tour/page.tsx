@@ -4,11 +4,13 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Stamp, Trophy, Info, BookOpen, MapPin, Navigation, FlaskConical } from "lucide-react";
 import { heritageData } from "@/data/active";
+import { getActiveCity } from "@/config/city";
+import { getSessionId, getClassCode, setClassCode } from "@/lib/utils/session";
 import StampCard from "@/components/stamp/StampCard";
 import Link from "next/link";
 import { haversineMeters, within, type Coord } from "@/lib/utils/geofence";
 
-const STORAGE_KEY = "yeongju-collected-stamps";
+const STORAGE_KEY = `sunbi-collected-stamps-${getActiveCity().id}`;
 const CHECKIN_RADIUS_M = 100;
 
 interface BadgeInfo {
@@ -52,10 +54,12 @@ export default function StampTourPage() {
   const [mode, setMode] = useState<Mode>("demo");
   const [userCoord, setUserCoord] = useState<Coord | null>(null);
   const [showFallbackModal, setShowFallbackModal] = useState(false);
+  const [classCode, setClassCodeState] = useState("");
 
   // Load stamps from localStorage + attempt GPS on mount
   useEffect(() => {
     setMounted(true);
+    setClassCodeState(getClassCode());
 
     // Restore stamps
     try {
@@ -98,6 +102,20 @@ export default function StampTourPage() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify([...next]));
       } catch {
         // ignore storage errors
+      }
+      // fire-and-forget 이벤트 로깅 (실패해도 앱 동작 무관)
+      const spot = stampSpots.find((s) => s.id === stampId);
+      if (spot) {
+        fetch("/api/events", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: "stamp",
+            heritage_id: spot.heritageId,
+            session_id: getSessionId(),
+            class_code: getClassCode(),
+          }),
+        }).catch(() => {});
       }
     },
     [collectedIds]
@@ -211,6 +229,22 @@ export default function StampTourPage() {
                 transition={{ duration: 0.6, ease: "easeOut" }}
               />
             </div>
+          </div>
+
+          {/* 교실코드 입력 (선택) */}
+          <div className="w-full max-w-sm">
+            <input
+              type="text"
+              placeholder="교실코드 입력 (선택, 예: ENG-2A)"
+              value={classCode}
+              onChange={(e) => {
+                setClassCodeState(e.target.value);
+                setClassCode(e.target.value);
+              }}
+              className="w-full px-4 py-2 rounded-xl bg-white/20 text-white placeholder:text-white/50 text-sm border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50"
+              maxLength={20}
+              aria-label="교실코드 (선택)"
+            />
           </div>
         </div>
       </section>

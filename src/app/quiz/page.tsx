@@ -15,6 +15,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { quizData, getQuizByDifficulty, getRandomQuiz } from "@/data/active";
+import { getSessionId, getClassCode, setClassCode } from "@/lib/utils/session";
 import { QuizQuestion } from "@/types";
 import QuizCard from "@/components/quiz/QuizCard";
 import Link from "next/link";
@@ -47,6 +48,12 @@ export default function QuizPage() {
 
   // Results state
   const [expandedReview, setExpandedReview] = useState<string | null>(null);
+
+  // 교실코드 — localStorage에서 초기화
+  const [classCode, setClassCodeState] = useState("");
+  useEffect(() => {
+    setClassCodeState(getClassCode());
+  }, []);
 
   // Timer
   const handleTimeUp = useCallback(() => {
@@ -115,6 +122,21 @@ export default function QuizPage() {
 
   function handleNext() {
     if (currentIndex + 1 >= questions.length) {
+      // fire-and-forget 퀴즈 결과 로깅 (실패해도 앱 동작 무관)
+      // answers에는 이미 마지막 문제 답변까지 포함됨 (handleSelect/handleTimeUp에서 추가됨)
+      fetch("/api/events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "quiz",
+          session_id: getSessionId(),
+          class_code: getClassCode(),
+          attempts: answers.map((a) => ({
+            quiz_id: a.question.id,
+            is_correct: a.correct,
+          })),
+        }),
+      }).catch(() => {});
       setScreen("results");
       return;
     }
@@ -233,6 +255,20 @@ export default function QuizPage() {
                 </div>
               </div>
             </div>
+
+            {/* 교실코드 입력 (선택) */}
+            <input
+              type="text"
+              placeholder="교실코드 입력 (선택, 예: ENG-2A)"
+              value={classCode}
+              onChange={(e) => {
+                setClassCodeState(e.target.value);
+                setClassCode(e.target.value);
+              }}
+              className="w-full px-4 py-3 rounded-xl bg-white border border-[var(--color-parchment)] text-[var(--color-ink)] placeholder:text-[var(--color-charcoal)]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-300)]"
+              maxLength={20}
+              aria-label="교실코드 (선택)"
+            />
 
             {/* Start button */}
             <button
