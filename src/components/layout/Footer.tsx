@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Landmark, ExternalLink } from "lucide-react";
+import { getActiveCity } from "@/config/city";
 
 const publicDataSources = [
   { name: "문화재청", url: "https://www.cha.go.kr" },
@@ -18,6 +19,7 @@ const footerLinks = [
 ];
 
 export default function Footer() {
+  const city = getActiveCity();
   return (
     <footer className="bg-[var(--color-earth-900)] text-[var(--color-earth-200)]">
       {/* Public data notice bar */}
@@ -54,14 +56,14 @@ export default function Footer() {
                 <Landmark size={18} strokeWidth={1.8} />
               </span>
               <span className="text-lg font-bold text-white">
-                영주<span className="text-[var(--color-primary-400)]">선비</span>AI
+                {city.name}<span className="text-[var(--color-primary-400)]">선비</span>AI
               </span>
             </Link>
             <p className="text-sm text-[var(--color-earth-300)] leading-relaxed max-w-xs">
-              유네스코 세계유산의 도시 영주의 천년 문화유산을 AI가 생생하게 해설해드립니다.
+              {city.brand.description}
             </p>
             <p className="text-xs text-[var(--color-earth-400)] font-medium">
-              🏆 2026 영주시 공공데이터 활용 창업경진대회 출품작
+              🏆 {city.brand.contestLabel}
             </p>
           </div>
 
@@ -105,7 +107,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 pt-6 border-t border-[var(--color-earth-700)] flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-[var(--color-earth-500)]">
-          <p>© 2026 영주선비AI. 본 서비스의 콘텐츠는 공공데이터 활용 목적으로 제작되었습니다.</p>
+          <p>© 2026 {city.brand.title}. 본 서비스의 콘텐츠는 공공데이터 활용 목적으로 제작되었습니다.</p>
           <p className="flex items-center gap-1">
             <span>공공데이터포털</span>
             <a

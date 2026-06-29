@@ -16,7 +16,7 @@ export interface EncykoreaEntry {
 }
 
 /** 영주 관련 인물·풍속 정적 데이터 8건 */
-const STATIC_ENCYKOREA_DATA: EncykoreaEntry[] = [
+export const STATIC_ENCYKOREA_DATA: EncykoreaEntry[] = [
   {
     id: "ency-001",
     title: "퇴계 이황",
@@ -118,18 +118,22 @@ const STATIC_ENCYKOREA_DATA: EncykoreaEntry[] = [
 /**
  * 한국민족문화대백과사전 키워드 검색
  * 정적 데이터에서 키워드 매칭
+ * @param keyword 검색 키워드
+ * @param fallback 도시별 정적 데이터 (미지정 시 영주 기본 데이터 사용)
  */
-export function searchEncykorea(keyword: string): {
+export function searchEncykorea(keyword: string, fallback?: EncykoreaEntry[]): {
   found: boolean;
   count: number;
   data: EncykoreaEntry[];
   source: string;
 } {
+  const staticData = fallback ?? STATIC_ENCYKOREA_DATA;
+
   if (!keyword || keyword.trim().length === 0) {
     return {
       found: true,
-      count: STATIC_ENCYKOREA_DATA.length,
-      data: STATIC_ENCYKOREA_DATA,
+      count: staticData.length,
+      data: staticData,
       source: "한국민족문화대백과사전 (한국학중앙연구원)",
     };
   }
@@ -139,7 +143,7 @@ export function searchEncykorea(keyword: string): {
     .split(/[\s,?.!]+/)
     .filter((t) => t.length > 1);
 
-  const scored = STATIC_ENCYKOREA_DATA.map((entry) => {
+  const scored = staticData.map((entry) => {
     const searchable = [
       entry.title,
       entry.category,

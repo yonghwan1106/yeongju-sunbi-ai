@@ -21,7 +21,7 @@ export interface MuseumRelic {
 const MUSEUM_API_BASE = "https://www.emuseum.go.kr/openapi/relicSearchList";
 
 /** 영주 관련 주요 유물 정적 폴백 데이터 5건 */
-const STATIC_YEONGJU_RELICS: MuseumRelic[] = [
+export const STATIC_YEONGJU_RELICS: MuseumRelic[] = [
   {
     id: "museum-001",
     name: "안향 초상",
@@ -108,10 +108,12 @@ interface MuseumApiResponse {
 }
 
 /**
- * 영주 관련 박물관 유물 검색
- * MUSEUM_API_KEY 환경변수가 있으면 실제 API 호출, 없으면 정적 데이터 반환
+ * 도시 관련 박물관 유물 검색
+ * MUSEUM_API_KEY 환경변수가 있으면 실제 API 호출, 없으면 정적 데이터(fallback) 반환
+ * @param keyword 검색 키워드
+ * @param fallback 도시별 정적 폴백 데이터 (미지정 시 영주 기본 데이터 사용)
  */
-export async function searchYeongjuRelics(keyword?: string): Promise<{
+export async function searchYeongjuRelics(keyword?: string, fallback?: MuseumRelic[]): Promise<{
   found: boolean;
   count: number;
   data: MuseumRelic[];
@@ -164,7 +166,8 @@ export async function searchYeongjuRelics(keyword?: string): Promise<{
   }
 
   // 정적 폴백 데이터 — 키워드 필터링
-  let results = [...STATIC_YEONGJU_RELICS];
+  const staticData = fallback ?? STATIC_YEONGJU_RELICS;
+  let results = [...staticData];
   if (keyword) {
     const kw = keyword.toLowerCase();
     const filtered = results.filter(

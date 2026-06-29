@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight, Bot, Target, Map, BookOpen, Globe, Award, ChevronRight } from "lucide-react";
-import { heritageData } from "@/data/heritage";
+import { heritageData } from "@/data/active";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },

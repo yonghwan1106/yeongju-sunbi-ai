@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import BottomNav from "@/components/layout/BottomNav";
+import { getActiveCity } from "@/config/city";
 
 const notoSansKr = Noto_Sans_KR({
   subsets: ["latin"],
@@ -13,15 +14,15 @@ const notoSansKr = Noto_Sans_KR({
   preload: false,
 });
 
+const _city = getActiveCity();
 export const metadata: Metadata = {
   metadataBase: new URL("https://yeongju-sunbi-ai.vercel.app"),
-  title: "영주선비AI - AI 문화유산 해설 플랫폼",
-  description:
-    "유네스코 세계유산 부석사·소수서원을 비롯한 영주의 천년 문화유산을 AI가 생생하게 해설해드립니다. 공공데이터 기반 대화형 AI 해설사, 선비문화 퀴즈, 디지털 스탬프투어를 만나보세요.",
-  keywords: ["영주", "문화유산", "AI 해설사", "부석사", "소수서원", "선비문화", "유네스코", "공공데이터"],
+  title: `${_city.brand.title} - AI 문화유산 해설 플랫폼`,
+  description: _city.brand.description,
+  keywords: _city.brand.keywords,
   openGraph: {
-    title: "영주선비AI - AI 문화유산 해설 플랫폼",
-    description: "영주의 천년 문화유산을 AI 선비 해설사가 안내합니다",
+    title: `${_city.brand.title} - AI 문화유산 해설 플랫폼`,
+    description: `${_city.name}의 천년 문화유산을 AI 선비 해설사가 안내합니다`,
     locale: "ko_KR",
     type: "website",
   },

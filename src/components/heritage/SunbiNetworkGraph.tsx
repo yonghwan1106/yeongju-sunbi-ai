@@ -2,9 +2,12 @@
 
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { heritageData } from "@/data/heritage";
-import { figuresData, HistoricalFigure } from "@/data/figures";
+import { heritageData, figuresData } from "@/data/active";
+import type { HistoricalFigure } from "@/data/active";
 import { Heritage } from "@/types";
+import { getActiveCity } from "@/config/city";
+
+const CITY_NAME = getActiveCity().name;
 
 interface SunbiNetworkGraphProps {
   selectedFigureId: string | null;
@@ -180,7 +183,7 @@ export default function SunbiNetworkGraph({
           viewBox={`0 0 ${SVG_W} ${SVG_H}`}
           className="w-full h-auto"
           role="img"
-          aria-label="영주 선비 인물과 유산의 네트워크 그래프"
+          aria-label={`${CITY_NAME} 선비 인물과 유산의 네트워크 그래프`}
         >
           {/* 중앙 후광 */}
           <defs>
@@ -247,7 +250,7 @@ export default function SunbiNetworkGraph({
               fontWeight={800}
               fill="white"
             >
-              영주
+              {CITY_NAME}
             </text>
             <text
               x={CENTER.x}

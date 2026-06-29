@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Landmark } from "lucide-react";
+import { getActiveCity } from "@/config/city";
 
 const navLinks = [
   { href: "/", label: "홈" },
@@ -16,6 +17,7 @@ const navLinks = [
 ];
 
 export default function Header() {
+  const city = getActiveCity();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -48,7 +50,7 @@ export default function Header() {
               <Landmark size={18} strokeWidth={1.8} />
             </span>
             <span className="text-lg font-bold tracking-tight text-[var(--color-ink)]">
-              영주<span className="text-[var(--color-primary-500)]">선비</span>AI
+              {city.name}<span className="text-[var(--color-primary-500)]">선비</span>AI
             </span>
           </Link>
 

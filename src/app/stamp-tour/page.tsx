@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Stamp, Trophy, Info, BookOpen, MapPin, Navigation, FlaskConical } from "lucide-react";
-import { heritageData } from "@/data/heritage";
+import { heritageData } from "@/data/active";
 import StampCard from "@/components/stamp/StampCard";
 import Link from "next/link";
 import { haversineMeters, within, type Coord } from "@/lib/utils/geofence";

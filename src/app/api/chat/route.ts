@@ -2,13 +2,15 @@ import { streamText, tool, stepCountIs, convertToModelMessages, createUIMessageS
 import { anthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
 import { buildAgentSystemPrompt } from "@/lib/rag/heritage-context";
-import { heritageData, getHeritageById } from "@/data/heritage";
-import { findCuratedCourse } from "@/data/courses";
+import { heritageData, getHeritageById, findCuratedCourse, findCanonicalAnswer } from "@/data/active";
 import { getYeongjuWeather } from "@/lib/api/weather-api";
 import { searchTourSpots } from "@/lib/api/tour-api";
 import { searchYeongjuRelics } from "@/lib/api/museum-api";
 import { searchEncykorea } from "@/lib/api/encykorea-api";
-import { findCanonicalAnswer } from "@/data/canonical-qa";
+import { getActiveCity } from "@/config/city";
+
+// 빌드 타임 상수 — NEXT_PUBLIC_CITY_ID 환경변수로 도시 선택
+const _activeCity = getActiveCity();
 
 
 export const runtime = "nodejs";
@@ -197,7 +199,7 @@ export async function POST(req: Request) {
             const results = await searchTourSpots({
               keyword: keyword,
               contentTypeId: type ? typeMap[type] : undefined,
-              areaCode: "35",
+              areaCode: _activeCity.areaCode,
               numOfRows: 10,
             });
 
@@ -250,7 +252,7 @@ export async function POST(req: Request) {
               }
               return {
                 curated: true,
-                source: "영주선비AI 큐레이션 코스",
+                source: `${_activeCity.brand.title} 큐레이션 코스`,
                 duration: curated.duration,
                 theme: curated.theme,
                 course: {
@@ -349,7 +351,7 @@ export async function POST(req: Request) {
                 correctIndex: selected.correctIndex,
                 difficulty: selected.difficulty,
                 explanation: selected.explanation,
-                relatedHeritage: heritage?.name || "영주 문화유산",
+                relatedHeritage: heritage?.name || `${_activeCity.name} 문화유산`,
               },
               tip: "정답을 맞추면 영주 문화유산에 대한 이해가 더 깊어집니다!",
             };

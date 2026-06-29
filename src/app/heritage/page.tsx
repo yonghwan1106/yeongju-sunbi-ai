@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Landmark, Search, GitBranch, Network } from "lucide-react";
-import { heritageData } from "@/data/heritage";
+import { heritageData } from "@/data/active";
 import { Heritage } from "@/types";
 import HeritageCard from "@/components/heritage/HeritageCard";
 import LineageTimeline from "@/components/heritage/LineageTimeline";

@@ -3,6 +3,8 @@
  * https://api.visitkorea.or.kr/
  */
 
+import { getActiveCity } from "@/config/city";
+
 const TOUR_API_BASE = "https://apis.data.go.kr/B551011/KorService1";
 const API_KEY = process.env.TOUR_API_KEY || "";
 
@@ -19,9 +21,9 @@ export async function searchTourSpots(params: TourSearchParams) {
   const searchParams = new URLSearchParams({
     serviceKey: API_KEY,
     MobileOS: "ETC",
-    MobileApp: "YeongjuSunbiAI",
+    MobileApp: getActiveCity().tourMobileApp,
     _type: "json",
-    areaCode: params.areaCode || "35", // 경상북도
+    areaCode: params.areaCode || getActiveCity().areaCode,
     numOfRows: String(params.numOfRows || 20),
     pageNo: String(params.pageNo || 1),
   });
@@ -56,7 +58,7 @@ export async function getTourDetail(contentId: string, contentTypeId: string = "
   const params = new URLSearchParams({
     serviceKey: API_KEY,
     MobileOS: "ETC",
-    MobileApp: "YeongjuSunbiAI",
+    MobileApp: getActiveCity().tourMobileApp,
     _type: "json",
     contentId,
     contentTypeId,

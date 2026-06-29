@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Map } from "lucide-react";
-import { coursesData } from "@/data/courses";
+import { coursesData } from "@/data/active";
 import CourseCard from "@/components/courses/CourseCard";
 
 export const metadata: Metadata = {

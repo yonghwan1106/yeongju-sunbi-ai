@@ -9,6 +9,7 @@ import SuggestedQuestions from "@/components/chat/SuggestedQuestions";
 import ToolInvocationDisplay from "@/components/chat/ToolInvocationDisplay";
 import ShareButton from "@/components/chat/ShareButton";
 import { useSpeechToText } from "@/lib/hooks/useSpeech";
+import { getActiveCity } from "@/config/city";
 
 const DATA_SOURCES = [
   "문화재청 국가문화유산포털",
@@ -22,6 +23,7 @@ const DATA_SOURCES = [
 const TOOL_NAMES = ["searchHeritage", "getWeather", "searchTourSpots", "planTourCourse", "generateQuiz", "searchMuseum", "searchEncyclopedia"];
 
 export default function ChatPage() {
+  const city = getActiveCity();
   const { messages, sendMessage, status, setMessages } = useChat({
     transport: new DefaultChatTransport({ api: "/api/chat" }),
   });
@@ -98,7 +100,7 @@ export default function ChatPage() {
             <h1 className="font-semibold text-stone-900 text-base leading-tight">
               AI 선비 에이전트
             </h1>
-            <p className="text-xs text-stone-500">영주선비AI · Tool-Use AI Agent</p>
+            <p className="text-xs text-stone-500">{city.brand.title} · Tool-Use AI Agent</p>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <ShareButton />
@@ -142,7 +144,7 @@ export default function ChatPage() {
                     <Bot size={20} />
                   </div>
                   <div className="space-y-2">
-                    <p className="font-medium text-stone-800">안녕하세요! 영주선비AI 에이전트입니다.</p>
+                    <p className="font-medium text-stone-800">안녕하세요! {city.persona}입니다.</p>
                     <p className="text-sm text-stone-600 leading-relaxed">
                       저는 공공데이터 도구를 자율적으로 활용하는 AI 에이전트입니다.
                       문화유산 검색, 실시간 날씨 조회, 관광지·맛집 탐색, 맞춤 코스 생성까지 —
@@ -274,7 +276,7 @@ export default function ChatPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="영주 문화유산에 대해 궁금한 점을 물어보세요..."
+            placeholder={`${city.name} 문화유산에 대해 궁금한 점을 물어보세요...`}
             rows={1}
             className="flex-1 resize-none rounded-xl border border-stone-200 bg-stone-50 px-3 py-2.5
               text-sm text-stone-800 placeholder:text-stone-400

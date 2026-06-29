@@ -1,5 +1,4 @@
-import { heritageData, getHeritageById } from "@/data/heritage";
-import { getQuizByHeritage } from "@/data/quiz";
+import { heritageData, getHeritageById, getQuizByHeritage } from "@/data/active";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";

@@ -14,7 +14,7 @@ import {
   XCircle,
   ChevronDown,
 } from "lucide-react";
-import { quizData, getQuizByDifficulty, getRandomQuiz } from "@/data/quiz";
+import { quizData, getQuizByDifficulty, getRandomQuiz } from "@/data/active";
 import { QuizQuestion } from "@/types";
 import QuizCard from "@/components/quiz/QuizCard";
 import Link from "next/link";

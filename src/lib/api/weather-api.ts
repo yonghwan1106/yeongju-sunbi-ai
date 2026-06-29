@@ -3,13 +3,11 @@
  * https://www.data.go.kr/data/15084084/openapi.do
  */
 
+import { getActiveCity } from "@/config/city";
+
 const WEATHER_API_BASE =
   "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
 const API_KEY = process.env.WEATHER_API_KEY || "";
-
-// 영주시 격자 좌표 (기상청 격자)
-const YEONGJU_NX = 71;
-const YEONGJU_NY = 122;
 
 interface WeatherData {
   temperature: number;
@@ -32,8 +30,8 @@ export async function getYeongjuWeather(): Promise<WeatherData | null> {
     dataType: "JSON",
     base_date: baseDate,
     base_time: baseTime,
-    nx: String(YEONGJU_NX),
-    ny: String(YEONGJU_NY),
+    nx: String(getActiveCity().weatherGrid.nx),
+    ny: String(getActiveCity().weatherGrid.ny),
   });
 
   try {

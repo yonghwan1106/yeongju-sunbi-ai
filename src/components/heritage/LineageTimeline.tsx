@@ -2,8 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { heritageData } from "@/data/heritage";
-import { figuresData } from "@/data/figures";
+import { heritageData, figuresData } from "@/data/active";
 
 interface LineageTimelineProps {
   selectedFigureId: string | null;
