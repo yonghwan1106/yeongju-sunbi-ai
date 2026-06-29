@@ -58,19 +58,23 @@ export async function POST(req: Request) {
     if (!noLog && lastUserText.trim()) {
       const admin = getAdminClient();
       if (admin) {
-        // PromiseLike(Supabase PostgrestBuilder)는 .catch 없음 → async IIFE로 감쌈
-        void (async () => {
-          try {
-            await admin.from("chat_questions").insert({
-              question: scrubPii(lastUserText).slice(0, 500),
-              session_id: sessionId,
-              class_code: classCode,
-              city_id: _activeCity.id,
-            });
-          } catch {
-            // non-fatal
-          }
-        })();
+        // 스트리밍 시작 전에 insert를 보장한다. Vercel 서버리스는 응답 종료 후
+        // await 없는 백그라운드 프로미스를 종료시켜 로깅을 유실시키므로(특히 클라이언트
+        // 조기 종료 시), 여기서 await 하되 2초 타임아웃 가드로 챗 응답을 막지 않는다.
+        try {
+          const insert = admin.from("chat_questions").insert({
+            question: scrubPii(lastUserText).slice(0, 500),
+            session_id: sessionId,
+            class_code: classCode,
+            city_id: _activeCity.id,
+          });
+          await Promise.race([
+            Promise.resolve(insert),
+            new Promise((resolve) => setTimeout(resolve, 2000)),
+          ]);
+        } catch {
+          // non-fatal — 로깅 실패가 챗 동작에 영향 없음
+        }
       }
     }
     // ─────────────────────────────────────────────────────────────────────────
