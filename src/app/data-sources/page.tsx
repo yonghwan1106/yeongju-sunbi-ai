@@ -144,14 +144,14 @@ export default function DataSourcesPage() {
               공공데이터 활용 내역
             </h1>
             <p className="text-base sm:text-lg text-white/80 max-w-2xl leading-relaxed">
-              영주선비AI는 5개 정부·공공기관의 데이터를 실시간으로 활용해
-              답변합니다. 문화재청, 한국관광공사, 기상청 등 신뢰할 수 있는
-              공공데이터를 기반으로 정확하고 최신의 정보를 제공합니다.
+              영주선비AI는 5개 정부·공공기관의 데이터를 활용해 답변합니다.
+              기상청·한국관광공사는 실시간 API로, 문화재청·국립중앙박물관·민족문화대백과는
+              검증된 정적 큐레이션으로 — 모든 답변에 출처를 명시합니다.
             </p>
             <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-5 py-3 text-sm text-white/90 mt-2">
               <Zap className="w-4 h-4 text-amber-300 shrink-0" />
               <span>
-                모든 API는{" "}
+                실시간 API(기상청·관광공사)는{" "}
                 <a
                   href="https://www.data.go.kr"
                   target="_blank"
@@ -170,7 +170,7 @@ export default function DataSourcesPage() {
       {/* Cards grid */}
       <section className="max-w-5xl mx-auto px-4 py-12 sm:py-16">
         <p className="text-sm text-[var(--color-charcoal)] opacity-60 mb-8 text-center">
-          총 5개 공공기관 API 연동
+          총 5개 공공기관 데이터 연동 · 실시간 API 2 + 검증 큐레이션 3
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -287,7 +287,7 @@ export default function DataSourcesPage() {
           <div className="flex-1 text-center sm:text-left">
             <p className="font-semibold text-white">공공데이터포털 인증키 발급</p>
             <p className="text-sm text-white/70 mt-0.5">
-              위 API는 공공데이터포털(data.go.kr)에서 무료로 인증키를 발급받아
+              실시간 API(기상청·한국관광공사)는 공공데이터포털(data.go.kr)에서 무료로 인증키를 발급받아
               사용할 수 있습니다. 누구나 신청 가능합니다.
             </p>
           </div>
