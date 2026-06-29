@@ -14,6 +14,7 @@ const navLinks = [
   { href: "/chat", label: "AI 해설사" },
   { href: "/quiz", label: "퀴즈" },
   { href: "/stamp-tour", label: "스탬프투어" },
+  { href: "/dashboard", label: "대시보드" },
 ];
 
 export default function Header() {
