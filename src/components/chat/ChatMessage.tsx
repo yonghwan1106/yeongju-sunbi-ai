@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Bot, User, Copy, Check } from "lucide-react";
+import { Bot, User, Copy, Check, Volume2, Square } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useTextToSpeech } from "@/lib/hooks/useSpeech";
 
 interface ChatMessageProps {
   role: "user" | "assistant";
@@ -20,6 +21,7 @@ function formatTime(date?: Date): string {
 export default function ChatMessage({ role, content, timestamp }: ChatMessageProps) {
   const isUser = role === "user";
   const [copied, setCopied] = useState(false);
+  const { speak, stop, isSpeaking, supported: ttsSupported } = useTextToSpeech();
 
   function handleCopy() {
     navigator.clipboard.writeText(content).then(() => {
@@ -57,20 +59,34 @@ export default function ChatMessage({ role, content, timestamp }: ChatMessagePro
             }`}
         >
           {!isUser && (
-            <button
-              type="button"
-              onClick={handleCopy}
-              aria-label="응답 복사"
-              className="absolute top-2 right-2 p-1 rounded-md text-stone-400 hover:text-stone-600
-                hover:bg-stone-200 transition-colors"
-            >
-              {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
-            </button>
+            <div className="absolute top-2 right-2 flex items-center gap-0.5">
+              {ttsSupported && (
+                <button
+                  type="button"
+                  onClick={() => (isSpeaking ? stop() : speak(content))}
+                  aria-label={isSpeaking ? "읽기 정지" : "응답 읽어주기"}
+                  title={isSpeaking ? "읽기 정지" : "응답 읽어주기 (음성)"}
+                  className="p-1 rounded-md text-stone-400 hover:text-emerald-700
+                    hover:bg-stone-200 transition-colors"
+                >
+                  {isSpeaking ? <Square size={13} className="text-emerald-600" /> : <Volume2 size={14} />}
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleCopy}
+                aria-label="응답 복사"
+                className="p-1 rounded-md text-stone-400 hover:text-stone-600
+                  hover:bg-stone-200 transition-colors"
+              >
+                {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
+              </button>
+            </div>
           )}
           {isUser ? (
             <p className="whitespace-pre-wrap">{content}</p>
           ) : (
-            <div className="prose-chat pr-5">
+            <div className="prose-chat pr-12">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{

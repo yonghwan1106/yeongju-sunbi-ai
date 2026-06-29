@@ -3,11 +3,12 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useRef, useEffect, useState } from "react";
-import { Send, Bot, Loader2, Database, Cpu, Trash2 } from "lucide-react";
+import { Send, Bot, Loader2, Database, Cpu, Trash2, Mic, MicOff } from "lucide-react";
 import ChatMessage from "@/components/chat/ChatMessage";
 import SuggestedQuestions from "@/components/chat/SuggestedQuestions";
 import ToolInvocationDisplay from "@/components/chat/ToolInvocationDisplay";
 import ShareButton from "@/components/chat/ShareButton";
+import { useSpeechToText } from "@/lib/hooks/useSpeech";
 
 const DATA_SOURCES = [
   "문화재청 국가문화유산포털",
@@ -26,6 +27,14 @@ export default function ChatPage() {
   });
   const [input, setInput] = useState("");
   const isLoading = status === "submitted" || status === "streaming";
+
+  // 음성 입력(STT) — 인식 결과를 입력창에 주입
+  const {
+    start: startListening,
+    stop: stopListening,
+    isListening,
+    supported: sttSupported,
+  } = useSpeechToText((t) => setInput((prev) => (prev ? prev.trim() + " " : "") + t));
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
@@ -273,6 +282,23 @@ export default function ChatPage() {
               transition-all"
             disabled={isLoading}
           />
+          {sttSupported && (
+            <button
+              type="button"
+              onClick={() => (isListening ? stopListening() : startListening())}
+              disabled={isLoading}
+              aria-label={isListening ? "음성 입력 중지" : "음성으로 질문하기"}
+              title="음성으로 질문하기 (Chrome·Edge·Safari)"
+              className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center
+                transition-colors active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed
+                ${isListening
+                  ? "bg-red-500 text-white animate-pulse"
+                  : "bg-stone-100 text-stone-500 border border-stone-200 hover:bg-stone-200 hover:text-stone-700"
+                }`}
+            >
+              {isListening ? <MicOff size={16} aria-hidden="true" /> : <Mic size={16} aria-hidden="true" />}
+            </button>
+          )}
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
@@ -290,7 +316,7 @@ export default function ChatPage() {
           </button>
         </form>
         <p className="max-w-2xl mx-auto text-xs text-stone-400 mt-2 px-1">
-          Enter로 전송 · Shift+Enter로 줄바꿈 · AI 에이전트가 도구를 자율 호출합니다
+          Enter로 전송 · Shift+Enter로 줄바꿈{sttSupported ? " · 🎤 음성으로 질문" : ""} · 🔊 답변 읽어주기 지원
         </p>
       </footer>
     </div>
