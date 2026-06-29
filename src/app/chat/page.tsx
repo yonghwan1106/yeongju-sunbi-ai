@@ -244,10 +244,13 @@ export default function ChatPage() {
             <>
               {messages.map((m) => {
                 // Extract text parts
+                // 도구 호출 전/후로 나뉜 텍스트 파트를 빈 줄로 이어 붙인다.
+                // ""로 붙이면 "...습니다.## 제목"처럼 heading(##)이 줄 중간에 와서
+                // 마크다운이 파싱되지 않고 '##'이 그대로 노출된다.
                 const textContent = m.parts
                   ?.filter((p): p is { type: "text"; text: string } => p.type === "text")
                   .map((p) => p.text)
-                  .join("") ?? "";
+                  .join("\n\n") ?? "";
 
                 // Extract tool parts: type is "tool-{name}" in AI SDK v6
                 const toolParts = (m.parts ?? [])

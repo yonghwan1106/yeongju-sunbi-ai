@@ -18,6 +18,16 @@ function formatTime(date?: Date): string {
   return date.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
 }
 
+/**
+ * 마크다운 안전 정규화 — 블록 요소가 줄 중간에 와서 '##' 등이 글자로 노출되는 것을 방지.
+ * (도구 호출 전/후 텍스트가 붙거나 모델이 "문장.## 제목"처럼 inline으로 쓴 경우)
+ * 정규식에 한글 리터럴을 쓰지 않는다(SWC 한글 regex 버그 회피).
+ */
+function normalizeMd(text: string): string {
+  // 줄 중간에 온 ATX heading('## ') 앞에 빈 줄을 넣어 마크다운으로 파싱되게 한다.
+  return text.replace(/([^\n])(#{1,6}\s)/g, "$1\n\n$2");
+}
+
 export default function ChatMessage({ role, content, timestamp }: ChatMessageProps) {
   const isUser = role === "user";
   const [copied, setCopied] = useState(false);
@@ -127,7 +137,7 @@ export default function ChatMessage({ role, content, timestamp }: ChatMessagePro
                   ),
                 }}
               >
-                {content}
+                {normalizeMd(content)}
               </ReactMarkdown>
             </div>
           )}
