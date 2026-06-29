@@ -44,12 +44,12 @@ const sources: DataSource[] = [
     providerEn: "Cultural Heritage Administration (CHA)",
     endpoint: "http://www.cha.go.kr/cha/SearchKindOpenapiList.do",
     providerUrl: "https://www.cha.go.kr",
-    accessType: "Static",
+    accessType: "REST",
     icon: <Landmark className="w-6 h-6" />,
     iconBg: "bg-amber-100 text-amber-700",
     accentColor: "border-amber-400",
     usage:
-      `${_dsCity.name} 지역 ${_dsCity.dataPack.heritage.length}개 유산의 메타데이터(국보 지정 번호, 시대, 위치, 종류)를 국가문화유산포털 기준으로 정리한 정적 큐레이션 데이터셋으로 제공합니다. AI 해설사가 유산 검색 시 이 데이터를 근거로 답변하고 문화재청을 출처로 표기합니다. (실시간 API는 클라우드 IP 차단 이슈로 현재 미사용)`,
+      `${_dsCity.name} 지역 문화유산을 문화재청 국가문화유산포털 OpenAPI(무인증)로 실시간 조회합니다. AI 해설사가 유산 검색 시 공식 지정문화유산 목록을 실시간 호출하고, 큐레이션 해설과 함께 문화재청을 출처로 표기합니다.`,
     tools: ["searchHeritage"],
     example: `${_top1} 관련 국보 지정 정보를 알려주세요`,
   },
@@ -57,7 +57,7 @@ const sources: DataSource[] = [
     id: 2,
     provider: "한국관광공사 TourAPI 4.0",
     providerEn: "Korea Tourism Organization (KTO)",
-    endpoint: "https://apis.data.go.kr/B551011/KorService1",
+    endpoint: "https://apis.data.go.kr/B551011/KorService2",
     providerUrl: "https://www.visitkorea.or.kr",
     accessType: "REST",
     icon: <MapPin className="w-6 h-6" />,
@@ -151,7 +151,7 @@ export default function DataSourcesPage() {
             </h1>
             <p className="text-base sm:text-lg text-white/80 max-w-2xl leading-relaxed">
               {_dsCity.brand.title}는 5개 정부·공공기관의 데이터를 활용해 답변합니다.
-              기상청·한국관광공사는 실시간 API로, 문화재청·국립중앙박물관·민족문화대백과는
+              문화재청·기상청·한국관광공사는 실시간 API로, 국립중앙박물관·민족문화대백과는
               검증된 정적 큐레이션으로 — 모든 답변에 출처를 명시합니다.
             </p>
             <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-5 py-3 text-sm text-white/90 mt-2">
@@ -176,7 +176,7 @@ export default function DataSourcesPage() {
       {/* Cards grid */}
       <section className="max-w-5xl mx-auto px-4 py-12 sm:py-16">
         <p className="text-sm text-[var(--color-charcoal)] opacity-60 mb-8 text-center">
-          총 5개 공공기관 데이터 연동 · 실시간 API 2 + 검증 큐레이션 3
+          총 5개 공공기관 데이터 연동 · 실시간 API 3 + 검증 큐레이션 2
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

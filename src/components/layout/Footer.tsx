@@ -2,13 +2,12 @@ import Link from "next/link";
 import { Landmark, ExternalLink } from "lucide-react";
 import { getActiveCity } from "@/config/city";
 
-const _footerCity = getActiveCity();
 const publicDataSources = [
   { name: "문화재청", url: "https://www.cha.go.kr" },
   { name: "한국관광공사", url: "https://www.visitkorea.or.kr" },
   { name: "기상청", url: "https://www.kma.go.kr" },
-  { name: `${_footerCity.name}시청`, url: _footerCity.govUrl ?? `https://www.${_footerCity.id}.go.kr` },
-  { name: "국토교통부", url: "https://www.molit.go.kr" },
+  { name: "국립중앙박물관", url: "https://www.museum.go.kr" },
+  { name: "한국학중앙연구원", url: "https://www.aks.ac.kr" },
 ];
 
 const footerLinks = [

@@ -34,6 +34,7 @@ export const andongCity: CityConfig = {
   weatherGrid: { nx: 91, ny: 106 },
   areaCode: "35",
   sigunguCode: "11",
+  chaCtcd: "37",
   tourMobileApp: "AndongSunbiAI",
   govUrl: "https://www.andong.go.kr",
   suggestedQuestions: [

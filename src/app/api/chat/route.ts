@@ -6,7 +6,8 @@ import { heritageData, quizData, getHeritageById, findCuratedCourse, findCanonic
 import { getYeongjuWeather } from "@/lib/api/weather-api";
 import { searchTourSpots } from "@/lib/api/tour-api";
 import { searchYeongjuRelics } from "@/lib/api/museum-api";
-import { searchEncykorea } from "@/lib/api/encykorea-api";
+import { searchEncykoreaLive } from "@/lib/api/encykorea-api";
+import { searchOfficialHeritage } from "@/lib/api/cha-api";
 import { getActiveCity } from "@/config/city";
 import { getAdminClient } from "@/lib/supabase";
 
@@ -166,14 +167,32 @@ export async function POST(req: Request) {
                 .map((s) => s.heritage);
             }
 
+            // 문화재청 국가문화유산포털 실시간 조회(무인증) — 공식 지정문화유산
+            const official = await searchOfficialHeritage(query);
+            const heritageSource = official.apiUsed
+              ? "문화재청 국가문화유산포털 (실시간 조회)"
+              : "문화재청 국가문화유산포털";
+
             if (results.length === 0) {
-              return { found: false, message: "해당 조건에 맞는 문화유산을 찾지 못했습니다.", data: [], externalSources: [] };
+              return {
+                found: official.count > 0,
+                message:
+                  official.count > 0
+                    ? "큐레이션 자료에는 없지만 문화재청 실시간 조회 결과가 있습니다."
+                    : "해당 조건에 맞는 문화유산을 찾지 못했습니다.",
+                data: [],
+                officialDesignations: official.data,
+                officialCount: official.count,
+                externalSources: [heritageSource],
+              };
             }
 
             return {
               found: true,
               count: results.length,
-              externalSources: ["문화재청 국가문화유산포털"],
+              externalSources: [heritageSource],
+              officialDesignations: official.data,
+              officialCount: official.count,
               data: results.map((h) => ({
                 id: h.id,
                 name: h.name,
@@ -443,7 +462,7 @@ export async function POST(req: Request) {
             keyword: z.string().describe(`검색 키워드 (예: ${_activeCity.dataPack.figures.slice(0, 3).map((f) => f.name).join(", ")})`),
           }),
           execute: async ({ keyword }) => {
-            const result = searchEncykorea(keyword, _activeCity.dataPack.encyData);
+            const result = await searchEncykoreaLive(keyword, _activeCity.dataPack.encyData);
             if (!result.found) {
               return {
                 found: false,

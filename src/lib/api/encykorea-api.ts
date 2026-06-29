@@ -173,3 +173,68 @@ export function searchEncykorea(keyword: string, fallback?: EncykoreaEntry[]): {
     source: "한국민족문화대백과사전 (한국학중앙연구원)",
   };
 }
+
+const ENCY_API_BASE = "https://devin.aks.ac.kr:8080/api";
+
+/**
+ * 한국민족문화대백과사전 OpenAPI 실시간 검색(요청 헤더 X-API-Key) + 정적 폴백.
+ * ENCYKOREA_API_KEY 미설정/비활성(발급 30분 이내)/오류 시 정적 데이터로 안전 폴백.
+ * 정규식에 한글 리터럴 없음(SWC 회피), 검색어는 encodeURIComponent로 처리.
+ */
+export async function searchEncykoreaLive(
+  keyword: string,
+  fallback?: EncykoreaEntry[]
+): Promise<{ found: boolean; count: number; data: EncykoreaEntry[]; source: string; apiUsed: boolean }> {
+  const key = process.env.ENCYKOREA_API_KEY;
+  if (key && keyword && keyword.trim().length > 0) {
+    try {
+      const url = `${ENCY_API_BASE}/articles/search?q=${encodeURIComponent(keyword.trim())}&p=1&ps=8`;
+      const res = await fetch(url, {
+        headers: { "X-API-Key": key, accept: "application/json" },
+        next: { revalidate: 3600 },
+      });
+      if (res.ok) {
+        const json: unknown = await res.json();
+        const root = (json ?? {}) as Record<string, unknown>;
+        const raw = (root.data ??
+          root.articles ??
+          root.items ??
+          root.list ??
+          root.result ??
+          (Array.isArray(json) ? json : [])) as unknown[];
+        if (Array.isArray(raw) && raw.length > 0) {
+          const data: EncykoreaEntry[] = raw
+            .slice(0, 8)
+            .map((r, i) => {
+              const o = (r ?? {}) as Record<string, unknown>;
+              const str = (...keys: string[]) => {
+                for (const k of keys) {
+                  const v = o[k];
+                  if (typeof v === "string" && v.trim()) return v.trim();
+                }
+                return "";
+              };
+              return {
+                id: `ency-live-${i}`,
+                title: str("title", "headword", "name", "term"),
+                category: str("category", "field", "type"),
+                era: str("era", "period", "age"),
+                summary: str("summary", "definition", "abstract", "description"),
+                content: str("content", "body", "text", "summary", "definition"),
+                relatedKeywords: Array.isArray(o.keywords) ? (o.keywords as string[]) : [],
+                source: "한국민족문화대백과사전 (한국학중앙연구원, 실시간 조회)",
+              };
+            })
+            .filter((e) => e.title);
+          if (data.length > 0) {
+            return { found: true, count: data.length, data, source: "한국민족문화대백과사전 (실시간 조회)", apiUsed: true };
+          }
+        }
+      }
+    } catch (e) {
+      console.error("민백 API 호출 실패, 정적 폴백:", e);
+    }
+  }
+  const s = searchEncykorea(keyword, fallback);
+  return { found: s.found, count: s.count, data: s.data, source: s.source, apiUsed: false };
+}

@@ -33,6 +33,8 @@ export interface CityConfig {
   /** 한국관광공사 areaCode (35 = 경상북도) */
   areaCode: string;
   sigunguCode?: string;
+  /** 문화재청(국가유산청) 시도코드 (경상북도=37) — 무인증 국가문화유산포털 */
+  chaCtcd?: string;
   /** TourAPI MobileApp 파라미터 */
   tourMobileApp: string;
   /** 지자체 공식 누리집 URL (예: "https://www.yeongju.go.kr") */

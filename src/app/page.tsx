@@ -362,11 +362,11 @@ export default function HomePage() {
               신뢰할 수 있는 공공데이터로 만든 서비스
             </h2>
             <p className="text-sm text-[var(--color-accent-300)] leading-relaxed max-w-2xl mx-auto">
-              본 서비스는 <strong className="text-white font-semibold">문화재청, 한국관광공사, 기상청, {city.name}시청, 국토교통부</strong> 등
+              본 서비스는 <strong className="text-white font-semibold">문화재청, 한국관광공사, 기상청, 국립중앙박물관, 한국학중앙연구원</strong> 등
               5개 기관의 공공데이터를 활용합니다. 정확하고 최신화된 정보를 바탕으로 {city.name} 문화유산을 소개합니다.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-2">
-              {["문화재청 문화재정보", "한국관광공사 관광정보", "기상청 날씨정보", `${city.name}시 지역정보`, "국토교통부 지도정보"].map(
+              {["문화재청 문화재정보", "한국관광공사 관광정보", "기상청 날씨정보", "국립중앙박물관 유물정보", "한국학중앙연구원 백과사전"].map(
                 (src) => (
                   <span
                     key={src}

@@ -19,7 +19,8 @@ export interface MuseumRelic {
   source: string;
 }
 
-const MUSEUM_API_BASE = "https://www.emuseum.go.kr/openapi/relicSearchList";
+// 올바른 경로는 /openapi/relic/list (구 relicSearchList는 404). 키는 data.go.kr "전국 박물관 유물정보"(15104964) 활용신청으로 발급.
+const MUSEUM_API_BASE = "http://www.emuseum.go.kr/openapi/relic/list";
 
 /** 영주 관련 주요 유물 정적 폴백 데이터 5건 */
 export const STATIC_YEONGJU_RELICS: MuseumRelic[] = [
