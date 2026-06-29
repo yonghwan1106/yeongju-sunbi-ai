@@ -191,7 +191,7 @@ export async function searchEncykoreaLive(
       const url = `${ENCY_API_BASE}/articles/search?q=${encodeURIComponent(keyword.trim())}&p=1&ps=8`;
       const res = await fetch(url, {
         headers: { "X-API-Key": key, accept: "application/json" },
-        next: { revalidate: 3600 },
+        cache: "no-store",
       });
       if (res.ok) {
         const json: unknown = await res.json();
