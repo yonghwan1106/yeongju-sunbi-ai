@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { MapPin, Tag } from "lucide-react";
 import { Heritage } from "@/types";
+import { t } from "@/i18n/ui";
 
 interface HeritageCardProps {
   heritage: Heritage;
@@ -15,43 +16,43 @@ const categoryConfig: Record<
   { label: string; bgClass: string; textClass: string; gradientClass: string }
 > = {
   유네스코: {
-    label: "유네스코",
+    label: t("유네스코"),
     bgClass: "bg-amber-100",
     textClass: "text-amber-800",
     gradientClass: "from-amber-400 to-yellow-600",
   },
   국보: {
-    label: "국보",
+    label: t("국보"),
     bgClass: "bg-red-100",
     textClass: "text-red-800",
     gradientClass: "from-red-400 to-rose-600",
   },
   보물: {
-    label: "보물",
+    label: t("보물"),
     bgClass: "bg-orange-100",
     textClass: "text-orange-800",
     gradientClass: "from-orange-400 to-amber-600",
   },
   사적: {
-    label: "사적",
+    label: t("사적"),
     bgClass: "bg-stone-100",
     textClass: "text-stone-700",
     gradientClass: "from-stone-400 to-stone-600",
   },
   명승: {
-    label: "명승",
+    label: t("명승"),
     bgClass: "bg-emerald-100",
     textClass: "text-emerald-800",
     gradientClass: "from-emerald-400 to-green-600",
   },
   천연기념물: {
-    label: "천연기념물",
+    label: t("천연기념물"),
     bgClass: "bg-teal-100",
     textClass: "text-teal-800",
     gradientClass: "from-teal-400 to-cyan-600",
   },
   민속문화재: {
-    label: "민속문화재",
+    label: t("민속문화재"),
     bgClass: "bg-violet-100",
     textClass: "text-violet-800",
     gradientClass: "from-violet-400 to-purple-600",
@@ -80,7 +81,7 @@ export default function HeritageCard({ heritage }: HeritageCardProps) {
         {imageSrc ? (
           <Image
             src={imageSrc}
-            alt={`${heritage.name} 카드뉴스 이미지`}
+            alt={`${heritage.name} ${t("카드뉴스 이미지")}`}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"

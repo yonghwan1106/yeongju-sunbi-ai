@@ -11,6 +11,7 @@ import {
   Zap,
 } from "lucide-react";
 import { getActiveCity } from "@/config/city";
+import { t } from "@/i18n/ui";
 
 const _dsCity = getActiveCity();
 
@@ -144,29 +145,27 @@ export default function DataSourcesPage() {
           <div className="flex flex-col items-center text-center gap-4">
             <div className="flex items-center gap-2 bg-white/15 rounded-full px-4 py-1.5 text-sm font-medium">
               <Database className="w-4 h-4" />
-              공공데이터 활용 내역
+              {t("공공데이터 활용 내역")}
             </div>
             <h1 className="text-3xl sm:text-5xl font-bold leading-tight">
-              공공데이터 활용 내역
+              {t("공공데이터 활용 내역")}
             </h1>
             <p className="text-base sm:text-lg text-white/80 max-w-2xl leading-relaxed">
-              {_dsCity.brand.title}는 5개 정부·공공기관의 데이터를 활용해 답변합니다.
-              문화재청·한국관광공사·기상청·국립중앙박물관·민족문화대백과 — 5종 모두 질문 시점에
-              실시간 API로 호출하며, 장애 시 검증된 정적 데이터로 폴백합니다(출처 100% 명시).
+              {_dsCity.brand.title}{t("는 5개 정부·공공기관의 데이터를 활용해 답변합니다. 문화재청·한국관광공사·기상청·국립중앙박물관·민족문화대백과 — 5종 모두 질문 시점에 실시간 API로 호출하며, 장애 시 검증된 정적 데이터로 폴백합니다(출처 100% 명시).")}
             </p>
             <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-5 py-3 text-sm text-white/90 mt-2">
               <Zap className="w-4 h-4 text-amber-300 shrink-0" />
               <span>
-                기상청·한국관광공사·국립중앙박물관 API는{" "}
+                {t("기상청·한국관광공사·국립중앙박물관 API는")}{" "}
                 <a
                   href="https://www.data.go.kr"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline underline-offset-2 hover:text-amber-300 transition-colors"
                 >
-                  공공데이터포털 data.go.kr
+                  {t("공공데이터포털")} data.go.kr
                 </a>
-                에서 인증키를 발급받아 사용합니다.
+                {t("에서 인증키를 발급받아 사용합니다.")}
               </span>
             </div>
           </div>
@@ -176,7 +175,7 @@ export default function DataSourcesPage() {
       {/* Cards grid */}
       <section className="max-w-5xl mx-auto px-4 py-12 sm:py-16">
         <p className="text-sm text-[var(--color-charcoal)] opacity-60 mb-8 text-center">
-          총 5개 공공기관 데이터 연동 · 실시간 API 5종 (장애 시 검증 큐레이션 폴백)
+          {t("총 5개 공공기관 데이터 연동 · 실시간 API 5종 (장애 시 검증 큐레이션 폴백)")}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -204,7 +203,7 @@ export default function DataSourcesPage() {
                     </span>
                     <div>
                       <h2 className="text-base font-bold text-[var(--color-ink)] leading-snug">
-                        {src.provider}
+                        {t(src.provider)}
                       </h2>
                       <p className="text-xs text-[var(--color-charcoal)] opacity-60 mt-0.5">
                         {src.providerEn}
@@ -222,7 +221,7 @@ export default function DataSourcesPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="shrink-0 text-[var(--color-charcoal)] opacity-50 hover:opacity-100 hover:text-[var(--color-primary-600)] transition-colors"
-                      aria-label={`${src.provider} 공식 사이트 열기`}
+                      aria-label={`${src.provider} ${t("공식 사이트 열기")}`}
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
@@ -231,7 +230,7 @@ export default function DataSourcesPage() {
                   {/* Usage prose */}
                   <div>
                     <p className="text-xs font-semibold text-[var(--color-charcoal)] uppercase tracking-wide opacity-50 mb-1">
-                      이 서비스에서의 활용
+                      {t("이 서비스에서의 활용")}
                     </p>
                     <p className="text-sm text-[var(--color-charcoal)] leading-relaxed">
                       {src.usage}
@@ -254,7 +253,7 @@ export default function DataSourcesPage() {
                   {/* Example query */}
                   <div className="border-t border-[var(--color-parchment)] pt-3">
                     <p className="text-xs font-semibold text-[var(--color-charcoal)] opacity-50 mb-1.5">
-                      샘플 질의
+                      {t("샘플 질의")}
                     </p>
                     <p className="text-sm italic text-[var(--color-primary-700)] bg-[var(--color-primary-50)] rounded-lg px-3 py-2 leading-relaxed">
                       &ldquo;{src.example}&rdquo;
@@ -270,19 +269,19 @@ export default function DataSourcesPage() {
         {_dsCity.id === "yeongju" && (
           <div className="mt-12 rounded-2xl bg-white border border-[var(--color-parchment)] p-6 sm:p-8">
             <h2 className="text-base font-bold text-[var(--color-ink)] mb-1">
-              문화유산 사진 출처
+              {t("문화유산 사진 출처")}
             </h2>
             <p className="text-sm text-[var(--color-charcoal)] opacity-60 mb-4">
-              문화유산 페이지의 실제 사진은 자유 이용 라이선스 저작물을 사용했습니다.
+              {t("문화유산 페이지의 실제 사진은 자유 이용 라이선스 저작물을 사용했습니다.")}
             </p>
             <ul className="space-y-1.5 text-sm text-[var(--color-charcoal)] leading-relaxed">
-              <li>부석사 — Bernard Gagnon, Wikimedia Commons (CC0)</li>
-              <li>소수서원 — Jjw, Wikimedia Commons (CC BY-SA 3.0)</li>
-              <li>소백산 — Seonghyeon5836, Wikimedia Commons (CC BY-SA 4.0)</li>
-              <li>영주향교 — 포모사, Wikimedia Commons (CC BY-SA 4.0)</li>
-              <li>소수박물관 — 한국관광공사 TourAPI (공공누리 제1유형)</li>
-              <li>풍기인삼 — Eugene Kim, Wikimedia Commons (CC BY 2.5)</li>
-              <li>선비촌·무섬마을 — 별도 제공 사진</li>
+              <li>{t("부석사 — Bernard Gagnon, Wikimedia Commons (CC0)")}</li>
+              <li>{t("소수서원 — Jjw, Wikimedia Commons (CC BY-SA 3.0)")}</li>
+              <li>{t("소백산 — Seonghyeon5836, Wikimedia Commons (CC BY-SA 4.0)")}</li>
+              <li>{t("영주향교 — 포모사, Wikimedia Commons (CC BY-SA 4.0)")}</li>
+              <li>{t("소수박물관 — 한국관광공사 TourAPI (공공누리 제1유형)")}</li>
+              <li>{t("풍기인삼 — Eugene Kim, Wikimedia Commons (CC BY 2.5)")}</li>
+              <li>{t("선비촌·무섬마을 — 별도 제공 사진")}</li>
             </ul>
           </div>
         )}
@@ -293,10 +292,9 @@ export default function DataSourcesPage() {
             <Database className="w-6 h-6" />
           </div>
           <div className="flex-1 text-center sm:text-left">
-            <p className="font-semibold text-white">공공데이터포털 인증키 발급</p>
+            <p className="font-semibold text-white">{t("공공데이터포털 인증키 발급")}</p>
             <p className="text-sm text-white/70 mt-0.5">
-              기상청·한국관광공사·국립중앙박물관 API는 공공데이터포털(data.go.kr)에서 무료로 인증키를
-              발급받아 사용할 수 있습니다. 누구나 신청 가능합니다.
+              {t("기상청·한국관광공사·국립중앙박물관 API는 공공데이터포털(data.go.kr)에서 무료로 인증키를 발급받아 사용할 수 있습니다. 누구나 신청 가능합니다.")}
             </p>
           </div>
           <Link

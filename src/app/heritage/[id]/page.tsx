@@ -14,6 +14,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import HeritageDetailTabs from "@/components/heritage/HeritageDetailTabs";
+import { t } from "@/i18n/ui";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { id } = await params;
   const heritage = getHeritageById(id);
   const brandTitle = getActiveCity().brand.title;
-  if (!heritage) return { title: "문화유산을 찾을 수 없습니다" };
+  if (!heritage) return { title: t("문화유산을 찾을 수 없습니다") };
   return {
     title: `${heritage.name} - ${brandTitle}`,
     description: heritage.description,
@@ -93,7 +94,7 @@ export default async function HeritageDetailPage({ params }: PageProps) {
         {heritage.images[0] && (
           <Image
             src={heritage.images[0]}
-            alt={`${heritage.name} 전경`}
+            alt={`${heritage.name} ${t("전경")}`}
             fill
             priority
             sizes="100vw"
@@ -108,7 +109,7 @@ export default async function HeritageDetailPage({ params }: PageProps) {
             className="inline-flex items-center gap-1 text-white/80 hover:text-white text-sm mb-4 w-fit"
           >
             <ChevronLeft className="w-4 h-4" />
-            문화유산 목록
+            {t("문화유산 목록")}
           </Link>
           <span
             className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3 w-fit ${categoryColors[heritage.category] ?? "bg-gray-500 text-white"}`}
@@ -143,34 +144,34 @@ export default async function HeritageDetailPage({ params }: PageProps) {
         {/* Visit Info Card */}
         <div className="mt-6 bg-white rounded-xl p-6 shadow-[var(--shadow-warm-sm)] border border-[var(--color-parchment)]">
           <h3 className="text-lg font-bold text-[var(--color-primary-800)] mb-4">
-            방문 정보
+            {t("방문 정보")}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-start gap-3">
               <MapPin className="w-5 h-5 text-[var(--color-primary-500)] mt-0.5 shrink-0" />
               <div>
-                <p className="text-sm text-[var(--color-earth-500)] font-medium">위치</p>
+                <p className="text-sm text-[var(--color-earth-500)] font-medium">{t("위치")}</p>
                 <p className="text-[var(--color-charcoal)] text-sm">{heritage.location.address}</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <Clock className="w-5 h-5 text-[var(--color-primary-500)] mt-0.5 shrink-0" />
               <div>
-                <p className="text-sm text-[var(--color-earth-500)] font-medium">운영 시간</p>
+                <p className="text-sm text-[var(--color-earth-500)] font-medium">{t("운영 시간")}</p>
                 <p className="text-[var(--color-charcoal)] text-sm">{heritage.visitInfo.hours}</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <Ticket className="w-5 h-5 text-[var(--color-primary-500)] mt-0.5 shrink-0" />
               <div>
-                <p className="text-sm text-[var(--color-earth-500)] font-medium">입장료</p>
+                <p className="text-sm text-[var(--color-earth-500)] font-medium">{t("입장료")}</p>
                 <p className="text-[var(--color-charcoal)] text-sm">{heritage.visitInfo.fee}</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CalendarX className="w-5 h-5 text-[var(--color-primary-500)] mt-0.5 shrink-0" />
               <div>
-                <p className="text-sm text-[var(--color-earth-500)] font-medium">휴관일</p>
+                <p className="text-sm text-[var(--color-earth-500)] font-medium">{t("휴관일")}</p>
                 <p className="text-[var(--color-charcoal)] text-sm">{heritage.visitInfo.closedDays}</p>
               </div>
             </div>
@@ -182,10 +183,10 @@ export default async function HeritageDetailPage({ params }: PageProps) {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div>
               <h3 className="text-lg font-bold">
-                {heritage.name}에 대해 더 궁금하신가요?
+                {heritage.name}{t("에 대해 더 궁금하신가요?")}
               </h3>
               <p className="text-white/80 text-sm mt-1">
-                AI 선비 해설사에게 자유롭게 질문해보세요
+                {t("AI 선비 해설사에게 자유롭게 질문해보세요")}
               </p>
             </div>
             <Link
@@ -193,7 +194,7 @@ export default async function HeritageDetailPage({ params }: PageProps) {
               className="inline-flex items-center gap-2 bg-white text-[var(--color-accent-700)] px-6 py-3 rounded-full font-semibold hover:bg-white/90 transition shrink-0"
             >
               <MessageCircle className="w-5 h-5" />
-              AI 해설사에게 질문하기
+              {t("AI 해설사에게 질문하기")}
             </Link>
           </div>
         </div>
@@ -202,7 +203,7 @@ export default async function HeritageDetailPage({ params }: PageProps) {
         {quizzes.length > 0 && (
           <div className="mt-8">
             <h3 className="text-lg font-bold text-[var(--color-primary-800)] mb-4">
-              관련 퀴즈 ({quizzes.length}문제)
+              {t("관련 퀴즈")} ({quizzes.length}{t("문제")})
             </h3>
             <div className="grid gap-3">
               {quizzes.slice(0, 3).map((quiz, idx) => (
@@ -228,10 +229,10 @@ export default async function HeritageDetailPage({ params }: PageProps) {
                     }`}
                   >
                     {quiz.difficulty === "easy"
-                      ? "쉬움"
+                      ? t("쉬움")
                       : quiz.difficulty === "medium"
-                        ? "보통"
-                        : "어려움"}
+                        ? t("보통")
+                        : t("어려움")}
                   </span>
                 </div>
               ))}
@@ -240,7 +241,7 @@ export default async function HeritageDetailPage({ params }: PageProps) {
               href="/quiz"
               className="inline-block mt-4 text-[var(--color-primary-600)] hover:text-[var(--color-primary-800)] font-medium text-sm"
             >
-              전체 퀴즈 도전하기 →
+              {t("전체 퀴즈 도전하기 →")}
             </Link>
           </div>
         )}
@@ -254,7 +255,7 @@ export default async function HeritageDetailPage({ params }: PageProps) {
             >
               <ChevronLeft className="w-5 h-5" />
               <div>
-                <p className="text-xs text-[var(--color-earth-400)]">이전</p>
+                <p className="text-xs text-[var(--color-earth-400)]">{t("이전")}</p>
                 <p className="font-medium">{prevHeritage.name}</p>
               </div>
             </Link>
@@ -267,7 +268,7 @@ export default async function HeritageDetailPage({ params }: PageProps) {
               className="flex items-center gap-2 text-[var(--color-primary-600)] hover:text-[var(--color-primary-800)] text-right"
             >
               <div>
-                <p className="text-xs text-[var(--color-earth-400)]">다음</p>
+                <p className="text-xs text-[var(--color-earth-400)]">{t("다음")}</p>
                 <p className="font-medium">{nextHeritage.name}</p>
               </div>
               <ChevronRight className="w-5 h-5" />

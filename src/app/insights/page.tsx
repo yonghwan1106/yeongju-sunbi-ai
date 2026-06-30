@@ -11,6 +11,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { getActiveCity } from "@/config/city";
+import { t } from "@/i18n/ui";
 
 const city = getActiveCity();
 
@@ -37,12 +38,12 @@ function EmptyState() {
         📡
       </div>
       <p className="text-[var(--color-ink)] font-semibold text-lg">
-        아직 분석할 질문이 충분치 않습니다
+        {t("아직 분석할 질문이 충분치 않습니다")}
       </p>
       <p className="text-stone-400 text-sm leading-relaxed max-w-xs">
-        사용자가 AI 해설사에게 질문할수록
+        {t("사용자가 AI 해설사에게 질문할수록")}
         <br />
-        {city.name}시 관광 수요 인사이트가 쌓입니다.
+        {t("{city}시 관광 수요 인사이트가 쌓입니다.")}
       </p>
     </div>
   );
@@ -52,7 +53,7 @@ function SummaryCard({ summary }: { summary: string }) {
   return (
     <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6">
       <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-2">
-        정책 담당자 요약
+        {t("정책 담당자 요약")}
       </p>
       <p className="text-[var(--color-ink)] text-sm leading-relaxed">{summary}</p>
     </div>
@@ -98,19 +99,19 @@ export default function InsightsPage() {
           {/* 배지 */}
           <div className="inline-flex items-center gap-2 bg-white/15 rounded-full px-4 py-1.5 text-sm font-medium w-fit">
             <span className="w-2 h-2 rounded-full bg-amber-400" />
-            관광 인사이트 리포트 · 익명 질문 기반 · 개인정보 미수집
+            {t("관광 인사이트 리포트 · 익명 질문 기반 · 개인정보 미수집")}
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
-            {city.name} 관광
+            {t("{city} 관광")}
             <br />
-            수요 인사이트
+            {t("수요 인사이트")}
           </h1>
           <p className="text-white/70 text-sm leading-relaxed max-w-md">
-            문화재청·한국관광공사·기상청·국립중앙박물관·한국민족문화대백과 등
+            {t("문화재청·한국관광공사·기상청·국립중앙박물관·한국민족문화대백과 등")}
             <br />
-            분산된 5종 국가 공공데이터를 통합·해석한 관광 수요신호입니다.
+            {t("분산된 5종 국가 공공데이터를 통합·해석한 관광 수요신호입니다.")}
             <br />
-            AI 해설사에 누적된 익명 질문을 Claude로 분석합니다.
+            {t("AI 해설사에 누적된 익명 질문을 Claude로 분석합니다.")}
           </p>
 
           <button
@@ -121,10 +122,10 @@ export default function InsightsPage() {
             {loading ? (
               <>
                 <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                분석 중…
+                {t("분석 중…")}
               </>
             ) : (
-              "리포트 생성"
+              t("리포트 생성")
             )}
           </button>
         </div>
@@ -134,14 +135,14 @@ export default function InsightsPage() {
       <div className="max-w-4xl mx-auto px-4 pt-8 flex flex-col gap-8">
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
-            분석 실패: {error}
+            {t("분석 실패: ")}{error}
           </div>
         )}
 
         {!data && !loading && !error && (
           <div className="flex flex-col items-center justify-center py-16 gap-3 text-center">
             <p className="text-stone-400 text-sm">
-              [리포트 생성] 버튼을 눌러 관광 수요 인사이트를 확인하세요.
+              {t("[리포트 생성] 버튼을 눌러 관광 수요 인사이트를 확인하세요.")}
             </p>
           </div>
         )}
@@ -153,12 +154,12 @@ export default function InsightsPage() {
             {/* ── 요약 통계 ── */}
             <section>
               <h2 className="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-3">
-                분석 개요
+                {t("분석 개요")}
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                <StatPill label="분석 질문 수" value={data.count.toLocaleString("ko-KR")} />
-                <StatPill label="주제 군집" value={data.themes.length} />
-                <StatPill label="미충족 수요" value={data.unmetNeeds.length} />
+                <StatPill label={t("분석 질문 수")} value={data.count.toLocaleString("ko-KR")} />
+                <StatPill label={t("주제 군집")} value={data.themes.length} />
+                <StatPill label={t("미충족 수요")} value={data.unmetNeeds.length} />
               </div>
             </section>
 
@@ -169,7 +170,7 @@ export default function InsightsPage() {
             {data.themes.length > 0 && (
               <section className="bg-white rounded-2xl border border-stone-200 shadow-sm p-6">
                 <h2 className="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-4">
-                  주제별 질문 분포
+                  {t("주제별 질문 분포")}
                 </h2>
                 <ResponsiveContainer width="100%" height={220}>
                   <BarChart
@@ -199,10 +200,10 @@ export default function InsightsPage() {
                         border: "1px solid #e7e5e4",
                         fontSize: 12,
                       }}
-                      formatter={(v) => [`${Number(v ?? 0)}건(추정)`, "질문 수"]}
+                      formatter={(v) => [`${Number(v ?? 0)}${t("건(추정)")}`, t("질문 수")]}
                       labelFormatter={(label) => {
-                        const theme = data.themes.find((t) => t.name === label);
-                        return theme ? `${label}\n예시: ${theme.example}` : label;
+                        const thm = data.themes.find((thm) => thm.name === label);
+                        return thm ? `${label}\n${t("예시: ")}${thm.example}` : label;
                       }}
                     />
                     <Bar dataKey="count" fill="#d97706" radius={[6, 6, 0, 0]} maxBarSize={56} />
@@ -211,16 +212,16 @@ export default function InsightsPage() {
 
                 {/* 주제별 예시 질문 */}
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {data.themes.map((t) => (
+                  {data.themes.map((thm) => (
                     <div
-                      key={t.name}
+                      key={thm.name}
                       className="bg-stone-50 rounded-xl px-3 py-2.5 flex gap-2 items-start"
                     >
                       <span className="w-2 h-2 mt-1.5 rounded-full bg-amber-400 flex-shrink-0" />
                       <div>
-                        <p className="text-xs font-semibold text-[var(--color-ink)]">{t.name}</p>
+                        <p className="text-xs font-semibold text-[var(--color-ink)]">{thm.name}</p>
                         <p className="text-xs text-stone-400 mt-0.5 leading-relaxed">
-                          &ldquo;{t.example}&rdquo;
+                          &ldquo;{thm.example}&rdquo;
                         </p>
                       </div>
                     </div>
@@ -233,7 +234,7 @@ export default function InsightsPage() {
             {data.unmetNeeds.length > 0 && (
               <section className="bg-white rounded-2xl border border-stone-200 shadow-sm p-6">
                 <h2 className="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-4">
-                  미충족 수요 — 관광 정보 보완 필요 항목
+                  {t("미충족 수요 — 관광 정보 보완 필요 항목")}
                 </h2>
                 <ul className="flex flex-col gap-3">
                   {data.unmetNeeds.map((need, i) => (
@@ -252,7 +253,7 @@ export default function InsightsPage() {
             {data.samples.length > 0 && (
               <section className="bg-white rounded-2xl border border-stone-200 shadow-sm p-6">
                 <h2 className="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-4">
-                  최근 질문 샘플 (익명, 상위 5개)
+                  {t("최근 질문 샘플 (익명, 상위 5개)")}
                 </h2>
                 <ul className="flex flex-col gap-2">
                   {data.samples.map((q, i) => (

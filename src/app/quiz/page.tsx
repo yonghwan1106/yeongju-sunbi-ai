@@ -20,6 +20,7 @@ import { getSessionId, getClassCode, setClassCode } from "@/lib/utils/session";
 import { QuizQuestion } from "@/types";
 import QuizCard from "@/components/quiz/QuizCard";
 import Link from "next/link";
+import { t } from "@/i18n/ui";
 
 type Screen = "start" | "playing" | "results";
 type Difficulty = "all" | "easy" | "medium" | "hard";
@@ -159,10 +160,10 @@ export default function QuizPage() {
   const pct = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
 
   function getBadgeInfo() {
-    if (pct === 100) return { label: "선비 대학자", icon: "🏆", color: "text-amber-600" };
-    if (pct >= 80) return { label: "선비 학자", icon: "⭐", color: "text-yellow-600" };
-    if (pct >= 60) return { label: "선비 수료생", icon: "📜", color: "text-blue-600" };
-    return { label: "선비 입문자", icon: "📖", color: "text-gray-600" };
+    if (pct === 100) return { label: t("선비 대학자"), icon: "🏆", color: "text-amber-600" };
+    if (pct >= 80) return { label: t("선비 학자"), icon: "⭐", color: "text-yellow-600" };
+    if (pct >= 60) return { label: t("선비 수료생"), icon: "📜", color: "text-blue-600" };
+    return { label: t("선비 입문자"), icon: "📖", color: "text-gray-600" };
   }
 
   const badge = getBadgeInfo();
@@ -189,12 +190,12 @@ export default function QuizPage() {
                 <BookOpen className="w-8 h-8 text-[var(--color-primary-600)]" />
               </div>
               <h1 className="text-3xl font-bold text-[var(--color-ink)] mb-2">
-                선비문화 퀴즈 챌린지
+                {t("선비문화 퀴즈 챌린지")}
               </h1>
               <p className="text-[var(--color-charcoal)] opacity-70 text-sm leading-relaxed">
-                {city.name}의 문화유산과 선비 정신을 퀴즈로 배워보세요.
+                {t("{city}의 문화유산과 선비 정신을 퀴즈로 배워보세요.")}
                 <br />
-                문제를 풀고 나만의 선비 등급을 받아보세요!
+                {t("문제를 풀고 나만의 선비 등급을 받아보세요!")}
               </p>
             </div>
 
@@ -203,7 +204,7 @@ export default function QuizPage() {
               {/* Difficulty */}
               <div>
                 <p className="text-sm font-semibold text-[var(--color-ink)] mb-2">
-                  난이도 선택
+                  {t("난이도 선택")}
                 </p>
                 <div className="grid grid-cols-4 gap-2">
                   {(
@@ -223,7 +224,7 @@ export default function QuizPage() {
                           : "bg-[var(--color-ivory)] text-[var(--color-charcoal)] hover:bg-[var(--color-primary-50)]"
                       }`}
                     >
-                      {opt.label}
+                      {t(opt.label)}
                     </button>
                   ))}
                 </div>
@@ -232,7 +233,7 @@ export default function QuizPage() {
               {/* Question count */}
               <div>
                 <p className="text-sm font-semibold text-[var(--color-ink)] mb-2">
-                  문제 수
+                  {t("문제 수")}
                 </p>
                 <div className="grid grid-cols-3 gap-2">
                   {(
@@ -251,7 +252,7 @@ export default function QuizPage() {
                           : "bg-[var(--color-ivory)] text-[var(--color-charcoal)] hover:bg-[var(--color-accent-50)]"
                       }`}
                     >
-                      {opt.label}
+                      {t(opt.label)}
                     </button>
                   ))}
                 </div>
@@ -261,7 +262,7 @@ export default function QuizPage() {
             {/* 교실코드 입력 (선택) */}
             <input
               type="text"
-              placeholder="교실코드 입력 (선택, 예: ENG-2A)"
+              placeholder={t("교실코드 입력 (선택, 예: ENG-2A)")}
               value={classCode}
               onChange={(e) => {
                 setClassCodeState(e.target.value);
@@ -269,7 +270,7 @@ export default function QuizPage() {
               }}
               className="w-full px-4 py-3 rounded-xl bg-white border border-[var(--color-parchment)] text-[var(--color-ink)] placeholder:text-[var(--color-charcoal)]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-300)]"
               maxLength={20}
-              aria-label="교실코드 (선택)"
+              aria-label={t("교실코드 (선택)")}
             />
 
             {/* Start button */}
@@ -277,14 +278,14 @@ export default function QuizPage() {
               onClick={handleStart}
               className="w-full py-4 bg-[var(--color-primary-600)] hover:bg-[var(--color-primary-700)] text-white font-bold text-base rounded-2xl shadow-[var(--shadow-warm-md)] transition-all flex items-center justify-center gap-2"
             >
-              퀴즈 시작하기
+              {t("퀴즈 시작하기")}
               <ChevronRight className="w-5 h-5" />
             </button>
 
             {/* Info */}
             <p className="text-center text-xs text-[var(--color-charcoal)] opacity-50">
               <Clock className="w-3 h-3 inline mr-1" />
-              문제당 30초 제한이 있습니다
+              {t("문제당 30초 제한이 있습니다")}
             </p>
           </motion.div>
         )}
@@ -335,7 +336,7 @@ export default function QuizPage() {
                   onClick={handleNext}
                   className="w-full py-3.5 bg-[var(--color-primary-600)] hover:bg-[var(--color-primary-700)] text-white font-semibold rounded-xl shadow-[var(--shadow-warm-sm)] transition-all flex items-center justify-center gap-2"
                 >
-                  {currentIndex + 1 >= questions.length ? "결과 보기" : "다음 문제"}
+                  {currentIndex + 1 >= questions.length ? t("결과 보기") : t("다음 문제")}
                   <ChevronRight className="w-5 h-5" />
                 </motion.button>
               )}
@@ -363,7 +364,7 @@ export default function QuizPage() {
                 {badge.icon}
               </motion.div>
               <div className="text-center">
-                <p className="text-white/70 text-sm mb-1">획득 등급</p>
+                <p className="text-white/70 text-sm mb-1">{t("획득 등급")}</p>
                 <p className="text-2xl font-bold">{badge.label}</p>
               </div>
               <div className="flex items-end gap-2">
@@ -371,7 +372,7 @@ export default function QuizPage() {
                 <span className="text-2xl font-medium text-white/70 mb-2">%</span>
               </div>
               <p className="text-white/80 text-sm">
-                {totalAnswered}문제 중 {correctCount}개 정답
+                {totalAnswered}{t("문제 중 ")}{correctCount}{t("개 정답")}
               </p>
             </div>
 
@@ -388,7 +389,7 @@ export default function QuizPage() {
                 >
                   {stat.icon}
                   <span className="text-xl font-bold text-[var(--color-ink)]">{stat.value}</span>
-                  <span className="text-xs text-[var(--color-charcoal)] opacity-60">{stat.label}</span>
+                  <span className="text-xs text-[var(--color-charcoal)] opacity-60">{t(stat.label)}</span>
                 </div>
               ))}
             </div>
@@ -397,7 +398,7 @@ export default function QuizPage() {
             <div className="bg-white rounded-2xl border border-[var(--color-parchment)] overflow-hidden shadow-[var(--shadow-warm-sm)]">
               <div className="px-4 py-3 border-b border-[var(--color-parchment)] flex items-center gap-2">
                 <Star className="w-4 h-4 text-[var(--color-primary-500)]" />
-                <span className="text-sm font-semibold text-[var(--color-ink)]">답안 확인</span>
+                <span className="text-sm font-semibold text-[var(--color-ink)]">{t("답안 확인")}</span>
               </div>
               <div className="divide-y divide-[var(--color-parchment)]">
                 {answers.map((record, i) => (
@@ -438,7 +439,7 @@ export default function QuizPage() {
                         >
                           <div className="mt-2 ml-12 text-xs text-[var(--color-charcoal)] opacity-75 leading-relaxed bg-[var(--color-primary-50)] rounded-lg p-3">
                             <p className="font-semibold mb-1">
-                              정답:{" "}
+                              {t("정답:")}{" "}
                               <span className="text-emerald-700">
                                 {record.question.options[record.question.correctIndex]}
                               </span>
@@ -460,14 +461,14 @@ export default function QuizPage() {
                 className="flex-1 py-3.5 border-2 border-[var(--color-primary-300)] text-[var(--color-primary-700)] font-semibold rounded-xl hover:bg-[var(--color-primary-50)] transition-all flex items-center justify-center gap-2"
               >
                 <RotateCcw className="w-4 h-4" />
-                다시 도전
+                {t("다시 도전")}
               </button>
               <Link
                 href="/stamp-tour"
                 className="flex-1 py-3.5 bg-[var(--color-primary-600)] hover:bg-[var(--color-primary-700)] text-white font-semibold rounded-xl shadow-[var(--shadow-warm-sm)] transition-all flex items-center justify-center gap-2"
               >
                 <Map className="w-4 h-4" />
-                스탬프투어
+                {t("스탬프투어")}
               </Link>
             </div>
           </motion.div>

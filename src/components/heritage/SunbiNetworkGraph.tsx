@@ -5,9 +5,9 @@ import { motion } from "framer-motion";
 import { heritageData, figuresData } from "@/data/active";
 import type { HistoricalFigure } from "@/data/active";
 import { Heritage } from "@/types";
-import { getActiveCity } from "@/config/city";
+import { t as tr, cityLabel } from "@/i18n/ui";
 
-const CITY_NAME = getActiveCity().name;
+const CITY_NAME = cityLabel();
 
 interface SunbiNetworkGraphProps {
   selectedFigureId: string | null;
@@ -116,7 +116,7 @@ export default function SunbiNetworkGraph({
   }, [figureLinks]);
   const spineCaption = useMemo(() => {
     const names = figures.filter((f) => SPINE.has(f.id)).map((f) => f.name);
-    return names.length >= 2 ? `기본 강조 — 학맥 계승: ${names.join(" → ")}` : "";
+    return names.length >= 2 ? `${tr("기본 강조 — 학맥 계승")}: ${names.join(" → ")}` : "";
   }, [figures, SPINE]);
 
   const activeFigureId = hoveredFigure ?? selectedFigureId;
@@ -176,7 +176,7 @@ export default function SunbiNetworkGraph({
       {/* 모바일: 학맥 흐름 칩 리스트 */}
       <div className="block md:hidden">
         <p className="text-xs text-[var(--color-charcoal)] opacity-60 mb-3">
-          네트워크 그래프는 데스크탑에서 가장 잘 보입니다. 모바일에서는 인물의 학맥과 연결 유산을 카드로 확인하세요.
+          {tr("네트워크 그래프는 데스크탑에서 가장 잘 보입니다. 모바일에서는 인물의 학맥과 연결 유산을 카드로 확인하세요.")}
         </p>
         <div className="flex flex-col gap-2.5">
           {figures.map((f) => (
@@ -201,7 +201,7 @@ export default function SunbiNetworkGraph({
                 <strong className="text-sm text-[var(--color-ink)]">{f.name}</strong>
                 {f.ho && <span className="text-[11px] text-[var(--color-charcoal)] opacity-55">{f.ho}</span>}
                 <span className="ml-auto text-[10px] text-[var(--color-charcoal)] opacity-55">
-                  {f.era ?? ""} · {f.bornYear}–{f.diedYear}
+                  {tr(f.era ?? "")} · {f.bornYear}–{f.diedYear}
                 </span>
               </div>
               {f.contribution && (
@@ -216,7 +216,7 @@ export default function SunbiNetworkGraph({
                     if (!t) return null;
                     return (
                       <span key={lk.to} className="text-[11px] px-2 py-0.5 rounded-full bg-[var(--color-primary-100)] text-[var(--color-primary-700)]">
-                        {t.name}에게 {lk.kind}
+                        {t.name}{tr("에게")} {tr(lk.kind)}
                       </span>
                     );
                   })}
@@ -230,23 +230,23 @@ export default function SunbiNetworkGraph({
       {/* 데스크탑: SVG 학맥 네트워크 */}
       <div className="hidden md:block">
         <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-[var(--color-charcoal)] opacity-75">
-          <span className="font-semibold text-[var(--color-ink)] opacity-100">시대</span>
+          <span className="font-semibold text-[var(--color-ink)] opacity-100">{tr("시대")}</span>
           {(["신라", "고려", "조선"] as const).map((e) => (
             <span key={e} className="flex items-center gap-1.5">
               <span className="inline-block w-3 h-3 rounded-md" style={{ backgroundColor: ERA_COLOR[e] }} />
-              {e}
+              {tr(e)}
             </span>
           ))}
           <span className="flex items-center gap-1.5">
             <span className="inline-block w-3 h-3 rounded-full bg-[var(--color-earth-500)]" />
-            문화유산
+            {tr("문화유산")}
           </span>
           <span className="flex items-center gap-1.5">
             <span className="inline-block w-5 h-0.5 rounded-full" style={{ background: "linear-gradient(90deg,#2E8C76,#355C8A)" }} />
-            학맥 계승
+            {tr("학맥 계승")}
           </span>
           <span className="ml-auto text-[var(--color-charcoal)] opacity-55">
-            노드를 클릭/호버하면 학맥과 연결 유산이 강조됩니다
+            {tr("노드를 클릭/호버하면 학맥과 연결 유산이 강조됩니다")}
           </span>
         </div>
 
@@ -254,7 +254,7 @@ export default function SunbiNetworkGraph({
           viewBox={`0 0 ${SVG_W} ${SVG_H}`}
           className="w-full h-auto"
           role="img"
-          aria-label={`${CITY_NAME} 선비 학맥 지식그래프`}
+          aria-label={`${CITY_NAME} ${tr("선비 학맥 지식그래프")}`}
         >
           <defs>
             <radialGradient id="hanjiBg" cx="50%" cy="42%" r="75%">
@@ -369,7 +369,7 @@ export default function SunbiNetworkGraph({
                 </text>
                 {typeof h.year === "number" && (
                   <text x={p.x} y={p.y + (on ? 41 : 37)} textAnchor="middle" fontSize={9.5} fill="var(--color-charcoal)" opacity={0.6}>
-                    {h.year}년
+                    {h.year}{tr("년")}
                   </text>
                 )}
               </g>
@@ -436,7 +436,7 @@ export default function SunbiNetworkGraph({
               {activeFig.hanja && <span className="text-[var(--color-charcoal)] opacity-70">{activeFig.hanja}</span>}
               {activeFig.ho && <span className="text-xs text-[var(--color-charcoal)] opacity-60">{activeFig.ho}</span>}
               <span className="text-xs text-[var(--color-charcoal)] opacity-60">
-                {activeFig.era ? `${activeFig.era} · ` : ""}{activeFig.bornYear}–{activeFig.diedYear} · {activeFig.role}
+                {activeFig.era ? `${tr(activeFig.era)} · ` : ""}{activeFig.bornYear}–{activeFig.diedYear} · {activeFig.role}
               </span>
             </div>
             <p className="mt-1.5 text-[var(--color-charcoal)] opacity-85 leading-relaxed">
@@ -444,13 +444,13 @@ export default function SunbiNetworkGraph({
             </p>
             {(activeFig.links ?? []).length > 0 && (
               <p className="mt-2 text-xs text-[var(--color-charcoal)] opacity-75">
-                학맥:{" "}
+                {tr("학맥")}:{" "}
                 {(activeFig.links ?? []).map((lk, idx) => {
                   const t = figures.find((x) => x.id === lk.to);
                   return t ? (
                     <span key={lk.to}>
                       {idx > 0 ? " · " : ""}
-                      <strong>{t.name}</strong>에게 {lk.label}({lk.kind})
+                      <strong>{t.name}</strong>{tr("에게")} {tr(lk.label)}({tr(lk.kind)})
                     </span>
                   ) : null;
                 })}

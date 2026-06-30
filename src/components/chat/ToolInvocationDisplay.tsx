@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { t } from "@/i18n/ui";
 import {
   Search,
   CloudSun,
@@ -97,7 +98,7 @@ export default function ToolInvocationDisplay({ toolParts }: ToolInvocationDispl
             >
               <Icon size={14} className={config.color} />
               <span className={`font-medium ${config.color}`}>
-                {config.label}
+                {t(config.label)}
               </span>
               {inputStr && (
                 <span className="text-stone-400 truncate max-w-[200px]">

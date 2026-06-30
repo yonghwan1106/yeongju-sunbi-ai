@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { heritageData, figuresData } from "@/data/active";
 import type { HistoricalFigure } from "@/data/active";
 import { getActiveCity } from "@/config/city";
+import { t, cityLabel } from "@/i18n/ui";
 
 interface LineageTimelineProps {
   selectedFigureId: string | null;
@@ -91,25 +92,25 @@ export default function LineageTimeline({ selectedFigureId, onSelectFigure }: Li
       className="bg-white rounded-2xl border border-[var(--color-parchment)] shadow-[var(--shadow-warm-sm)] p-4 sm:p-6 overflow-x-auto"
     >
       <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-[var(--color-charcoal)] opacity-75">
-        <span className="font-semibold text-[var(--color-ink)] opacity-100">시대</span>
+        <span className="font-semibold text-[var(--color-ink)] opacity-100">{t("시대")}</span>
         {(["신라", "고려", "조선"] as const).map((e) => (
           <span key={e} className="flex items-center gap-1.5">
             <span className="inline-block w-3 h-2 rounded-sm" style={{ backgroundColor: ERA_COLOR[e] }} />
-            {e}
+            {t(e)}
           </span>
         ))}
         <span className="flex items-center gap-1.5">
           <span className="inline-block w-2.5 h-2.5 rounded-full bg-[var(--color-earth-500)]" />
-          유산 창건/개관
+          {t("유산 창건/개관")}
         </span>
         <span className="flex items-center gap-1.5">
           <span className="inline-block w-5 h-0.5 rounded-full" style={{ background: "linear-gradient(90deg,#2E8C76,#355C8A)" }} />
-          학맥 계승
+          {t("학맥 계승")}
         </span>
-        <span className="ml-auto text-[var(--color-charcoal)] opacity-55">인물 클릭 시 네트워크 보기와 연동</span>
+        <span className="ml-auto text-[var(--color-charcoal)] opacity-55">{t("인물 클릭 시 네트워크 보기와 연동")}</span>
       </div>
 
-      <svg viewBox={`0 0 ${WIDTH} ${height}`} className="w-full min-w-[760px] h-auto" role="img" aria-label={`${city.name} 선비 학맥 타임라인`}>
+      <svg viewBox={`0 0 ${WIDTH} ${height}`} className="w-full min-w-[760px] h-auto" role="img" aria-label={`${cityLabel()} ${t("선비 학맥 타임라인")}`}>
         <defs>
           <linearGradient id="tlSpine" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#2E8C76" />
@@ -166,7 +167,7 @@ export default function LineageTimeline({ selectedFigureId, onSelectFigure }: Li
             <path d={spinePath} fill="none" stroke="url(#tlSpine)" strokeWidth={3} markerEnd="url(#tlArrow)" strokeLinecap="round" opacity={0.9} />
             {spinePts[0] && (
               <text x={spinePts[0].x} y={spinePts[0].y - 16} fontSize={10} fontWeight={700} fill="#355C8A" opacity={0.75}>
-                학맥
+                {t("학맥")}
               </text>
             )}
           </g>
@@ -224,7 +225,7 @@ export default function LineageTimeline({ selectedFigureId, onSelectFigure }: Li
                 <g>
                   <rect x={x - 62} y={y + 12} width={124} height={34} rx={6} fill="var(--color-ink)" opacity={0.92} />
                   <text x={x} y={y + 27} textAnchor="middle" fontSize={11} fontWeight={700} fill="white">{h.name}</text>
-                  <text x={x} y={y + 40} textAnchor="middle" fontSize={9.5} fill="white" opacity={0.75}>{h.year}년 · {eraOf(h.year)}</text>
+                  <text x={x} y={y + 40} textAnchor="middle" fontSize={9.5} fill="white" opacity={0.75}>{h.year}{t("년")} · {t(eraOf(h.year))}</text>
                 </g>
               )}
             </g>
@@ -243,8 +244,8 @@ export default function LineageTimeline({ selectedFigureId, onSelectFigure }: Li
                 <strong className="text-base" style={{ color: col }}>{f.name}</strong>
                 {f.hanja && <span className="text-[var(--color-charcoal)] opacity-70">{f.hanja}</span>}
                 {f.ho && <span className="text-xs text-[var(--color-charcoal)] opacity-60">{f.ho}</span>}
-                <span className="text-xs text-[var(--color-charcoal)] opacity-60">{figEra(f)} · {f.bornYear}–{f.diedYear} · {f.role}</span>
-                <span className="ml-auto text-[11px] text-[var(--color-primary-700)] opacity-70">다시 클릭하면 해제</span>
+                <span className="text-xs text-[var(--color-charcoal)] opacity-60">{t(figEra(f))} · {f.bornYear}–{f.diedYear} · {f.role}</span>
+                <span className="ml-auto text-[11px] text-[var(--color-primary-700)] opacity-70">{t("다시 클릭하면 해제")}</span>
               </div>
               <p className="mt-1.5 text-[var(--color-charcoal)] opacity-85 leading-relaxed">{f.description}</p>
             </motion.div>

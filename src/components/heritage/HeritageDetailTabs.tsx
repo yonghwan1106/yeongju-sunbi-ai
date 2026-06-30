@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heritage } from "@/types";
+import { t } from "@/i18n/ui";
 
 interface Tab {
   id: string;
@@ -16,14 +17,14 @@ interface HeritageDetailTabsProps {
 
 export default function HeritageDetailTabs({ heritage }: HeritageDetailTabsProps) {
   const tabs: Tab[] = [
-    { id: "intro", label: "소개", content: heritage.description },
-    { id: "history", label: "역사", content: heritage.history },
-    { id: "architecture", label: "건축", content: heritage.architecture },
-    { id: "hidden", label: "숨겨진 이야기", content: heritage.hiddenStory },
-  ].filter((t) => !!t.content);
+    { id: "intro", label: t("소개"), content: heritage.description },
+    { id: "history", label: t("역사"), content: heritage.history },
+    { id: "architecture", label: t("건축"), content: heritage.architecture },
+    { id: "hidden", label: t("숨겨진 이야기"), content: heritage.hiddenStory },
+  ].filter((tab) => !!tab.content);
 
   const [activeTab, setActiveTab] = useState(tabs[0]?.id ?? "intro");
-  const activeContent = tabs.find((t) => t.id === activeTab)?.content ?? "";
+  const activeContent = tabs.find((tab) => tab.id === activeTab)?.content ?? "";
 
   return (
     <div className="bg-white rounded-2xl border border-[var(--color-parchment)] shadow-[var(--shadow-warm-sm)] overflow-hidden">

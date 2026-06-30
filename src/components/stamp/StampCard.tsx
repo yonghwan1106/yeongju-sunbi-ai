@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, CheckCircle, MapPin } from "lucide-react";
 import { useState } from "react";
+import { t } from "@/i18n/ui";
 
 interface StampCardProps {
   id: string;
@@ -41,7 +42,7 @@ export default function StampCard({
         className={`relative w-28 h-28 rounded-full flex items-center justify-center overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-500)] ${
           collected ? "cursor-default" : "cursor-pointer"
         }`}
-        aria-label={collected ? `${name} 수집 완료` : `${name} - 미수집`}
+        aria-label={collected ? `${name} ${t("수집 완료")}` : `${name} - ${t("미수집")}`}
       >
         {collected ? (
           <>
@@ -70,7 +71,7 @@ export default function StampCard({
             <div className="absolute inset-1 rounded-full border-4 border-dashed border-gray-300" />
             <div className="relative z-10 flex flex-col items-center gap-1">
               <Lock className="w-7 h-7 text-gray-400" />
-              <span className="text-gray-400 text-xs font-medium">미수집</span>
+              <span className="text-gray-400 text-xs font-medium">{t("미수집")}</span>
             </div>
           </>
         )}
@@ -105,7 +106,7 @@ export default function StampCard({
             className="absolute -top-14 left-1/2 -translate-x-1/2 bg-[var(--color-ink)] text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg z-20 flex items-center gap-1.5"
           >
             <MapPin className="w-3 h-3 shrink-0" />
-            이 문화유산을 방문하세요!
+            {t("이 문화유산을 방문하세요!")}
             {/* Arrow */}
             <span className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-[var(--color-ink)]" />
           </motion.div>

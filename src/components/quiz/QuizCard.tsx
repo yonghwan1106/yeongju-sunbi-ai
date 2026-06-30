@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, XCircle, BookOpen } from "lucide-react";
 import { QuizQuestion } from "@/types";
+import { t } from "@/i18n/ui";
 
 interface QuizCardProps {
   question: QuizQuestion;
@@ -72,7 +73,7 @@ export default function QuizCard({
             {question.category}
           </span>
           <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--color-accent-100)] text-[var(--color-accent-700)]">
-            {question.difficulty === "easy" ? "쉬움" : question.difficulty === "medium" ? "보통" : "어려움"}
+            {question.difficulty === "easy" ? t("쉬움") : question.difficulty === "medium" ? t("보통") : t("어려움")}
           </span>
         </div>
       </div>
@@ -128,7 +129,7 @@ export default function QuizCard({
                   selectedIndex === question.correctIndex ? "text-emerald-700" : "text-amber-700"
                 }`}
               >
-                {selectedIndex === question.correctIndex ? "정답입니다!" : "아쉽네요!"}
+                {selectedIndex === question.correctIndex ? t("정답입니다!") : t("아쉽네요!")}
               </p>
               <p className="text-sm text-[var(--color-charcoal)] leading-relaxed">
                 {question.explanation}

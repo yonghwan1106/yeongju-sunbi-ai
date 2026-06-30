@@ -9,12 +9,16 @@
  * 안동 빌드     : NEXT_PUBLIC_CITY_ID=andong 설정 후 배포.
  */
 import { getActiveCity } from "@/config/city";
+import { isEn } from "@/config/locale";
+import { applyHeritageEn, applyFiguresEn, applyCoursesEn, applyQuizEn, applyCanonicalEn } from "@/data/en";
 import type { CourseRecommendation, QuizQuestion } from "@/types";
 import type { CanonicalQA } from "@/data/canonical-qa";
 
 // 모듈 초기화 시점(빌드 타임)에 한 번만 평가된다
 const _city = getActiveCity();
 const _pack = _city.dataPack;
+// 영어 오버레이: 영주(yeongju) 영문 빌드에서만 텍스트를 영어로 치환
+const _en = isEn() && _city.id === "yeongju";
 
 // ── 도시 편의 헬퍼 ───────────────────────────────────────────────────────────
 /** 활성 도시명 (예: "영주", "안동") */
@@ -27,11 +31,13 @@ export const landmarks: string[] = _pack.heritage.map((h) => h.name);
 export const figureNames: string[] = _pack.figures.map((f) => f.name);
 
 // ── 데이터 배열 ──────────────────────────────────────────────────────────────
-export const heritageData = _pack.heritage;
-export const figuresData = _pack.figures;
-export const coursesData = _pack.courses;
-export const quizData = _pack.quiz;
-export const canonicalQAs = _pack.canonicalQAs;
+export const heritageData = _en ? applyHeritageEn(_pack.heritage) : _pack.heritage;
+export const figuresData = _en ? applyFiguresEn(_pack.figures) : _pack.figures;
+export const coursesData = _en ? applyCoursesEn(_pack.courses) : _pack.courses;
+export const quizData = _en ? applyQuizEn(_pack.quiz) : _pack.quiz;
+// 한국어 원본(챗 도구의 기간 매칭 등 — API/매칭은 한국어 기준)
+export const coursesDataKo = _pack.courses;
+export const canonicalQAs = _en ? applyCanonicalEn(_pack.canonicalQAs) : _pack.canonicalQAs;
 
 // ── 타입 re-export ────────────────────────────────────────────────────────────
 export type { HistoricalFigure } from "@/data/figures";
@@ -53,9 +59,13 @@ export function findCuratedCourse(opts: {
 }): CourseRecommendation | undefined {
   const { duration, theme } = opts;
 
+  // 매칭은 항상 한국어 원본(기간 문자열) 기준 → 결과는 활성 로케일 코스로 반환
+  const toActive = (c: CourseRecommendation) =>
+    coursesData.find((x) => x.id === c.id) ?? c;
+
   if (duration) {
     const norm = duration.trim();
-    const found = coursesData.find((c) => {
+    const found = coursesDataKo.find((c) => {
       const d = c.duration;
       return (
         d.includes(norm) ||
@@ -66,12 +76,12 @@ export function findCuratedCourse(opts: {
         ((norm === "2박3일" || norm === "2박 3일") && d.includes("2박"))
       );
     });
-    if (found) return found;
+    if (found) return toActive(found);
   }
 
   if (theme) {
-    const found = coursesData.find((c) => c.theme === theme);
-    if (found) return found;
+    const found = coursesDataKo.find((c) => c.theme === theme);
+    if (found) return toActive(found);
   }
 
   return undefined;

@@ -6,16 +6,18 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Landmark } from "lucide-react";
 import { getActiveCity } from "@/config/city";
+import { t, cityLabel } from "@/i18n/ui";
+import { isEn } from "@/config/locale";
 
 const navLinks = [
-  { href: "/", label: "홈" },
-  { href: "/heritage", label: "문화유산" },
-  { href: "/courses", label: "추천 코스" },
-  { href: "/chat", label: "AI 해설사" },
-  { href: "/quiz", label: "퀴즈" },
-  { href: "/stamp-tour", label: "스탬프투어" },
-  { href: "/dashboard", label: "대시보드" },
-  { href: "/insights", label: "인사이트" },
+  { href: "/", label: t("홈") },
+  { href: "/heritage", label: t("문화유산") },
+  { href: "/courses", label: t("추천 코스") },
+  { href: "/chat", label: t("AI 해설사") },
+  { href: "/quiz", label: t("퀴즈") },
+  { href: "/stamp-tour", label: t("스탬프투어") },
+  { href: "/dashboard", label: t("대시보드") },
+  { href: "/insights", label: t("인사이트") },
 ];
 
 export default function Header() {
@@ -53,9 +55,9 @@ export default function Header() {
             </span>
             <span className="text-lg font-bold tracking-tight text-[var(--color-ink)]">
               {city.id === "andong" ? (
-                <>안동 <span className="text-[var(--color-primary-500)]">유교문화</span> AI</>
+                <>{t("안동")} <span className="text-[var(--color-primary-500)]">{t("유교문화")}</span> AI</>
               ) : (
-                <>{city.name}<span className="text-[var(--color-primary-500)]">선비</span>AI</>
+                <>{cityLabel()}{isEn() ? " " : ""}<span className="text-[var(--color-primary-500)]">{t("선비")}</span>{isEn() ? " AI" : "AI"}</>
               )}
             </span>
           </Link>
@@ -89,7 +91,7 @@ export default function Header() {
               href="/chat"
               className="ml-3 inline-flex items-center gap-1.5 rounded-xl bg-[var(--color-primary-500)] px-4 py-2 text-sm font-semibold text-white shadow-[var(--shadow-warm-sm)] hover:bg-[var(--color-primary-600)] hover:shadow-[var(--shadow-warm-md)] active:scale-95"
             >
-              🤖 AI 해설사
+              {t("🤖 AI 해설사")}
             </Link>
           </nav>
 
@@ -97,7 +99,7 @@ export default function Header() {
           <button
             className="md:hidden flex items-center justify-center h-9 w-9 rounded-lg text-[var(--color-charcoal)] hover:bg-[var(--color-primary-100)] transition-colors"
             onClick={() => setMenuOpen((v) => !v)}
-            aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
+            aria-label={menuOpen ? t("메뉴 닫기") : t("메뉴 열기")}
           >
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -148,7 +150,7 @@ export default function Header() {
                   href="/chat"
                   className="flex items-center justify-center gap-2 w-full rounded-xl bg-[var(--color-primary-500)] px-4 py-3 text-sm font-semibold text-white hover:bg-[var(--color-primary-600)] active:scale-95"
                 >
-                  🤖 AI 해설사와 대화하기
+                  {t("🤖 AI 해설사와 대화하기")}
                 </Link>
               </motion.div>
             </nav>

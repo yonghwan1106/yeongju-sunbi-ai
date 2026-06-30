@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Clock, Tag, X, MapPin, Bus } from "lucide-react";
 import { CourseRecommendation } from "@/types";
+import { t } from "@/i18n/ui";
 
 interface CourseCardProps {
   course: CourseRecommendation;
@@ -56,7 +57,7 @@ export default function CourseCard({ course }: CourseCardProps) {
         role="button"
         tabIndex={0}
         onKeyDown={(e) => e.key === "Enter" && setOpen(true)}
-        aria-label={`${course.name} 자세히 보기`}
+        aria-label={`${course.name} ${t("자세히 보기")}`}
       >
         {/* Cover */}
         <div
@@ -65,7 +66,7 @@ export default function CourseCard({ course }: CourseCardProps) {
           {coverImage ? (
             <Image
               src={coverImage}
-              alt={`${course.name} 표지 이미지`}
+              alt={`${course.name} ${t("표지 이미지")}`}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -154,7 +155,7 @@ export default function CourseCard({ course }: CourseCardProps) {
                 <button
                   onClick={() => setOpen(false)}
                   className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 text-[var(--color-ink)] flex items-center justify-center hover:bg-white transition-colors"
-                  aria-label="닫기"
+                  aria-label={t("닫기")}
                 >
                   <X size={18} />
                 </button>
@@ -184,7 +185,7 @@ export default function CourseCard({ course }: CourseCardProps) {
                 {course.bestFor && (
                   <div className="flex items-start gap-2 -mt-2">
                     <span className="shrink-0 mt-0.5 px-2 py-0.5 rounded-full bg-[var(--color-primary-100)] text-[var(--color-primary-700)] text-xs font-semibold">
-                      이런 분께
+                      {t("이런 분께")}
                     </span>
                     <span className="text-sm text-[var(--color-charcoal)] leading-relaxed">{course.bestFor}</span>
                   </div>
@@ -194,7 +195,7 @@ export default function CourseCard({ course }: CourseCardProps) {
                 {course.highlights && course.highlights.length > 0 && (
                   <div>
                     <h3 className="text-sm font-bold text-[var(--color-ink)] mb-2">
-                      코스 하이라이트
+                      {t("코스 하이라이트")}
                     </h3>
                     <ul className="flex flex-col gap-1.5">
                       {course.highlights.map((h, i) => (
@@ -215,7 +216,7 @@ export default function CourseCard({ course }: CourseCardProps) {
                 {/* Itinerary timeline */}
                 {course.itinerary && course.itinerary.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-bold text-[var(--color-ink)] mb-3">추천 동선</h3>
+                    <h3 className="text-sm font-bold text-[var(--color-ink)] mb-3">{t("추천 동선")}</h3>
                     <ol className="relative flex flex-col gap-3.5 pl-4 border-l-2 border-[var(--color-parchment)]">
                       {course.itinerary.map((it, i) => (
                         <li key={i} className="relative">
@@ -234,7 +235,7 @@ export default function CourseCard({ course }: CourseCardProps) {
                 {/* Spots */}
                 <div>
                   <h3 className="text-sm font-bold text-[var(--color-ink)] mb-2">
-                    방문 장소 ({course.spots.length}곳)
+                    {t("방문 장소")} ({course.spots.length}{t("곳")})
                   </h3>
                   <ol className="flex flex-col gap-2">
                     {course.spots.map((spot, i) => (
@@ -269,7 +270,7 @@ export default function CourseCard({ course }: CourseCardProps) {
                   {course.season && course.season.length > 0 && (
                     <div>
                       <h4 className="text-xs font-semibold text-[var(--color-charcoal)] opacity-70 mb-1">
-                        추천 계절
+                        {t("추천 계절")}
                       </h4>
                       <div className="flex flex-wrap gap-1">
                         {course.season.map((s) => (
@@ -286,7 +287,7 @@ export default function CourseCard({ course }: CourseCardProps) {
                   {course.transport && (
                     <div>
                       <h4 className="text-xs font-semibold text-[var(--color-charcoal)] opacity-70 mb-1">
-                        교통편
+                        {t("교통편")}
                       </h4>
                       <p className="flex items-center gap-1 text-xs text-[var(--color-charcoal)] leading-relaxed">
                         <Bus className="w-3.5 h-3.5 shrink-0" />

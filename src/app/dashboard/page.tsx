@@ -14,6 +14,7 @@ import {
 } from "recharts";
 import { getActiveCity } from "@/config/city";
 import { getClassCode, setClassCode } from "@/lib/utils/session";
+import { t } from "@/i18n/ui";
 
 const city = getActiveCity();
 const POLL_INTERVAL_MS = 10_000;
@@ -68,11 +69,11 @@ function EmptyState() {
       <div className="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl">
         📊
       </div>
-      <p className="text-[var(--color-ink)] font-semibold text-lg">아직 집계된 데이터가 없습니다</p>
+      <p className="text-[var(--color-ink)] font-semibold text-lg">{t("아직 집계된 데이터가 없습니다")}</p>
       <p className="text-stone-400 text-sm leading-relaxed max-w-xs">
-        학생들이 스탬프투어·퀴즈를 진행하면
+        {t("학생들이 스탬프투어·퀴즈를 진행하면")}
         <br />
-        익명 집계가 실시간으로 쌓입니다.
+        {t("익명 집계가 실시간으로 쌓입니다.")}
       </p>
     </div>
   );
@@ -149,17 +150,17 @@ export default function DashboardPage() {
           {/* 배지 */}
           <div className="inline-flex items-center gap-2 bg-white/15 rounded-full px-4 py-1.5 text-sm font-medium w-fit">
             <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse" />
-            교사 대시보드 · 익명 집계 · 개인정보 미수집
+            {t("교사 대시보드 · 익명 집계 · 개인정보 미수집")}
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
-            {city.name} 선비AI
+            {t("{city} 선비AI")}
             <br />
-            학습 현황 대시보드
+            {t("학습 현황 대시보드")}
           </h1>
           <p className="text-white/70 text-sm">
-            교실코드를 입력하면 해당 수업의 스탬프 · 퀴즈 현황을 집계합니다.
+            {t("교실코드를 입력하면 해당 수업의 스탬프 · 퀴즈 현황을 집계합니다.")}
             <br />
-            모든 데이터는 익명 세션 ID 기준이며 실명·연락처는 수집하지 않습니다.
+            {t("모든 데이터는 익명 세션 ID 기준이며 실명·연락처는 수집하지 않습니다.")}
           </p>
 
           {/* 교실코드 입력 */}
@@ -171,7 +172,7 @@ export default function DashboardPage() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleLoad();
               }}
-              placeholder="교실코드 입력 (예: ENG-2A)"
+              placeholder={t("교실코드 입력 (예: ENG-2A)")}
               maxLength={20}
               className="flex-1 px-4 py-2.5 rounded-xl bg-white/20 text-white placeholder:text-white/50 text-sm border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50"
             />
@@ -180,12 +181,12 @@ export default function DashboardPage() {
               disabled={loading}
               className="px-5 py-2.5 rounded-xl bg-white text-emerald-800 font-semibold text-sm hover:bg-emerald-50 disabled:opacity-50 transition-colors"
             >
-              {loading ? "로딩…" : "불러오기"}
+              {loading ? t("로딩…") : t("불러오기")}
             </button>
           </div>
           {lastUpdated && (
             <p className="text-white/40 text-xs">
-              마지막 업데이트: {lastUpdated.toLocaleTimeString("ko-KR")} (10초 자동 갱신)
+              {t("마지막 업데이트: ")}{lastUpdated.toLocaleTimeString("ko-KR")}{t(" (10초 자동 갱신)")}
             </p>
           )}
         </div>
@@ -195,7 +196,7 @@ export default function DashboardPage() {
       <div className="max-w-4xl mx-auto px-4 pt-8 flex flex-col gap-8">
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
-            데이터 불러오기 실패: {error}
+            {t("데이터 불러오기 실패: ")}{error}
           </div>
         )}
 
@@ -206,16 +207,16 @@ export default function DashboardPage() {
             {/* ── 요약 카드 ── */}
             <section>
               <h2 className="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-3">
-                종합 현황
+                {t("종합 현황")}
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <StatCard label="참여 학생 (익명)" value={data.totals.participants} sub="고유 세션" />
-                <StatCard label="스탬프 체크인" value={data.totals.stamps} sub="누적" />
-                <StatCard label="퀴즈 도전" value={data.totals.quizAttempts} sub="누적" />
+                <StatCard label={t("참여 학생 (익명)")} value={data.totals.participants} sub={t("고유 세션")} />
+                <StatCard label={t("스탬프 체크인")} value={data.totals.stamps} sub={t("누적")} />
+                <StatCard label={t("퀴즈 도전")} value={data.totals.quizAttempts} sub={t("누적")} />
                 <StatCard
-                  label="전체 정답률"
+                  label={t("전체 정답률")}
                   value={`${data.totals.overallAccuracy}%`}
-                  sub={`${data.totals.quizAttempts}문항 기준`}
+                  sub={`${data.totals.quizAttempts}${t("문항 기준")}`}
                 />
               </div>
             </section>
@@ -224,7 +225,7 @@ export default function DashboardPage() {
             {data.totals.quizAttempts > 0 && (
               <section className="bg-white rounded-2xl border border-stone-200 shadow-sm p-6">
                 <h2 className="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-4">
-                  전체 정답률
+                  {t("전체 정답률")}
                 </h2>
                 <div className="flex items-center gap-8">
                   <div className="w-36 h-36 flex-shrink-0">
@@ -248,7 +249,7 @@ export default function DashboardPage() {
                       <span className="text-2xl font-normal text-stone-400">%</span>
                     </p>
                     <p className="text-stone-500 text-sm mt-1">
-                      {data.totals.quizAttempts}문항 중 {Math.round(data.totals.quizAttempts * data.totals.overallAccuracy / 100)}개 정답
+                      {data.totals.quizAttempts}{t("문항 중 ")}{Math.round(data.totals.quizAttempts * data.totals.overallAccuracy / 100)}{t("개 정답")}
                     </p>
                   </div>
                 </div>
@@ -259,7 +260,7 @@ export default function DashboardPage() {
             {data.heritage.length > 0 && (
               <section className="bg-white rounded-2xl border border-stone-200 shadow-sm p-6">
                 <h2 className="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-4">
-                  유산별 스탬프 체크인
+                  {t("유산별 스탬프 체크인")}
                 </h2>
                 <ResponsiveContainer width="100%" height={220}>
                   <BarChart
@@ -289,7 +290,7 @@ export default function DashboardPage() {
                         border: "1px solid #e7e5e4",
                         fontSize: 12,
                       }}
-                      formatter={(v) => [`${Number(v ?? 0)}회`, "체크인"]}
+                      formatter={(v) => [`${Number(v ?? 0)}${t("회")}`, t("체크인")]}
                     />
                     <Bar dataKey="checkins" fill={HERITAGE_COLOR} radius={[6, 6, 0, 0]} maxBarSize={56} />
                   </BarChart>
@@ -301,7 +302,7 @@ export default function DashboardPage() {
             {data.quiz.length > 0 && (
               <section className="bg-white rounded-2xl border border-stone-200 shadow-sm p-6">
                 <h2 className="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-4">
-                  문항별 정답률 (%)
+                  {t("문항별 정답률 (%)")}
                 </h2>
                 <ResponsiveContainer width="100%" height={Math.max(220, data.quiz.length * 36)}>
                   <BarChart
@@ -338,7 +339,7 @@ export default function DashboardPage() {
                       formatter={(v, _name, item) => {
                         const pct = Number(v ?? 0);
                         const p = item.payload as { correct?: number; total?: number };
-                        return [`${pct}% (${p?.correct ?? 0}/${p?.total ?? 0})`, "정답률"];
+                        return [`${pct}% (${p?.correct ?? 0}/${p?.total ?? 0})`, t("정답률")];
                       }}
                     />
                     <Bar dataKey="accuracy" fill={QUIZ_CORRECT_COLOR} radius={[0, 6, 6, 0]} maxBarSize={24} />

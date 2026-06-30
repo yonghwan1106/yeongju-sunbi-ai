@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Landmark, ExternalLink } from "lucide-react";
 import { getActiveCity } from "@/config/city";
+import { t, cityLabel } from "@/i18n/ui";
+import { isEn } from "@/config/locale";
 
 const publicDataSources = [
   { name: "문화재청", url: "https://www.cha.go.kr" },
@@ -26,22 +28,22 @@ export default function Footer() {
       <div className="border-b border-[var(--color-earth-700)] bg-[var(--color-earth-800)]/60">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
           <p className="text-xs text-[var(--color-earth-300)] text-center">
-            📊 본 서비스는{" "}
+            📊 {t("본 서비스는")}{" "}
             {publicDataSources.map((src, i) => (
               <span key={src.name}>
                 <a
                   href={src.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`${src.name} (새 창에서 열기)`}
+                  aria-label={`${t(src.name)} ${t("(새 창에서 열기)")}`}
                   className="underline underline-offset-2 hover:text-[var(--color-primary-300)] transition-colors"
                 >
-                  {src.name}
+                  {t(src.name)}
                 </a>
                 {i < publicDataSources.length - 1 && ", "}
               </span>
             ))}{" "}
-            등 5개 기관의 공공데이터를 활용합니다.
+            {t("등 5개 기관의 공공데이터를 활용합니다.")}
           </p>
         </div>
       </div>
@@ -57,9 +59,9 @@ export default function Footer() {
               </span>
               <span className="text-lg font-bold text-white">
                 {city.id === "andong" ? (
-                  <>안동 <span className="text-[var(--color-primary-400)]">유교문화</span> AI</>
+                  <>{t("안동")}{" "}<span className="text-[var(--color-primary-400)]">{t("유교문화")}</span> AI</>
                 ) : (
-                  <>{city.name}<span className="text-[var(--color-primary-400)]">선비</span>AI</>
+                  <>{cityLabel()}{isEn() ? " " : ""}<span className="text-[var(--color-primary-400)]">{t("선비")}</span>{isEn() ? " AI" : "AI"}</>
                 )}
               </span>
             </Link>
@@ -73,7 +75,7 @@ export default function Footer() {
 
           {/* Navigation */}
           <div>
-            <h3 className="text-sm font-semibold text-white mb-3">서비스</h3>
+            <h3 className="text-sm font-semibold text-white mb-3">{t("서비스")}</h3>
             <ul className="space-y-2">
               {footerLinks.map(({ href, label }) => (
                 <li key={href}>
@@ -81,7 +83,7 @@ export default function Footer() {
                     href={href}
                     className="text-sm text-[var(--color-earth-300)] hover:text-[var(--color-primary-300)] transition-colors"
                   >
-                    {label}
+                    {t(label)}
                   </Link>
                 </li>
               ))}
@@ -90,7 +92,7 @@ export default function Footer() {
 
           {/* Data sources */}
           <div>
-            <h3 className="text-sm font-semibold text-white mb-3">공공데이터 출처</h3>
+            <h3 className="text-sm font-semibold text-white mb-3">{t("공공데이터 출처")}</h3>
             <ul className="space-y-2">
               {publicDataSources.map((src) => (
                 <li key={src.name}>
@@ -98,10 +100,10 @@ export default function Footer() {
                     href={src.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`${src.name} (새 창에서 열기)`}
+                    aria-label={`${t(src.name)} ${t("(새 창에서 열기)")}`}
                     className="inline-flex items-center gap-1 text-sm text-[var(--color-earth-300)] hover:text-[var(--color-primary-300)] transition-colors"
                   >
-                    {src.name}
+                    {t(src.name)}
                     <ExternalLink size={11} className="opacity-60" aria-hidden="true" />
                   </a>
                 </li>
@@ -111,14 +113,14 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 pt-6 border-t border-[var(--color-earth-700)] flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-[var(--color-earth-500)]">
-          <p>© 2026 {city.brand.title}. 본 서비스의 콘텐츠는 공공데이터 활용 목적으로 제작되었습니다.</p>
+          <p>© 2026 {city.brand.title}{t(". 본 서비스의 콘텐츠는 공공데이터 활용 목적으로 제작되었습니다.")}</p>
           <p className="flex items-center gap-1">
-            <span>공공데이터포털</span>
+            <span>{t("공공데이터포털")}</span>
             <a
               href="https://www.data.go.kr"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="공공데이터포털 data.go.kr (새 창에서 열기)"
+              aria-label={t("공공데이터포털 data.go.kr (새 창에서 열기)")}
               className="underline hover:text-[var(--color-primary-300)] transition-colors"
             >
               data.go.kr

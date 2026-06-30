@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Landmark, Bot, Target, Map } from "lucide-react";
+import { t } from "@/i18n/ui";
 
 const tabs = [
   { href: "/", label: "홈", icon: Home },
@@ -19,7 +20,7 @@ export default function BottomNav() {
     <nav
       className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--color-cream)] border-t border-[var(--color-parchment)]"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-      aria-label="하단 탐색"
+      aria-label={t("하단 탐색")}
     >
       <ul className="flex h-16 items-stretch">
         {tabs.map(({ href, label, icon: Icon }) => {
@@ -28,7 +29,7 @@ export default function BottomNav() {
             <li key={href} className="flex flex-1">
               <Link
                 href={href}
-                aria-label={label}
+                aria-label={t(label)}
                 aria-current={isActive ? "page" : undefined}
                 className={`flex flex-1 flex-col items-center justify-center gap-0.5 text-xs font-medium transition-colors rounded-lg mx-0.5 my-1 ${
                   isActive
@@ -41,7 +42,7 @@ export default function BottomNav() {
                   strokeWidth={isActive ? 2.2 : 1.8}
                   aria-hidden="true"
                 />
-                <span>{label}</span>
+                <span>{t(label)}</span>
               </Link>
             </li>
           );

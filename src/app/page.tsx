@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ArrowRight, Bot, Target, Map, BookOpen, Globe, Award, ChevronRight } from "lucide-react";
 import { heritageData } from "@/data/active";
 import { getActiveCity } from "@/config/city";
+import { t, cityLabel } from "@/i18n/ui";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -33,7 +34,7 @@ export default function HomePage() {
     {
       icon: <Bot size={24} strokeWidth={1.8} />,
       emoji: "🤖",
-      title: "AI 선비 해설사",
+      title: t("AI 선비 해설사"),
       desc: `공공데이터 기반 대화형 문화재 해설. ${top2.join("·")} 등 AI가 숨겨진 이야기를 들려드립니다.`,
       href: "/chat",
       color: "bg-[var(--color-accent-500)]",
@@ -42,8 +43,8 @@ export default function HomePage() {
     {
       icon: <Target size={24} strokeWidth={1.8} />,
       emoji: "🎯",
-      title: "선비문화 퀴즈",
-      desc: `재미있는 퀴즈로 배우는 ${city.name} 역사. 나의 선비 지식을 테스트해보세요.`,
+      title: t("선비문화 퀴즈"),
+      desc: t("재미있는 퀴즈로 배우는 {city} 역사. 나의 선비 지식을 테스트해보세요."),
       href: "/quiz",
       color: "bg-[var(--color-primary-500)]",
       light: "bg-[var(--color-primary-50)] text-[var(--color-primary-600)]",
@@ -51,8 +52,8 @@ export default function HomePage() {
     {
       icon: <Map size={24} strokeWidth={1.8} />,
       emoji: "🗺️",
-      title: "디지털 스탬프투어",
-      desc: `대표 명소 방문 인증 & 배지 수집. ${city.name}의 주요 명소를 모두 완주해보세요.`,
+      title: t("디지털 스탬프투어"),
+      desc: t("대표 명소 방문 인증 & 배지 수집. {city}의 주요 명소를 모두 완주해보세요."),
       href: "/stamp-tour",
       color: "bg-[var(--color-earth-600)]",
       light: "bg-[var(--color-earth-50)] text-[var(--color-earth-700)]",
@@ -60,8 +61,8 @@ export default function HomePage() {
     {
       icon: <BookOpen size={24} strokeWidth={1.8} />,
       emoji: "📚",
-      title: "문화유산 카드",
-      desc: `아름다운 카드로 보는 ${city.name} 문화재. 유네스코 세계유산부터 숨겨진 명소까지 한눈에 만나보세요.`,
+      title: t("문화유산 카드"),
+      desc: t("아름다운 카드로 보는 {city} 문화재. 유네스코 세계유산부터 숨겨진 명소까지 한눈에 만나보세요."),
       href: "/heritage",
       color: "bg-[var(--color-accent-700)]",
       light: "bg-[var(--color-accent-50)] text-[var(--color-accent-700)]",
@@ -107,9 +108,9 @@ export default function HomePage() {
               className="inline-flex items-center gap-2 rounded-full border border-[var(--color-primary-200)] bg-[var(--color-primary-50)] px-4 py-1.5 text-xs font-semibold text-[var(--color-primary-700)] mb-6 ml-0 sm:ml-2"
             >
               <Globe size={13} aria-hidden="true" />
-              유네스코 세계유산 2개 보유 도시
+              {t("유네스코 세계유산 2개 보유 도시")}
               <span className="ml-1 rounded-full bg-[var(--color-primary-500)] px-2 py-0.5 text-white text-[10px]">
-                {city.name}
+                {cityLabel()}
               </span>
             </motion.div>
 
@@ -120,11 +121,11 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.18] tracking-tight text-[var(--color-ink)] mb-6"
             >
-              안내판을 넘어,
+              {t("안내판을 넘어,")}
               <br />
-              <span className="text-[var(--color-primary-500)]">지역 경제</span>를 살리는
+              <span className="text-[var(--color-primary-500)]">{t("지역 경제")}</span>{t("를 살리는")}
               <br />
-              AI 에이전트
+              {t("AI 에이전트")}
             </motion.h1>
 
             {/* Subtitle */}
@@ -134,9 +135,9 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-base sm:text-lg text-[var(--color-earth-600)] leading-relaxed mb-10 max-w-xl"
             >
-              유네스코 세계유산을 보유한 {city.name}의 짧은 관광 체류 문제를
-              <strong className="font-semibold text-[var(--color-charcoal)]"> AI로 해결</strong>하고,
-              서비스의 완성도와 확장 가능성을 보여줍니다.
+              {t("유네스코 세계유산을 보유한 {city}의 짧은 관광 체류 문제를")}
+              <strong className="font-semibold text-[var(--color-charcoal)]">{t(" AI로 해결")}</strong>{t("하고,")}
+              {t("서비스의 완성도와 확장 가능성을 보여줍니다.")}
             </motion.p>
 
             {/* CTA buttons */}
@@ -151,14 +152,14 @@ export default function HomePage() {
                 className="inline-flex items-center gap-2 rounded-xl bg-[var(--color-primary-500)] px-6 py-3.5 text-sm font-bold text-white shadow-[var(--shadow-warm-lg)] hover:bg-[var(--color-primary-600)] hover:shadow-[var(--shadow-warm-xl)] hover:-translate-y-0.5 active:scale-95"
               >
                 <Bot size={17} strokeWidth={2} />
-                AI 해설사와 대화하기
+                {t("AI 해설사와 대화하기")}
                 <ArrowRight size={15} strokeWidth={2.2} />
               </Link>
               <Link
                 href="/heritage"
                 className="inline-flex items-center gap-2 rounded-xl border-2 border-[var(--color-primary-300)] bg-white/70 backdrop-blur-sm px-6 py-3.5 text-sm font-bold text-[var(--color-primary-700)] hover:bg-[var(--color-primary-50)] hover:border-[var(--color-primary-400)] hover:-translate-y-0.5 active:scale-95"
               >
-                문화유산 둘러보기
+                {t("문화유산 둘러보기")}
                 <ChevronRight size={15} strokeWidth={2.2} />
               </Link>
             </motion.div>
@@ -171,9 +172,9 @@ export default function HomePage() {
               className="mt-12 flex flex-wrap gap-6"
             >
               {[
-                { value: "+30%", label: "체류시간 향상 목표" },
-                { value: "9개", label: "라이브 라우트" },
-                { value: "5종", label: "실시간 공공데이터" },
+                { value: "+30%", label: t("체류시간 향상 목표") },
+                { value: "9개", label: t("라이브 라우트") },
+                { value: "5종", label: t("실시간 공공데이터") },
               ].map((stat) => (
                 <div key={stat.label} className="text-center sm:text-left">
                   <p className="text-2xl font-black text-[var(--color-primary-500)]">{stat.value}</p>
@@ -192,15 +193,15 @@ export default function HomePage() {
             >
               <Image
                 src="/ai/agentic.jpg"
-                alt="공공데이터를 자율로 활용하는 영주선비 AI 에이전트 일러스트"
+                alt={t("공공데이터를 자율로 활용하는 영주선비 AI 에이전트 일러스트")}
                 width={1200}
                 height={675}
                 priority
                 className="w-full h-auto rounded-3xl border border-[var(--color-parchment)] shadow-[var(--shadow-warm-xl)]"
               />
               <div className="absolute -bottom-4 -left-4 rounded-2xl bg-white/90 backdrop-blur-sm border border-[var(--color-parchment)] px-4 py-2.5 shadow-[var(--shadow-warm-md)]">
-                <p className="text-xs font-bold text-[var(--color-primary-700)]">5종 공공데이터 · 7개 도구</p>
-                <p className="text-[11px] text-[var(--color-earth-500)]">Agentic RAG로 스스로 호출·답변</p>
+                <p className="text-xs font-bold text-[var(--color-primary-700)]">{t("5종 공공데이터 · 7개 도구")}</p>
+                <p className="text-[11px] text-[var(--color-earth-500)]">{t("Agentic RAG로 스스로 호출·답변")}</p>
               </div>
             </motion.div>
           </div>
@@ -221,14 +222,14 @@ export default function HomePage() {
               custom={0}
               className="text-sm font-semibold text-[var(--color-primary-500)] uppercase tracking-widest mb-3"
             >
-              주요 서비스
+              {t("주요 서비스")}
             </motion.p>
             <motion.h2
               variants={fadeUp}
               custom={1}
               className="text-3xl sm:text-4xl font-black text-[var(--color-ink)] leading-tight"
             >
-              {city.name} 문화유산을 더 깊이<br />경험하는 방법
+              {t("{city} 문화유산을 더 깊이")}<br />{t("경험하는 방법")}
             </motion.h2>
           </motion.div>
 
@@ -252,7 +253,7 @@ export default function HomePage() {
                   </h3>
                   <p className="text-sm text-[var(--color-earth-600)] leading-relaxed flex-1">{f.desc}</p>
                   <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-[var(--color-primary-500)] group-hover:gap-2 transition-all">
-                    바로가기 <ArrowRight size={13} strokeWidth={2.5} />
+                    {t("바로가기")} <ArrowRight size={13} strokeWidth={2.5} />
                   </div>
                 </Link>
               </motion.div>
@@ -271,10 +272,10 @@ export default function HomePage() {
             className="text-center mb-14"
           >
             <motion.p variants={fadeUp} custom={0} className="text-sm font-semibold text-[var(--color-primary-500)] uppercase tracking-widest mb-3">
-              왜 다른가
+              {t("왜 다른가")}
             </motion.p>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl sm:text-4xl font-black text-[var(--color-ink)] leading-tight">
-              단순 안내가 아니라,<br />스스로 일하는 AI 에이전트
+              {t("단순 안내가 아니라,")}<br />{t("스스로 일하는 AI 에이전트")}
             </motion.h2>
           </motion.div>
 
@@ -285,9 +286,9 @@ export default function HomePage() {
             className="grid grid-cols-1 md:grid-cols-3 gap-6"
           >
             {[
-              { src: "/ai/path.jpg", title: "정해진 길이 아닌, 대화형 추론", desc: "정적 안내가 아니라 질문에 따라 스스로 길을 찾는 Agentic RAG. 최대 5단계 자율 추론으로 답합니다." },
-              { src: "/ai/loop.jpg", title: "공공데이터가 시민가치로", desc: "국가 데이터 → AI 해설 → 시민 경험 → 익명 이용기록이 다시 데이터가 되는 공공가치 선순환." },
-              { src: "/ai/expansion.jpg", title: "데이터팩 교체로 전국 확장", desc: city.id === "andong" ? "영주 1호 도시의 엔진·도구를 그대로 두고 데이터팩만 교체해 안동으로 옮겨왔습니다 — 전국 확장을 라이브로 실증." : "같은 엔진·도구는 그대로, 도시 데이터만 교체. 안동 2호 도시를 라이브로 실증했습니다." },
+              { src: "/ai/path.jpg", title: t("정해진 길이 아닌, 대화형 추론"), desc: t("정적 안내가 아니라 질문에 따라 스스로 길을 찾는 Agentic RAG. 최대 5단계 자율 추론으로 답합니다.") },
+              { src: "/ai/loop.jpg", title: t("공공데이터가 시민가치로"), desc: t("국가 데이터 → AI 해설 → 시민 경험 → 익명 이용기록이 다시 데이터가 되는 공공가치 선순환.") },
+              { src: "/ai/expansion.jpg", title: t("데이터팩 교체로 전국 확장"), desc: city.id === "andong" ? t("영주 1호 도시의 엔진·도구를 그대로 두고 데이터팩만 교체해 안동으로 옮겨왔습니다 — 전국 확장을 라이브로 실증.") : t("같은 엔진·도구는 그대로, 도시 데이터만 교체. 안동 2호 도시를 라이브로 실증했습니다.") },
             ].map((c, i) => (
               <motion.div
                 key={c.src}
@@ -323,14 +324,14 @@ export default function HomePage() {
                 custom={0}
                 className="text-sm font-semibold text-[var(--color-primary-500)] uppercase tracking-widest mb-3"
               >
-                문화유산 둘러보기
+                {t("문화유산 둘러보기")}
               </motion.p>
               <motion.h2
                 variants={fadeUp}
                 custom={1}
                 className="text-3xl sm:text-4xl font-black text-[var(--color-ink)] leading-tight"
               >
-                {city.name}의 대표 명소
+                {t("{city}의 대표 명소")}
               </motion.h2>
             </div>
             <motion.div variants={fadeUp} custom={2}>
@@ -338,7 +339,7 @@ export default function HomePage() {
                 href="/heritage"
                 className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--color-primary-600)] hover:text-[var(--color-primary-700)] transition-colors"
               >
-                전체 보기 <ArrowRight size={14} strokeWidth={2.3} />
+                {t("전체 보기")} <ArrowRight size={14} strokeWidth={2.3} />
               </Link>
             </motion.div>
           </motion.div>
@@ -406,7 +407,7 @@ export default function HomePage() {
                     </div>
 
                     <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-[var(--color-primary-500)] group-hover:gap-2 transition-all">
-                      자세히 보기 <ArrowRight size={12} strokeWidth={2.5} />
+                      {t("자세히 보기")} <ArrowRight size={12} strokeWidth={2.5} />
                     </div>
                   </div>
                 </Link>
@@ -427,13 +428,13 @@ export default function HomePage() {
             className="text-center mb-10"
           >
             <motion.p variants={fadeUp} custom={0} className="text-sm font-semibold text-[var(--color-primary-500)] uppercase tracking-widest mb-3">
-              한눈에 보기
+              {t("한눈에 보기")}
             </motion.p>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl sm:text-4xl font-black text-[var(--color-ink)] leading-tight">
-              한 장으로 보는 영주선비AI
+              {t("한 장으로 보는 영주선비AI")}
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="mt-3 text-sm text-[var(--color-earth-600)] max-w-2xl mx-auto">
-              문제 정의부터 해결 방식, 기술 신뢰도, 기대효과와 전국 확장까지 — 프로젝트의 전체 그림을 한 장에 담았습니다.
+              {t("문제 정의부터 해결 방식, 기술 신뢰도, 기대효과와 전국 확장까지 — 프로젝트의 전체 그림을 한 장에 담았습니다.")}
             </motion.p>
           </motion.div>
           <motion.div
@@ -445,7 +446,7 @@ export default function HomePage() {
           >
             <Image
               src="/infographic.jpg"
-              alt="영주선비AI 한 장 요약 인포그래픽 — 문제, 해결, 기술 신뢰도와 공공가치, 기대효과, 전국 확장"
+              alt={t("영주선비AI 한 장 요약 인포그래픽 — 문제, 해결, 기술 신뢰도와 공공가치, 기대효과, 전국 확장")}
               width={1672}
               height={941}
               className="w-full h-auto"
@@ -465,14 +466,14 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
           >
             <div className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent-700)]/60 px-4 py-1.5 text-xs font-semibold text-[var(--color-accent-200)] mb-5">
-              📊 공공데이터 활용
+              {t("📊 공공데이터 활용")}
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white mb-3 leading-snug">
-              신뢰할 수 있는 공공데이터로 만든 서비스
+              {t("신뢰할 수 있는 공공데이터로 만든 서비스")}
             </h2>
             <p className="text-sm text-[var(--color-accent-300)] leading-relaxed max-w-2xl mx-auto">
-              본 서비스는 <strong className="text-white font-semibold">문화재청, 한국관광공사, 기상청, 국립중앙박물관, 한국학중앙연구원</strong> 등
-              5개 기관의 공공데이터를 활용합니다. 정확하고 최신화된 정보를 바탕으로 {city.name} 문화유산을 소개합니다.
+              {t("본 서비스는")} <strong className="text-white font-semibold">{t("문화재청, 한국관광공사, 기상청, 국립중앙박물관, 한국학중앙연구원")}</strong> {t("등 5개 기관의 공공데이터를 활용합니다.")}{" "}
+              {t("정확하고 최신화된 정보를 바탕으로")} {cityLabel()} {t("문화유산을 소개합니다.")}
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-2">
               {["문화재청 문화재정보", "한국관광공사 관광정보", "기상청 날씨정보", "국립중앙박물관 유물정보", "한국학중앙연구원 백과사전"].map(
@@ -481,7 +482,7 @@ export default function HomePage() {
                     key={src}
                     className="rounded-full border border-[var(--color-accent-600)] bg-[var(--color-accent-800)]/50 px-3 py-1 text-xs text-[var(--color-accent-300)]"
                   >
-                    {src}
+                    {t(src)}
                   </span>
                 )
               )}
@@ -501,17 +502,17 @@ export default function HomePage() {
           >
             <p className="text-4xl mb-4">🏛️</p>
             <h2 className="text-2xl sm:text-3xl font-black text-white mb-4 leading-tight">
-              지금 바로 AI 선비 해설사와<br />대화를 시작해보세요
+              {t("지금 바로 AI 선비 해설사와")}<br />{t("대화를 시작해보세요")}
             </h2>
             <p className="text-sm text-[var(--color-primary-100)] mb-8">
-              {top2[0]}, {top2[1]}… 궁금한 것은 무엇이든 물어보세요.
+              {top2[0]}, {top2[1]}… {t("궁금한 것은 무엇이든 물어보세요.")}
             </p>
             <Link
               href="/chat"
               className="inline-flex items-center gap-2 rounded-xl bg-white px-7 py-3.5 text-sm font-bold text-[var(--color-primary-700)] shadow-[var(--shadow-warm-xl)] hover:bg-[var(--color-primary-50)] hover:-translate-y-0.5 active:scale-95 transition-all"
             >
               <Bot size={17} strokeWidth={2} />
-              AI 해설사 시작하기
+              {t("AI 해설사 시작하기")}
               <ArrowRight size={15} strokeWidth={2.2} />
             </Link>
           </motion.div>

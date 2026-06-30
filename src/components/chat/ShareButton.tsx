@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Share2 } from "lucide-react";
 import { getActiveCity } from "@/config/city";
+import { t } from "@/i18n/ui";
 
 export default function ShareButton() {
   const city = getActiveCity();
@@ -32,7 +33,7 @@ export default function ShareButton() {
     // Desktop fallback: copy URL to clipboard
     try {
       await navigator.clipboard.writeText(url);
-      showToast("URL이 복사되었습니다");
+      showToast(t("URL이 복사되었습니다"));
     } catch {
       // Clipboard unavailable: open KakaoTalk share
       const kakaoUrl = `https://story.kakao.com/share?url=${encodeURIComponent(url)}`;
@@ -45,13 +46,13 @@ export default function ShareButton() {
       <button
         type="button"
         onClick={handleShare}
-        aria-label="공유"
+        aria-label={t("공유")}
         className="flex items-center gap-1.5 text-xs text-stone-500 hover:text-amber-700
           bg-stone-100 hover:bg-amber-50 border border-stone-200 hover:border-amber-300
           rounded-lg px-2.5 py-1.5 transition-colors"
       >
         <Share2 size={13} />
-        공유
+        {t("공유")}
       </button>
 
       {toast && (

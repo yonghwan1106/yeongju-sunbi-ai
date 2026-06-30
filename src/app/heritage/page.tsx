@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Landmark, Search, GitBranch, Network } from "lucide-react";
 import { heritageData } from "@/data/active";
 import { getActiveCity } from "@/config/city";
+import { t } from "@/i18n/ui";
 import { Heritage } from "@/types";
 import HeritageCard from "@/components/heritage/HeritageCard";
 import LineageTimeline from "@/components/heritage/LineageTimeline";
@@ -15,11 +16,11 @@ type LineageView = "timeline" | "network";
 type FilterCategory = "전체" | Heritage["category"];
 
 const FILTER_TABS: { label: string; value: FilterCategory }[] = [
-  { label: "전체", value: "전체" },
-  { label: "유네스코", value: "유네스코" },
-  { label: "국보/보물", value: "국보" },
-  { label: "민속문화재", value: "민속문화재" },
-  { label: "명승", value: "명승" },
+  { label: t("전체"), value: "전체" },
+  { label: t("유네스코"), value: "유네스코" },
+  { label: t("국보/보물"), value: "국보" },
+  { label: t("민속문화재"), value: "민속문화재" },
+  { label: t("명승"), value: "명승" },
 ];
 
 export default function HeritagePage() {
@@ -56,14 +57,13 @@ export default function HeritagePage() {
           >
             <div className="flex items-center gap-2 bg-white/15 rounded-full px-4 py-1.5 text-sm font-medium">
               <Landmark className="w-4 h-4" />
-              {city.name}시 문화유산
+              {t("{city}시 문화유산")}
             </div>
             <h1 className="text-3xl sm:text-5xl font-bold leading-tight">
-              {city.name} 문화유산
+              {t("{city} 문화유산")}
             </h1>
             <p className="text-base sm:text-lg text-white/80 max-w-xl leading-relaxed">
-              유네스코 세계유산부터 숨겨진 명소까지, 선비의 고장 {city.name}이(가) 품은
-              소중한 문화유산을 만나보세요.
+              {t("유네스코 세계유산부터 숨겨진 명소까지, 선비의 고장 {city}이(가) 품은 소중한 문화유산을 만나보세요.")}
             </p>
 
             {/* Search */}
@@ -71,7 +71,7 @@ export default function HeritagePage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" />
               <input
                 type="text"
-                placeholder="문화유산 검색..."
+                placeholder={t("문화유산 검색...")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-4 py-2.5 bg-white/15 border border-white/25 rounded-full text-white placeholder:text-white/50 text-sm focus:outline-none focus:ring-2 focus:ring-white/40 backdrop-blur-sm"
@@ -112,17 +112,16 @@ export default function HeritagePage() {
         >
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-[var(--color-ink)]">
-              {city.name} 선비 계보 — 인물과 유산의 천 년
+              {t("{city} 선비 계보 — 인물과 유산의 천 년")}
             </h2>
             <p className="mt-1 text-sm text-[var(--color-charcoal)] opacity-70">
-              {city.dataPack.figures[0] ? `${city.dataPack.figures[0].bornYear}년` : "고대"}부터 현대까지, {city.name} 학맥을 빚어낸
-              인물과 유산의 연결을 한눈에 살펴보세요.
+              {city.dataPack.figures[0] ? `${city.dataPack.figures[0].bornYear}년` : t("고대")}{t("부터 현대까지, {city} 학맥을 빚어낸 인물과 유산의 연결을 한눈에 살펴보세요.")}
             </p>
           </div>
 
           <div
             role="tablist"
-            aria-label="선비 계보 보기 방식"
+            aria-label={t("선비 계보 보기 방식")}
             className="inline-flex bg-[var(--color-ivory)] border border-[var(--color-parchment)] rounded-full p-1 self-start sm:self-end shrink-0"
           >
             <button
@@ -136,7 +135,7 @@ export default function HeritagePage() {
               }`}
             >
               <GitBranch className="w-3.5 h-3.5" />
-              타임라인 보기
+              {t("타임라인 보기")}
             </button>
             <button
               role="tab"
@@ -149,7 +148,7 @@ export default function HeritagePage() {
               }`}
             >
               <Network className="w-3.5 h-3.5" />
-              네트워크 보기
+              {t("네트워크 보기")}
             </button>
           </div>
         </motion.div>
@@ -172,12 +171,12 @@ export default function HeritagePage() {
         {filtered.length === 0 ? (
           <div className="text-center py-20 text-[var(--color-charcoal)] opacity-50">
             <Landmark className="w-12 h-12 mx-auto mb-3 opacity-30" />
-            <p className="text-base">검색 결과가 없습니다.</p>
+            <p className="text-base">{t("검색 결과가 없습니다.")}</p>
           </div>
         ) : (
           <>
             <p className="text-sm text-[var(--color-charcoal)] opacity-60 mb-6">
-              총 {filtered.length}개의 문화유산
+              {t("총 ")}{filtered.length}{t("개의 문화유산")}
             </p>
             <motion.div
               layout

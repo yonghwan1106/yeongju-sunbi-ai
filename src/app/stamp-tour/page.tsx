@@ -9,6 +9,7 @@ import { getSessionId, getClassCode, setClassCode } from "@/lib/utils/session";
 import StampCard from "@/components/stamp/StampCard";
 import Link from "next/link";
 import { haversineMeters, within, type Coord } from "@/lib/utils/geofence";
+import { t } from "@/i18n/ui";
 
 const STORAGE_KEY = `sunbi-collected-stamps-${getActiveCity().id}`;
 const CHECKIN_RADIUS_M = 100;
@@ -31,9 +32,9 @@ const STAMP_GRADIENTS: Record<string, string> = {
 };
 
 const BADGES: Omit<BadgeInfo, "unlocked">[] = [
-  { id: "b1", name: "첫 발걸음", description: "첫 번째 스탬프 수집", icon: "🌱", requiredCount: 1 },
-  { id: "b2", name: "탐방가", description: "3개 스탬프 수집", icon: "🗺️", requiredCount: 3 },
-  { id: "b3", name: `${getActiveCity().name} 선비`, description: "모든 스탬프 수집", icon: "🏆", requiredCount: 5 },
+  { id: "b1", name: t("첫 발걸음"), description: t("첫 번째 스탬프 수집"), icon: "🌱", requiredCount: 1 },
+  { id: "b2", name: t("탐방가"), description: t("3개 스탬프 수집"), icon: "🗺️", requiredCount: 3 },
+  { id: "b3", name: t("{city} 선비"), description: t("모든 스탬프 수집"), icon: "🏆", requiredCount: 5 },
 ];
 
 // Map heritageData to stamp spots (first 5), including coordinates
@@ -169,27 +170,27 @@ export default function StampTourPage() {
               transition={{ duration: 0.28, ease: "easeOut" }}
               className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 flex flex-col gap-4 text-center"
             >
-              <div className="text-4xl" role="img" aria-label="체험 모드 아이콘">🧪</div>
+              <div className="text-4xl" role="img" aria-label={t("체험 모드 아이콘")}>🧪</div>
               <h2
                 id="gps-modal-title"
                 className="text-lg font-bold text-[var(--color-ink)]"
               >
-                체험 모드
+                {t("체험 모드")}
               </h2>
               <p
                 id="gps-modal-desc"
                 className="text-sm text-[var(--color-charcoal)] leading-relaxed"
               >
-                {city.name} 현장에서는 GPS로 검증됩니다.
+                {t("{city} 현장에서는 GPS로 검증됩니다.")}
                 <br />
-                지금은 <strong>체험 모드</strong>로 진행합니다.
+                {t("지금은 ")}<strong>{t("체험 모드")}</strong>{t("로 진행합니다.")}
               </p>
               <button
                 onClick={switchToDemo}
                 className="mt-1 w-full py-3 bg-[var(--color-primary-600)] hover:bg-[var(--color-primary-700)] text-white font-semibold rounded-xl transition-colors text-sm"
-                aria-label="체험 모드로 진행하기"
+                aria-label={t("체험 모드로 진행하기")}
               >
-                체험 모드로 진행
+                {t("체험 모드로 진행")}
               </button>
             </motion.div>
           </motion.div>
@@ -202,22 +203,22 @@ export default function StampTourPage() {
         <div className="relative z-10 max-w-2xl mx-auto px-4 py-14 text-center flex flex-col items-center gap-4">
           <div className="flex items-center gap-2 bg-white/15 rounded-full px-4 py-1.5 text-sm font-medium">
             <Stamp className="w-4 h-4" />
-            디지털 스탬프투어
+            {t("디지털 스탬프투어")}
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
-            {city.name} 문화유산
+            {t("{city} 문화유산")}
             <br />
-            디지털 스탬프투어
+            {t("디지털 스탬프투어")}
           </h1>
           <p className="text-white/80 text-sm leading-relaxed max-w-sm">
-            {city.name}의 다섯 가지 문화유산을 탐방하고 스탬프를 수집하세요.
-            모든 스탬프를 모으면 특별한 배지가 주어집니다!
+            {t("{city}의 다섯 가지 문화유산을 탐방하고 스탬프를 수집하세요.")}
+            {t("모든 스탬프를 모으면 특별한 배지가 주어집니다!")}
           </p>
 
           {/* Progress */}
           <div className="w-full max-w-sm bg-white/20 rounded-2xl p-4 mt-2">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">스탬프 수집 현황</span>
+              <span className="text-sm font-medium">{t("스탬프 수집 현황")}</span>
               <span className="text-lg font-bold">
                 {collectedCount}
                 <span className="text-white/60 text-sm font-normal"> / {totalCount}</span>
@@ -236,7 +237,7 @@ export default function StampTourPage() {
           <div className="w-full max-w-sm">
             <input
               type="text"
-              placeholder="교실코드 입력 (선택, 예: ENG-2A)"
+              placeholder={t("교실코드 입력 (선택, 예: ENG-2A)")}
               value={classCode}
               onChange={(e) => {
                 setClassCodeState(e.target.value);
@@ -244,7 +245,7 @@ export default function StampTourPage() {
               }}
               className="w-full px-4 py-2 rounded-xl bg-white/20 text-white placeholder:text-white/50 text-sm border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50"
               maxLength={20}
-              aria-label="교실코드 (선택)"
+              aria-label={t("교실코드 (선택)")}
             />
           </div>
         </div>
@@ -271,8 +272,8 @@ export default function StampTourPage() {
               }`}
             >
               {mode === "gps"
-                ? `📍 GPS 실시간 검증 모드 (${city.name} 현장 방문 시) — 각 유산 100m 반경 진입 시 체크인이 활성화됩니다.`
-                : `🧪 체험 모드 — ${city.name} 현장에서는 GPS 100m 반경으로 자동 검증됩니다. 지금은 모든 체크인 버튼을 직접 누를 수 있습니다.`}
+                ? t("📍 GPS 실시간 검증 모드 ({city} 현장 방문 시) — 각 유산 100m 반경 진입 시 체크인이 활성화됩니다.")
+                : t("🧪 체험 모드 — {city} 현장에서는 GPS 100m 반경으로 자동 검증됩니다. 지금은 모든 체크인 버튼을 직접 누를 수 있습니다.")}
             </p>
           </div>
           {/* Always-visible toggle to demo mode */}
@@ -280,10 +281,10 @@ export default function StampTourPage() {
             <button
               onClick={switchToDemo}
               className="shrink-0 text-xs px-3 py-1 rounded-full bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-50 transition-colors whitespace-nowrap"
-              aria-label="체험 모드로 전환"
+              aria-label={t("체험 모드로 전환")}
             >
               <FlaskConical className="w-3 h-3 inline mr-1" aria-hidden="true" />
-              체험 모드
+              {t("체험 모드")}
             </button>
           )}
         </div>
@@ -292,7 +293,7 @@ export default function StampTourPage() {
       {/* Stamps grid */}
       <section className="max-w-2xl mx-auto px-4 py-10">
         <h2 className="text-lg font-bold text-[var(--color-ink)] mb-8 text-center">
-          수집 스탬프 목록
+          {t("수집 스탬프 목록")}
         </h2>
         <div className="flex flex-wrap justify-center gap-8">
           {stampSpots.map((spot, i) => {
@@ -327,7 +328,7 @@ export default function StampTourPage() {
                 {mode === "gps" && distanceM !== null && !isCollected && (
                   <div className="flex items-center gap-1 text-xs text-gray-500" aria-label={`현 위치에서 ${distanceM}미터`}>
                     <MapPin className="w-3 h-3" aria-hidden="true" />
-                    현 위치에서 {distanceM.toLocaleString()}m
+                    {t("현 위치에서 ")}{distanceM.toLocaleString()}m
                   </div>
                 )}
 
@@ -348,7 +349,7 @@ export default function StampTourPage() {
                     }`}
                   >
                     {canCheckin
-                      ? "체크인"
+                      ? t("체크인")
                       : `${(distanceM ?? 0).toLocaleString()}m — 100m 이내로 이동`}
                   </button>
                 ) : (
@@ -357,7 +358,7 @@ export default function StampTourPage() {
                     className="text-xs px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors"
                     aria-label={`${spot.name} 상세 보기`}
                   >
-                    상세 보기
+                    {t("상세 보기")}
                   </Link>
                 )}
               </motion.div>
@@ -371,7 +372,7 @@ export default function StampTourPage() {
         <div className="bg-white rounded-2xl border border-[var(--color-parchment)] shadow-[var(--shadow-warm-sm)] overflow-hidden">
           <div className="px-5 py-4 border-b border-[var(--color-parchment)] flex items-center gap-2">
             <Trophy className="w-5 h-5 text-[var(--color-primary-500)]" aria-hidden="true" />
-            <h2 className="text-base font-bold text-[var(--color-ink)]">배지 갤러리</h2>
+            <h2 className="text-base font-bold text-[var(--color-ink)]">{t("배지 갤러리")}</h2>
           </div>
           <div className="p-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
             {badges.map((badge) => (
@@ -401,7 +402,7 @@ export default function StampTourPage() {
                 </p>
                 {!badge.unlocked && (
                   <p className="text-xs text-gray-400">
-                    {badge.requiredCount}개 수집 시 해금
+                    {badge.requiredCount}{t("개 수집 시 해금")}
                   </p>
                 )}
               </motion.div>
@@ -414,17 +415,17 @@ export default function StampTourPage() {
           <Link
             href="/heritage"
             className="px-5 py-3 bg-[var(--color-primary-600)] hover:bg-[var(--color-primary-700)] text-white text-sm font-semibold rounded-xl shadow-[var(--shadow-warm-sm)] transition-all flex items-center gap-2"
-            aria-label="문화유산 탐방하기"
+            aria-label={t("문화유산 탐방하기")}
           >
             <BookOpen className="w-4 h-4" aria-hidden="true" />
-            문화유산 탐방하기
+            {t("문화유산 탐방하기")}
           </Link>
           <Link
             href="/quiz"
             className="px-5 py-3 border-2 border-[var(--color-primary-300)] text-[var(--color-primary-700)] text-sm font-semibold rounded-xl hover:bg-[var(--color-primary-50)] transition-all flex items-center gap-2"
-            aria-label="퀴즈 도전하기"
+            aria-label={t("퀴즈 도전하기")}
           >
-            퀴즈 도전하기
+            {t("퀴즈 도전하기")}
           </Link>
         </div>
       </section>

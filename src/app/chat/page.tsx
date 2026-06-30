@@ -16,6 +16,7 @@ import {
   isQuestionLoggingOptedOut,
   setQuestionLoggingOptOut,
 } from "@/lib/utils/session";
+import { t } from "@/i18n/ui";
 
 const DATA_SOURCES = [
   "문화재청 국가문화유산포털",
@@ -67,7 +68,7 @@ export default function ChatPage() {
     stop: stopListening,
     isListening,
     supported: sttSupported,
-  } = useSpeechToText((t) => setInput((prev) => (prev ? prev.trim() + " " : "") + t));
+  } = useSpeechToText((transcript) => setInput((prev) => (prev ? prev.trim() + " " : "") + transcript));
 
   // mount 시 localStorage에서 세션 정보 초기화
   useEffect(() => {
@@ -147,7 +148,7 @@ export default function ChatPage() {
           </div>
           <div>
             <h1 className="font-semibold text-stone-900 text-base leading-tight">
-              AI 선비 에이전트
+              {t("AI 선비 에이전트")}
             </h1>
             <p className="text-xs text-stone-500">{city.brand.title} · Tool-Use AI Agent</p>
           </div>
@@ -157,18 +158,18 @@ export default function ChatPage() {
               <button
                 type="button"
                 onClick={handleClearChat}
-                aria-label="대화 초기화"
+                aria-label={t("대화 초기화")}
                 className="flex items-center gap-1 text-xs text-stone-400 hover:text-red-500
                   hover:bg-red-50 border border-transparent hover:border-red-200
                   rounded-lg px-2 py-1.5 transition-colors"
               >
                 <Trash2 size={13} />
-                초기화
+                {t("초기화")}
               </button>
             )}
             <div className="flex items-center gap-1.5 text-xs text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              에이전트 활성
+              {t("에이전트 활성")}
             </div>
           </div>
         </div>
@@ -181,7 +182,7 @@ export default function ChatPage() {
         role="log"
         aria-live="polite"
         aria-relevant="additions"
-        aria-label="대화 내용"
+        aria-label={t("대화 내용")}
       >
         <div className="max-w-2xl mx-auto px-4 py-6 space-y-5">
           {showWelcome ? (
@@ -193,14 +194,14 @@ export default function ChatPage() {
                     <Bot size={20} />
                   </div>
                   <div className="space-y-2">
-                    <p className="font-medium text-stone-800">안녕하세요! {city.persona}입니다.</p>
+                    <p className="font-medium text-stone-800">{t("안녕하세요!")} {city.persona}{t("입니다.")}</p>
                     <p className="text-sm text-stone-600 leading-relaxed">
-                      저는 공공데이터 도구를 자율적으로 활용하는 AI 에이전트입니다.
-                      문화유산 검색, 실시간 날씨 조회, 관광지·맛집 탐색, 맞춤 코스 생성까지 —
-                      필요한 정보를 스스로 수집하고 종합하여 답변해 드립니다.
+                      {t("저는 공공데이터 도구를 자율적으로 활용하는 AI 에이전트입니다.")}{" "}
+                      {t("문화유산 검색, 실시간 날씨 조회, 관광지·맛집 탐색, 맞춤 코스 생성까지 —")}{" "}
+                      {t("필요한 정보를 스스로 수집하고 종합하여 답변해 드립니다.")}
                     </p>
                     <p className="text-xs text-stone-400 italic">
-                      "학이시습지 불역열호(學而時習之 不亦說乎)" — 배우고 때로 익히니 또한 기쁘지 아니한가
+                      {t('"학이시습지 불역열호(學而時習之 不亦說乎)" — 배우고 때로 익히니 또한 기쁘지 아니한가')}
                     </p>
                   </div>
                 </div>
@@ -222,8 +223,8 @@ export default function ChatPage() {
                   >
                     <span className="text-lg">{cap.icon}</span>
                     <div>
-                      <p className="text-xs font-medium text-stone-700">{cap.label}</p>
-                      <p className="text-[10px] text-stone-400">{cap.desc}</p>
+                      <p className="text-xs font-medium text-stone-700">{t(cap.label)}</p>
+                      <p className="text-[10px] text-stone-400">{t(cap.desc)}</p>
                     </div>
                   </div>
                 ))}
@@ -236,7 +237,7 @@ export default function ChatPage() {
               <div className="flex items-start gap-2 text-xs text-stone-400 bg-stone-100 rounded-xl px-3 py-2.5">
                 <Database size={13} className="mt-0.5 flex-shrink-0" />
                 <span>
-                  공공데이터 연동: {DATA_SOURCES.join(" · ")}
+                  {t("공공데이터 연동:")} {DATA_SOURCES.map(s => t(s)).join(" · ")}
                 </span>
               </div>
             </div>
@@ -255,8 +256,8 @@ export default function ChatPage() {
                 // Extract tool parts: type is "tool-{name}" in AI SDK v6
                 const toolParts = (m.parts ?? [])
                   .filter((p) => {
-                    const t = p.type;
-                    return TOOL_NAMES.some((name) => t === `tool-${name}`);
+                    const pType = p.type;
+                    return TOOL_NAMES.some((name) => pType === `tool-${name}`);
                   })
                   .map((p) => {
                     // Extract tool name from type "tool-searchHeritage" → "searchHeritage"
@@ -298,7 +299,7 @@ export default function ChatPage() {
                   </div>
                   <div className="bg-stone-100 border border-stone-200 rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-2">
                     <Cpu size={14} className="text-amber-600 animate-pulse" />
-                    <span className="text-xs text-stone-500">에이전트 추론 중...</span>
+                    <span className="text-xs text-stone-500">{t("에이전트 추론 중...")}</span>
                     <Loader2 size={14} className="text-stone-400 animate-spin" />
                   </div>
                 </div>
@@ -308,7 +309,7 @@ export default function ChatPage() {
               {messages.some((m) => m.role === "assistant") && !isLoading && (
                 <div className="flex items-start gap-2 text-xs text-stone-400 bg-stone-100 rounded-xl px-3 py-2.5">
                   <Database size={13} className="mt-0.5 flex-shrink-0" />
-                  <span>출처: {DATA_SOURCES.join(" · ")}</span>
+                  <span>{t("출처:")} {DATA_SOURCES.map(s => t(s)).join(" · ")}</span>
                 </div>
               )}
             </>
@@ -328,7 +329,7 @@ export default function ChatPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={`${city.name} 문화유산에 대해 궁금한 점을 물어보세요...`}
+            placeholder={t("{city} 문화유산에 대해 궁금한 점을 물어보세요...")}
             rows={1}
             className="flex-1 resize-none rounded-xl border border-stone-200 bg-stone-50 px-3 py-2.5
               text-sm text-stone-800 placeholder:text-stone-400
@@ -341,8 +342,8 @@ export default function ChatPage() {
               type="button"
               onClick={() => (isListening ? stopListening() : startListening())}
               disabled={isLoading}
-              aria-label={isListening ? "음성 입력 중지" : "음성으로 질문하기"}
-              title="음성으로 질문하기 (Chrome·Edge·Safari)"
+              aria-label={isListening ? t("음성 입력 중지") : t("음성으로 질문하기")}
+              title={t("음성으로 질문하기 (Chrome·Edge·Safari)")}
               className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center
                 transition-colors active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed
                 ${isListening
@@ -356,7 +357,7 @@ export default function ChatPage() {
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            aria-label={isLoading ? "전송 중" : "메시지 전송"}
+            aria-label={isLoading ? t("전송 중") : t("메시지 전송")}
             className="flex-shrink-0 w-10 h-10 rounded-xl bg-amber-600 text-white
               flex items-center justify-center
               hover:bg-amber-700 disabled:opacity-40 disabled:cursor-not-allowed
@@ -370,15 +371,15 @@ export default function ChatPage() {
           </button>
         </form>
         <p className="max-w-2xl mx-auto text-xs text-stone-400 mt-2 px-1 flex flex-wrap gap-x-1 items-center">
-          <span>Enter로 전송 · Shift+Enter로 줄바꿈{sttSupported ? " · 🎤 음성으로 질문" : ""} · 🔊 답변 읽어주기 지원</span>
+          <span>{t("Enter로 전송 · Shift+Enter로 줄바꿈")}{sttSupported ? t(" · 🎤 음성으로 질문") : ""}{t(" · 🔊 답변 읽어주기 지원")}</span>
           <span>·</span>
           <button
             type="button"
             onClick={handleToggleOptOut}
             className="underline hover:text-stone-500 transition-colors"
-            title="질문은 도슨트 개선을 위해 익명으로 수집됩니다. 클릭해 켜거나 끌 수 있습니다."
+            title={t("질문은 도슨트 개선을 위해 익명으로 수집됩니다. 클릭해 켜거나 끌 수 있습니다.")}
           >
-            {isOptedOut ? "질문 기록 꺼짐" : "질문 익명 기록 중"}
+            {isOptedOut ? t("질문 기록 꺼짐") : t("질문 익명 기록 중")}
           </button>
         </p>
       </footer>

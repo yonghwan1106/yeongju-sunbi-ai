@@ -6,6 +6,7 @@ import { Bot, User, Copy, Check, Volume2, Square } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useTextToSpeech } from "@/lib/hooks/useSpeech";
+import { t } from "@/i18n/ui";
 
 interface ChatMessageProps {
   role: "user" | "assistant";
@@ -77,7 +78,7 @@ export default function ChatMessage({ role, content, timestamp }: ChatMessagePro
       {/* Bubble */}
       <div className={`flex flex-col gap-1 max-w-[85%] ${isUser ? "items-end" : "items-start"}`}>
         {!isUser && (
-          <span className="text-xs text-stone-500 font-medium px-1">선비AI 해설사</span>
+          <span className="text-xs text-stone-500 font-medium px-1">{t("선비AI 해설사")}</span>
         )}
 
         <div
@@ -93,8 +94,8 @@ export default function ChatMessage({ role, content, timestamp }: ChatMessagePro
                 <button
                   type="button"
                   onClick={() => (isSpeaking ? stop() : speak(content))}
-                  aria-label={isSpeaking ? "읽기 정지" : "응답 읽어주기"}
-                  title={isSpeaking ? "읽기 정지" : "응답 읽어주기 (음성)"}
+                  aria-label={isSpeaking ? t("읽기 정지") : t("응답 읽어주기")}
+                  title={isSpeaking ? t("읽기 정지") : t("응답 읽어주기 (음성)")}
                   className="p-1 rounded-md text-stone-400 hover:text-emerald-700
                     hover:bg-stone-200 transition-colors"
                 >
@@ -104,7 +105,7 @@ export default function ChatMessage({ role, content, timestamp }: ChatMessagePro
               <button
                 type="button"
                 onClick={handleCopy}
-                aria-label="응답 복사"
+                aria-label={t("응답 복사")}
                 className="p-1 rounded-md text-stone-400 hover:text-stone-600
                   hover:bg-stone-200 transition-colors"
               >
