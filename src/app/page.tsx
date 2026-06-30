@@ -468,7 +468,7 @@ export default function HomePage() {
             className="rounded-2xl overflow-hidden border border-[var(--color-parchment)] shadow-[var(--shadow-warm-xl)] bg-white"
           >
             <Image
-              src="/infographic.jpg"
+              src={isEn() ? "/infographic-en.jpg" : "/infographic.jpg"}
               alt={t("영주선비AI 한 장 요약 인포그래픽 — 문제, 해결, 기술 신뢰도와 공공가치, 기대효과, 전국 확장")}
               width={1672}
               height={941}

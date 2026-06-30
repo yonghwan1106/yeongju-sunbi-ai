@@ -411,6 +411,7 @@ const dict: Record<string, string> = {
   "국립중앙박물관 e-뮤지엄": "National Museum of Korea · e-Museum",
   "한국학중앙연구원 민족문화대백과": "AKS · Encyclopedia of Korean Culture",
   "선비 퀴즈 생성": "Sunbi quiz generation",
+  // ── 인포그래픽 ──
 };
 
 function cityDisplay(): string {
