@@ -11,6 +11,9 @@ import {
   CheckCircle2,
   Loader2,
   AlertCircle,
+  Landmark,
+  BookOpen,
+  Database,
 } from "lucide-react";
 
 interface ToolPartInfo {
@@ -25,35 +28,52 @@ interface ToolInvocationDisplayProps {
 
 const TOOL_CONFIG: Record<
   string,
-  { icon: React.ElementType; label: string; color: string; bg: string }
+  { icon: React.ElementType; label: string; color: string; bg: string; source?: string }
 > = {
   searchHeritage: {
     icon: Search,
     label: "문화유산 검색",
+    source: "문화재청 국가문화유산포털",
     color: "text-emerald-700",
     bg: "bg-emerald-50 border-emerald-200",
   },
   getWeather: {
     icon: CloudSun,
     label: "날씨 조회",
+    source: "기상청 단기예보",
     color: "text-blue-600",
     bg: "bg-blue-50 border-blue-200",
   },
   searchTourSpots: {
     icon: MapPin,
     label: "관광지 탐색",
+    source: "한국관광공사 TourAPI",
     color: "text-orange-600",
     bg: "bg-orange-50 border-orange-200",
   },
+  searchMuseum: {
+    icon: Landmark,
+    label: "유물 검색",
+    source: "국립중앙박물관 e-뮤지엄",
+    color: "text-rose-700",
+    bg: "bg-rose-50 border-rose-200",
+  },
+  searchEncyclopedia: {
+    icon: BookOpen,
+    label: "백과 검색",
+    source: "한국학중앙연구원 민족문화대백과",
+    color: "text-teal-700",
+    bg: "bg-teal-50 border-teal-200",
+  },
   planTourCourse: {
     icon: Route,
-    label: "코스 생성",
+    label: "맞춤 코스 생성",
     color: "text-purple-600",
     bg: "bg-purple-50 border-purple-200",
   },
   generateQuiz: {
     icon: HelpCircle,
-    label: "퀴즈 생성",
+    label: "선비 퀴즈 생성",
     color: "text-amber-600",
     bg: "bg-amber-50 border-amber-200",
   },
@@ -94,12 +114,21 @@ export default function ToolInvocationDisplay({ toolParts }: ToolInvocationDispl
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.2, delay: idx * 0.1 }}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs ${config.bg}`}
+              className={`flex items-center gap-x-2 gap-y-1 flex-wrap px-3 py-2 rounded-xl border text-xs ${config.bg}`}
             >
               <Icon size={14} className={config.color} />
-              <span className={`font-medium ${config.color}`}>
+              <span className={`font-semibold ${config.color}`}>
                 {t(config.label)}
               </span>
+              {config.source && (
+                <span
+                  className={`inline-flex items-center gap-1 rounded-md bg-white/70 border border-stone-200 px-1.5 py-0.5 text-[10px] font-bold ${config.color}`}
+                  title={t("공공데이터 출처")}
+                >
+                  <Database size={10} />
+                  {t(config.source)}
+                </span>
+              )}
               {inputStr && (
                 <span className="text-stone-400 truncate max-w-[200px]">
                   ({inputStr})

@@ -215,7 +215,7 @@ export default function HomePage() {
               className="relative hidden lg:block"
             >
               <Image
-                src="/ai/agentic.jpg"
+                src={isEn() ? "/ai/agentic-en.jpg" : "/ai/agentic.jpg"}
                 alt={t("공공데이터를 자율로 활용하는 영주선비 AI 에이전트 일러스트")}
                 width={1200}
                 height={675}

@@ -404,6 +404,13 @@ const dict: Record<string, string> = {
   "한국학중앙연구원 연동": "AKS API",
   " 등": " & more",
   "\"학이시습지 불역열호(學而時習之 不亦說乎)\" — 배우고 때로 익히니 또한 기쁘지 아니한가": "\"Is it not a pleasure to learn and to practice it in due time?\" — Confucius, Analects",
+  // ── 챗 도구 공공데이터 출처 ──
+  "문화재청 국가문화유산포털": "Cultural Heritage Admin. · National Heritage Portal",
+  "기상청 단기예보": "KMA · Short-term Forecast",
+  "한국관광공사 TourAPI": "Korea Tourism Org. · TourAPI",
+  "국립중앙박물관 e-뮤지엄": "National Museum of Korea · e-Museum",
+  "한국학중앙연구원 민족문화대백과": "AKS · Encyclopedia of Korean Culture",
+  "선비 퀴즈 생성": "Sunbi quiz generation",
 };
 
 function cityDisplay(): string {
