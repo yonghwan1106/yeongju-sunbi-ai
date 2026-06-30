@@ -2,6 +2,7 @@ import { heritageData, getHeritageById, getQuizByHeritage } from "@/data/active"
 import { getActiveCity } from "@/config/city";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Metadata } from "next";
 import {
   MapPin,
@@ -89,8 +90,18 @@ export default async function HeritageDetailPage({ params }: PageProps) {
     <main className="min-h-screen pb-20">
       {/* Hero */}
       <div className={`relative h-72 md:h-96 bg-gradient-to-br ${gradient}`}>
-        <div className="absolute inset-0 bg-black/20" />
-        <div className="absolute inset-0 pattern-bg opacity-20" />
+        {heritage.images[0] && (
+          <Image
+            src={heritage.images[0]}
+            alt={`${heritage.name} 전경`}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/25" />
+        <div className="absolute inset-0 pattern-bg opacity-10" />
         <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12">
           <Link
             href="/heritage"

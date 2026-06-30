@@ -142,4 +142,6 @@ export interface CourseRecommendation {
   season?: string[];
   highlights?: string[];
   transport?: string;
+  bestFor?: string;
+  itinerary?: { time: string; title: string; detail: string }[];
 }

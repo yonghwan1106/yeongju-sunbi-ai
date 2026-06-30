@@ -181,6 +181,15 @@ export default function CourseCard({ course }: CourseCardProps) {
                   {course.description}
                 </p>
 
+                {course.bestFor && (
+                  <div className="flex items-start gap-2 -mt-2">
+                    <span className="shrink-0 mt-0.5 px-2 py-0.5 rounded-full bg-[var(--color-primary-100)] text-[var(--color-primary-700)] text-xs font-semibold">
+                      이런 분께
+                    </span>
+                    <span className="text-sm text-[var(--color-charcoal)] leading-relaxed">{course.bestFor}</span>
+                  </div>
+                )}
+
                 {/* Highlights */}
                 {course.highlights && course.highlights.length > 0 && (
                   <div>
@@ -200,6 +209,25 @@ export default function CourseCard({ course }: CourseCardProps) {
                         </li>
                       ))}
                     </ul>
+                  </div>
+                )}
+
+                {/* Itinerary timeline */}
+                {course.itinerary && course.itinerary.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-bold text-[var(--color-ink)] mb-3">추천 동선</h3>
+                    <ol className="relative flex flex-col gap-3.5 pl-4 border-l-2 border-[var(--color-parchment)]">
+                      {course.itinerary.map((it, i) => (
+                        <li key={i} className="relative">
+                          <span className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-[var(--color-primary-500)] ring-2 ring-white" />
+                          <div className="flex items-baseline gap-2 flex-wrap">
+                            <span className="text-xs font-bold text-[var(--color-primary-600)] font-mono">{it.time}</span>
+                            <span className="text-sm font-semibold text-[var(--color-ink)]">{it.title}</span>
+                          </div>
+                          <p className="text-xs text-[var(--color-charcoal)] opacity-75 leading-relaxed mt-0.5">{it.detail}</p>
+                        </li>
+                      ))}
+                    </ol>
                   </div>
                 )}
 
