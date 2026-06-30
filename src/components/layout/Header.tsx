@@ -114,7 +114,7 @@ export default function Header() {
                 </Link>
               );
             })}
-            <LangToggle pathname={pathname} className="ml-2" />
+            {city.id === "yeongju" && <LangToggle pathname={pathname} className="ml-2" />}
             <Link
               href="/chat"
               className="ml-2 inline-flex items-center gap-1.5 rounded-xl bg-[var(--color-primary-500)] px-4 py-2 text-sm font-semibold text-white shadow-[var(--shadow-warm-sm)] hover:bg-[var(--color-primary-600)] hover:shadow-[var(--shadow-warm-md)] active:scale-95"
@@ -168,14 +168,16 @@ export default function Header() {
                   </motion.div>
                 );
               })}
-              <motion.div
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: navLinks.length * 0.05 }}
-                className="flex justify-center py-2"
-              >
-                <LangToggle pathname={pathname} />
-              </motion.div>
+              {city.id === "yeongju" && (
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: navLinks.length * 0.05 }}
+                  className="flex justify-center py-2"
+                >
+                  <LangToggle pathname={pathname} />
+                </motion.div>
+              )}
               <motion.div
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
