@@ -41,8 +41,7 @@ function normalizeMd(text: string): string {
   //     CommonMark right-flanking 규칙에 걸려 emphasis가 닫히지 않고 '**'가 글자로 남는다
   //     (예: '**주리론(主理論)**을'). 구두점과 '**' 사이에 ZWSP(U+200B)를 넣어
   //     닫는 '**'를 right-flanking으로 만든다. (SWC 한글 regex 버그 회피: 한글은 \u 범위로만 표기)
-  const _hangul = "[" + String.fromCharCode(0xac00) + "-" + String.fromCharCode(0xd7a3) + "]";
-  const _reBoldJosa = new RegExp("([)\\]}])\\*\\*(?=" + _hangul + ")", "g");
+  const _reBoldJosa = new RegExp("(\\p{P})\\*\\*(?=[^\\s])(?!\\p{P})", "gu");
   out = out.replace(_reBoldJosa, "$1" + String.fromCharCode(0x200b) + "**");
 
   return out;
