@@ -3,17 +3,11 @@ import { andongCity } from "./cities/andong";
 import type { CityConfig } from "./cities/types";
 
 /**
- * 활성 도시 설정을 반환한다.
- *
- * NEXT_PUBLIC_CITY_ID 환경변수로 도시를 선택한다.
- * 이 변수는 Next.js 빌드 타임에 인라인되므로 배포당 도시가 고정된다.
- *
- * - "andong"  → 안동선비AI
- * - 그 외 / 미설정 → 영주선비AI (기본)
+ * andong 브랜치 전용 — 안동 도시로 고정(라이브 데모용).
+ * 동일 코드·아키텍처에서 데이터팩만 교체해 "전국 확장 프레임워크"를 라이브로 입증한다.
+ * (main/master 영주 기본값은 영향 없음 — 이 변경은 andong 브랜치에만 존재)
  */
 export function getActiveCity(): CityConfig {
-  if (process.env.NEXT_PUBLIC_CITY_ID === "andong") {
-    return andongCity;
-  }
-  return yeongjuCity;
+  if (process.env.NEXT_PUBLIC_CITY_ID === "yeongju") return yeongjuCity;
+  return andongCity;
 }
