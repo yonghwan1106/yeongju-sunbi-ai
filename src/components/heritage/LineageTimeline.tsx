@@ -130,7 +130,7 @@ export default function LineageTimeline({ selectedFigureId, onSelectFigure }: Li
               <rect x={x1} y={TOP_PAD - 18} width={Math.max(x2 - x1, 0)} height={height - TOP_PAD - BOTTOM_PAD + 30} fill={ERA_COLOR[e.name]} opacity={0.06} />
               <line x1={x1} y1={TOP_PAD - 18} x2={x1} y2={height - BOTTOM_PAD + 12} stroke={ERA_COLOR[e.name]} strokeWidth={1} opacity={0.25} strokeDasharray="2 4" />
               <text x={(x1 + x2) / 2} y={TOP_PAD - 26} textAnchor="middle" fontSize={12} fontWeight={700} fill={ERA_COLOR[e.name]} opacity={0.9}>
-                {e.name}
+                {t(e.name)}
               </text>
             </g>
           );

@@ -7,6 +7,7 @@ import { ArrowRight, Bot, Target, Map, BookOpen, Globe, Award, ChevronRight } fr
 import { heritageData } from "@/data/active";
 import { getActiveCity } from "@/config/city";
 import { t, cityLabel } from "@/i18n/ui";
+import { isEn } from "@/config/locale";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -121,11 +122,23 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.18] tracking-tight text-[var(--color-ink)] mb-6"
             >
-              {t("안내판을 넘어,")}
-              <br />
-              <span className="text-[var(--color-primary-500)]">{t("지역 경제")}</span>{t("를 살리는")}
-              <br />
-              {t("AI 에이전트")}
+              {isEn() ? (
+                <>
+                  Beyond the signboard:
+                  <br />
+                  an AI agent that revives
+                  <br />
+                  the <span className="text-[var(--color-primary-500)]">local economy</span>
+                </>
+              ) : (
+                <>
+                  {t("안내판을 넘어,")}
+                  <br />
+                  <span className="text-[var(--color-primary-500)]">{t("지역 경제")}</span>{t("를 살리는")}
+                  <br />
+                  {t("AI 에이전트")}
+                </>
+              )}
             </motion.h1>
 
             {/* Subtitle */}
@@ -135,9 +148,19 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-base sm:text-lg text-[var(--color-earth-600)] leading-relaxed mb-10 max-w-xl"
             >
-              {t("유네스코 세계유산을 보유한 {city}의 짧은 관광 체류 문제를")}
-              <strong className="font-semibold text-[var(--color-charcoal)]">{t(" AI로 해결")}</strong>{t("하고,")}
-              {t("서비스의 완성도와 확장 가능성을 보여줍니다.")}
+              {isEn() ? (
+                <>
+                  {cityLabel()} is home to UNESCO World Heritage, yet most visits are short. This service{" "}
+                  <strong className="font-semibold text-[var(--color-charcoal)]">solves that with AI</strong>{" "}
+                  — showing the completeness and scalability of the experience.
+                </>
+              ) : (
+                <>
+                  {t("유네스코 세계유산을 보유한 {city}의 짧은 관광 체류 문제를")}
+                  <strong className="font-semibold text-[var(--color-charcoal)]">{t(" AI로 해결")}</strong>{t("하고,")}
+                  {t("서비스의 완성도와 확장 가능성을 보여줍니다.")}
+                </>
+              )}
             </motion.p>
 
             {/* CTA buttons */}
@@ -173,8 +196,8 @@ export default function HomePage() {
             >
               {[
                 { value: "+30%", label: t("체류시간 향상 목표") },
-                { value: "9개", label: t("라이브 라우트") },
-                { value: "5종", label: t("실시간 공공데이터") },
+                { value: isEn() ? "9" : "9개", label: t("라이브 라우트") },
+                { value: isEn() ? "5" : "5종", label: t("실시간 공공데이터") },
               ].map((stat) => (
                 <div key={stat.label} className="text-center sm:text-left">
                   <p className="text-2xl font-black text-[var(--color-primary-500)]">{stat.value}</p>

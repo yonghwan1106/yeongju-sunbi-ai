@@ -114,7 +114,7 @@ export default async function HeritageDetailPage({ params }: PageProps) {
           <span
             className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3 w-fit ${categoryColors[heritage.category] ?? "bg-gray-500 text-white"}`}
           >
-            {heritage.category}
+            {t(heritage.category)}
           </span>
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">
             {heritage.name}

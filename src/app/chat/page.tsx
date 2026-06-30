@@ -17,6 +17,7 @@ import {
   setQuestionLoggingOptOut,
 } from "@/lib/utils/session";
 import { t } from "@/i18n/ui";
+import { isEn } from "@/config/locale";
 
 const DATA_SOURCES = [
   "문화재청 국가문화유산포털",
@@ -210,12 +211,12 @@ export default function ChatPage() {
               {/* Agent capabilities */}
               <div className="grid grid-cols-2 gap-2">
                 {[
-                  { icon: "🏛️", label: "문화유산 검색", desc: `${city.dataPack.heritage.slice(0, 2).map((h) => h.name).join("·")} 등` },
-                  { icon: "🌤️", label: "실시간 날씨", desc: "기상청 API 연동" },
-                  { icon: "🍽️", label: "맛집·숙박 탐색", desc: "관광공사 API 연동" },
-                  { icon: "🗺️", label: "맞춤 코스 생성", desc: "다단계 자율 추론" },
-                  { icon: "🏺", label: "유물 검색", desc: "국립중앙박물관 연동" },
-                  { icon: "📖", label: "백과 검색", desc: "한국학중앙연구원 연동" },
+                  { icon: "🏛️", label: t("문화유산 검색"), desc: isEn() ? "Buseoksa, Sosu Seowon & more" : `${city.dataPack.heritage.slice(0, 2).map((h) => h.name).join("·")} 등` },
+                  { icon: "🌤️", label: t("실시간 날씨"), desc: t("기상청 API 연동") },
+                  { icon: "🍽️", label: t("맛집·숙박 탐색"), desc: t("관광공사 API 연동") },
+                  { icon: "🗺️", label: t("맞춤 코스 생성"), desc: t("다단계 자율 추론") },
+                  { icon: "🏺", label: t("유물 검색"), desc: t("국립중앙박물관 연동") },
+                  { icon: "📖", label: t("백과 검색"), desc: t("한국학중앙연구원 연동") },
                 ].map((cap) => (
                   <div
                     key={cap.label}

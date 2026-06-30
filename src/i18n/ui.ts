@@ -390,6 +390,19 @@ const dict: Record<string, string> = {
   "📍 GPS 실시간 검증 모드 ({city} 현장 방문 시) — 각 유산 100m 반경 진입 시 체크인이 활성화됩니다.": "📍 Real-time GPS verification mode (when visiting {city} in person) — check-in activates when you enter within 100m of each site.",
   "🤖 AI 해설사와 대화하기": "🤖 Chat with the AI Guide",
   "🧪 체험 모드 — {city} 현장에서는 GPS 100m 반경으로 자동 검증됩니다. 지금은 모든 체크인 버튼을 직접 누를 수 있습니다.": "🧪 Demo Mode — on-site in {city}, check-ins are auto-verified within a 100m GPS radius. For now, you can press every check-in button yourself.",
+  // ── 챗 도구 카드 · 인용 ──
+  "실시간 날씨": "Real-time Weather",
+  "기상청 API 연동": "KMA API",
+  "맛집·숙박 탐색": "Food & Lodging",
+  "관광공사 API 연동": "KTO API",
+  "맞춤 코스 생성": "Custom Course",
+  "다단계 자율 추론": "Multi-step reasoning",
+  "유물 검색": "Relic Search",
+  "국립중앙박물관 연동": "National Museum API",
+  "백과 검색": "Encyclopedia Search",
+  "한국학중앙연구원 연동": "AKS API",
+  " 등": " & more",
+  "\"학이시습지 불역열호(學而時習之 不亦說乎)\" — 배우고 때로 익히니 또한 기쁘지 아니한가": "\"Is it not a pleasure to learn and to practice it in due time?\" — Confucius, Analects",
 };
 
 function cityDisplay(): string {

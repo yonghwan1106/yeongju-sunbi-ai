@@ -115,7 +115,7 @@ export default function HeritagePage() {
               {t("{city} 선비 계보 — 인물과 유산의 천 년")}
             </h2>
             <p className="mt-1 text-sm text-[var(--color-charcoal)] opacity-70">
-              {city.dataPack.figures[0] ? `${city.dataPack.figures[0].bornYear}년` : t("고대")}{t("부터 현대까지, {city} 학맥을 빚어낸 인물과 유산의 연결을 한눈에 살펴보세요.")}
+              {city.dataPack.figures[0] ? `${city.dataPack.figures[0].bornYear}${t("년")}` : t("고대")}{t("부터 현대까지, {city} 학맥을 빚어낸 인물과 유산의 연결을 한눈에 살펴보세요.")}
             </p>
           </div>
 
