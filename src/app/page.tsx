@@ -445,14 +445,11 @@ export default function HomePage() {
             <Image
               src="/infographic.jpg"
               alt="영주선비AI 한 장 요약 인포그래픽 — 문제, 해결, 기술 신뢰도와 공공가치, 기대효과, 전국 확장"
-              width={1920}
-              height={1072}
+              width={1672}
+              height={941}
               className="w-full h-auto"
             />
           </motion.div>
-          <p className="mt-3 text-center text-xs text-[var(--color-earth-500)]">
-            출처: 통계청 · 영주시(2025.12), 한국관광 데이터랩
-          </p>
         </div>
       </section>
 
