@@ -510,6 +510,12 @@ export default function HomePage() {
                 )
               )}
             </div>
+            <Link
+              href="/data-sources"
+              className="mt-7 inline-flex items-center gap-1.5 rounded-xl bg-white/10 border border-[var(--color-accent-600)] px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/20 transition-colors"
+            >
+              {t("공공데이터 출처 자세히 보기")} <ArrowRight size={15} strokeWidth={2.5} />
+            </Link>
           </motion.div>
         </div>
       </section>

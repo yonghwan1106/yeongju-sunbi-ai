@@ -13,11 +13,11 @@ const navLinks = [
   { href: "/", label: t("홈") },
   { href: "/heritage", label: t("문화유산") },
   { href: "/courses", label: t("추천 코스") },
-  { href: "/chat", label: t("AI 해설사") },
   { href: "/quiz", label: t("퀴즈") },
   { href: "/stamp-tour", label: t("스탬프투어") },
   { href: "/dashboard", label: t("대시보드") },
   { href: "/insights", label: t("인사이트") },
+  { href: "/data-sources", label: t("공공데이터") },
 ];
 
 // 한/영 사이트 (영문은 english 브랜치 배포)

@@ -37,6 +37,7 @@ const dict: Record<string, string> = {
   "서비스": "Services",
   "공공데이터": "Public Data",
   "공공데이터 출처": "Public Data Sources",
+  "공공데이터 출처 자세히 보기": "See our public data sources",
   "선비 퀴즈": "Sunbi Quiz",
   "본 서비스는": "This service uses public data from",
   "등 5개 기관의 공공데이터를 활용합니다.": "and 5 public institutions in total.",
