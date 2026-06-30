@@ -60,9 +60,13 @@ export default function HeritageDetailTabs({ heritage }: HeritageDetailTabsProps
           transition={{ duration: 0.2 }}
           className="p-5"
         >
-          <p className="text-sm text-[var(--color-charcoal)] leading-relaxed">
-            {activeContent}
-          </p>
+          <div className="flex flex-col gap-3 text-sm text-[var(--color-charcoal)] leading-relaxed">
+            {activeContent
+              .split(/\n\n+/)
+              .map((para, i) => (
+                <p key={i}>{para.trim()}</p>
+              ))}
+          </div>
         </motion.div>
       </AnimatePresence>
     </div>
