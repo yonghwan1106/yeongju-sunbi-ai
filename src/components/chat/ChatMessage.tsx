@@ -24,8 +24,28 @@ function formatTime(date?: Date): string {
  * 정규식에 한글 리터럴을 쓰지 않는다(SWC 한글 regex 버그 회피).
  */
 function normalizeMd(text: string): string {
-  // 줄 중간에 온 ATX heading('## ') 앞에 빈 줄을 넣어 마크다운으로 파싱되게 한다.
-  return text.replace(/([^\n])(#{1,6}\s)/g, "$1\n\n$2");
+  let out = text;
+
+  // (1) 줄 중간에 온 ATX heading('## ') 앞에 빈 줄을 넣어 마크다운으로 파싱되게 한다.
+  out = out.replace(/([^\n])(#{1,6}\s)/g, "$1\n\n$2");
+
+  // (2) raw <details>/<summary> 평탄화 — react-markdown은 raw HTML을 렌더하지 않아
+  //     태그가 글자로 노출된다(예: 퀴즈 '정답 보기'). 접힘 UI 대신
+  //     구분선 + 굵은 라벨 + 본문(마크다운)으로 치환해 깔끔히 보이게 한다.
+  out = out
+    .replace(/<details>\s*/gi, "\n\n---\n\n")
+    .replace(/<summary>\s*([\s\S]*?)\s*<\/summary>/gi, "**$1**\n\n")
+    .replace(/\s*<\/details>/gi, "\n");
+
+  // (3) 한글 'bold+조사' 깨짐 보정 — 닫는 '**'가 구두점 뒤 + 한글 앞에 오면
+  //     CommonMark right-flanking 규칙에 걸려 emphasis가 닫히지 않고 '**'가 글자로 남는다
+  //     (예: '**주리론(主理論)**을'). 구두점과 '**' 사이에 ZWSP(U+200B)를 넣어
+  //     닫는 '**'를 right-flanking으로 만든다. (SWC 한글 regex 버그 회피: 한글은 \u 범위로만 표기)
+  const _hangul = "[" + String.fromCharCode(0xac00) + "-" + String.fromCharCode(0xd7a3) + "]";
+  const _reBoldJosa = new RegExp("([)\\]}])\\*\\*(?=" + _hangul + ")", "g");
+  out = out.replace(_reBoldJosa, "$1" + String.fromCharCode(0x200b) + "**");
+
+  return out;
 }
 
 export default function ChatMessage({ role, content, timestamp }: ChatMessageProps) {

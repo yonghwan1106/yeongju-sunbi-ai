@@ -157,7 +157,7 @@ export default function DataSourcesPage() {
             <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-5 py-3 text-sm text-white/90 mt-2">
               <Zap className="w-4 h-4 text-amber-300 shrink-0" />
               <span>
-                실시간 API(기상청·관광공사)는{" "}
+                기상청·한국관광공사 API는{" "}
                 <a
                   href="https://www.data.go.kr"
                   target="_blank"
@@ -295,7 +295,7 @@ export default function DataSourcesPage() {
           <div className="flex-1 text-center sm:text-left">
             <p className="font-semibold text-white">공공데이터포털 인증키 발급</p>
             <p className="text-sm text-white/70 mt-0.5">
-              실시간 API(기상청·한국관광공사)는 공공데이터포털(data.go.kr)에서 무료로 인증키를 발급받아
+              기상청·한국관광공사 API는 공공데이터포털(data.go.kr)에서 무료로 인증키를 발급받아
               사용할 수 있습니다. 누구나 신청 가능합니다.
             </p>
           </div>
