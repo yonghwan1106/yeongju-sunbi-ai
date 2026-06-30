@@ -58,8 +58,19 @@ export default function LineageTimeline({ selectedFigureId, onSelectFigure }: Li
     return new Set(figures.find((f) => f.id === selectedFigureId)?.relatedHeritage ?? []);
   }, [selectedFigureId, figures]);
 
-  // 성리학 도통 spine: 안향 → 주세붕 → 이황 (존재하는 것만, 출생순)
-  const spineIds = ["anhyang", "juseboong", "yihwang"];
+  // 학맥/계승 간선에 등장하는 인물 = spine (도시 무관, 하드코딩 없음). 출생순.
+  const spineIds = useMemo(() => {
+    const s = new Set<string>();
+    figures.forEach((f) =>
+      (f.links ?? []).forEach((l) => {
+        if (l.kind === "학맥" || l.kind === "계승") {
+          s.add(f.id);
+          s.add(l.to);
+        }
+      }),
+    );
+    return figures.filter((f) => s.has(f.id)).map((f) => f.id);
+  }, [figures]);
   const spinePts = spineIds
     .map((id) => {
       const idx = figures.findIndex((f) => f.id === id);
@@ -93,7 +104,7 @@ export default function LineageTimeline({ selectedFigureId, onSelectFigure }: Li
         </span>
         <span className="flex items-center gap-1.5">
           <span className="inline-block w-5 h-0.5 rounded-full" style={{ background: "linear-gradient(90deg,#2E8C76,#355C8A)" }} />
-          성리학 도통
+          학맥 계승
         </span>
         <span className="ml-auto text-[var(--color-charcoal)] opacity-55">인물 클릭 시 네트워크 보기와 연동</span>
       </div>
@@ -155,7 +166,7 @@ export default function LineageTimeline({ selectedFigureId, onSelectFigure }: Li
             <path d={spinePath} fill="none" stroke="url(#tlSpine)" strokeWidth={3} markerEnd="url(#tlArrow)" strokeLinecap="round" opacity={0.9} />
             {spinePts[0] && (
               <text x={spinePts[0].x} y={spinePts[0].y - 16} fontSize={10} fontWeight={700} fill="#355C8A" opacity={0.75}>
-                도통(道統)
+                학맥
               </text>
             )}
           </g>

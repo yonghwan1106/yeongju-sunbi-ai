@@ -103,8 +103,21 @@ export default function SunbiNetworkGraph({
     return links;
   }, [figures]);
 
-  // 성리학 도통 spine(기본 강조 대상)
-  const SPINE = useMemo(() => new Set(["anhyang", "juseboong", "yihwang"]), []);
+  // 학맥/계승 간선에 등장하는 인물 = 기본 강조 spine (도시 무관, 하드코딩 없음)
+  const SPINE = useMemo(() => {
+    const s = new Set<string>();
+    figureLinks.forEach((l) => {
+      if (l.kind === "학맥" || l.kind === "계승") {
+        s.add(l.from.id);
+        s.add(l.to.id);
+      }
+    });
+    return s;
+  }, [figureLinks]);
+  const spineCaption = useMemo(() => {
+    const names = figures.filter((f) => SPINE.has(f.id)).map((f) => f.name);
+    return names.length >= 2 ? `기본 강조 — 학맥 계승: ${names.join(" → ")}` : "";
+  }, [figures, SPINE]);
 
   const activeFigureId = hoveredFigure ?? selectedFigureId;
   const activeHeritageId = hoveredHeritage;
@@ -274,9 +287,11 @@ export default function SunbiNetworkGraph({
           <text x={SVG_W - 28} y="58" textAnchor="end" fontSize="34" fontWeight={800} fill="#000" opacity={0.05}>
             千年學脈
           </text>
-          <text x="28" y={SVG_H - 22} textAnchor="start" fontSize="12" fill="var(--color-charcoal)" opacity={0.5}>
-            기본 강조 — 성리학 도통: 안향 → 주세붕 → 이황
-          </text>
+          {spineCaption && (
+            <text x="28" y={SVG_H - 22} textAnchor="start" fontSize="12" fill="var(--color-charcoal)" opacity={0.5}>
+              {spineCaption}
+            </text>
+          )}
 
           {/* 인물 → 유산 간선(은은) */}
           {figures.map((f) =>

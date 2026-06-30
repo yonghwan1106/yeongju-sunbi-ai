@@ -287,7 +287,7 @@ export default function HomePage() {
             {[
               { src: "/ai/path.jpg", title: "정해진 길이 아닌, 대화형 추론", desc: "정적 안내가 아니라 질문에 따라 스스로 길을 찾는 Agentic RAG. 최대 5단계 자율 추론으로 답합니다." },
               { src: "/ai/loop.jpg", title: "공공데이터가 시민가치로", desc: "국가 데이터 → AI 해설 → 시민 경험 → 익명 이용기록이 다시 데이터가 되는 공공가치 선순환." },
-              { src: "/ai/expansion.jpg", title: "데이터팩 교체로 전국 확장", desc: "같은 엔진·도구는 그대로, 도시 데이터만 교체. 안동 2호 도시를 라이브로 실증했습니다." },
+              { src: "/ai/expansion.jpg", title: "데이터팩 교체로 전국 확장", desc: city.id === "andong" ? "영주 1호 도시의 엔진·도구를 그대로 두고 데이터팩만 교체해 안동으로 옮겨왔습니다 — 전국 확장을 라이브로 실증." : "같은 엔진·도구는 그대로, 도시 데이터만 교체. 안동 2호 도시를 라이브로 실증했습니다." },
             ].map((c, i) => (
               <motion.div
                 key={c.src}
@@ -416,7 +416,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 한 장으로 보는 영주선비AI (인포그래픽) ── */}
+      {/* ── 한 장으로 보는 영주선비AI (인포그래픽) — 영주 전용 ── */}
+      {city.id === "yeongju" && (
       <section className="bg-[var(--color-ivory)] py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -452,6 +453,7 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+      )}
 
       {/* ── Public Data Banner ── */}
       <section className="bg-[var(--color-accent-900)] py-12 sm:py-16">
