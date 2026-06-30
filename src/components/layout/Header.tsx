@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Landmark } from "lucide-react";
+import { Menu, X, Landmark, Globe } from "lucide-react";
 import { getActiveCity } from "@/config/city";
 import { t, cityLabel } from "@/i18n/ui";
 import { isEn } from "@/config/locale";
@@ -19,6 +19,33 @@ const navLinks = [
   { href: "/dashboard", label: t("대시보드") },
   { href: "/insights", label: t("인사이트") },
 ];
+
+// 한/영 사이트 (영문은 english 브랜치 배포)
+const SITE_KO = "https://yeongju-sunbi-ai.vercel.app";
+const SITE_EN = "https://yeongju-sunbi-ai-git-english-sanoramyun8.vercel.app";
+
+/** 한 | EN 언어 토글 — 현재 언어 강조, 같은 경로(pathname) 유지하며 다른 언어 사이트로 이동 */
+function LangToggle({ pathname, className = "" }: { pathname: string; className?: string }) {
+  const en = isEn();
+  const seg = "px-2 py-0.5 rounded-full transition-colors";
+  const on = "bg-[var(--color-primary-500)] text-white";
+  const off = "text-[var(--color-charcoal)] hover:text-[var(--color-primary-600)]";
+  return (
+    <div
+      className={`inline-flex items-center gap-0.5 rounded-full border border-[var(--color-parchment)] bg-white/70 pl-1.5 pr-0.5 py-0.5 text-xs font-bold ${className}`}
+      role="group"
+      aria-label="Language / 언어"
+    >
+      <Globe size={13} className="text-[var(--color-earth-500)]" />
+      <a href={`${SITE_KO}${pathname}`} hrefLang="ko" aria-current={!en ? "true" : undefined} className={`${seg} ${!en ? on : off}`}>
+        한
+      </a>
+      <a href={`${SITE_EN}${pathname}`} hrefLang="en" aria-current={en ? "true" : undefined} className={`${seg} ${en ? on : off}`}>
+        EN
+      </a>
+    </div>
+  );
+}
 
 export default function Header() {
   const city = getActiveCity();
@@ -87,9 +114,10 @@ export default function Header() {
                 </Link>
               );
             })}
+            <LangToggle pathname={pathname} className="ml-2" />
             <Link
               href="/chat"
-              className="ml-3 inline-flex items-center gap-1.5 rounded-xl bg-[var(--color-primary-500)] px-4 py-2 text-sm font-semibold text-white shadow-[var(--shadow-warm-sm)] hover:bg-[var(--color-primary-600)] hover:shadow-[var(--shadow-warm-md)] active:scale-95"
+              className="ml-2 inline-flex items-center gap-1.5 rounded-xl bg-[var(--color-primary-500)] px-4 py-2 text-sm font-semibold text-white shadow-[var(--shadow-warm-sm)] hover:bg-[var(--color-primary-600)] hover:shadow-[var(--shadow-warm-md)] active:scale-95"
             >
               {t("🤖 AI 해설사")}
             </Link>
@@ -144,6 +172,14 @@ export default function Header() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: navLinks.length * 0.05 }}
+                className="flex justify-center py-2"
+              >
+                <LangToggle pathname={pathname} />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: (navLinks.length + 1) * 0.05 }}
                 className="pt-1 pb-2"
               >
                 <Link
