@@ -1,16 +1,12 @@
 /**
- * 활성 로케일 — 빌드 타임 고정(NEXT_PUBLIC_LOCALE).
- *
- * - "en" → 영문 버전
- * - 그 외 / 미설정 → 한국어(기본)
- *
- * city.ts 핀과 동일하게, english 브랜치는 이 파일을 'en' 고정으로 오버라이드해
- * 영문 전용 빌드/배포를 만든다. (main/master 한국어 기본은 영향 없음)
+ * 활성 로케일 — english 브랜치 전용: 영문(en) 고정.
+ * (main/master 한국어 기본은 영향 없음 — 이 변경은 english 브랜치에만 존재)
  */
 export type Locale = "ko" | "en";
 
 export function getLocale(): Locale {
-  return process.env.NEXT_PUBLIC_LOCALE === "en" ? "en" : "ko";
+  if (process.env.NEXT_PUBLIC_LOCALE === "ko") return "ko";
+  return "en";
 }
 
 export const isEn = (): boolean => getLocale() === "en";
