@@ -73,7 +73,8 @@ export function findCuratedCourse(opts: {
         ((norm === "당일" || norm === "하루" || norm === "당일치기") &&
           d.includes("당일")) ||
         ((norm === "1박2일" || norm === "1박 2일") && d.includes("1박")) ||
-        ((norm === "2박3일" || norm === "2박 3일") && d.includes("2박"))
+        ((norm === "2박3일" || norm === "2박 3일") && d.includes("2박")) ||
+        ((norm === "3박4일" || norm === "3박 4일") && d.includes("3박"))
       );
     });
     if (found) return toActive(found);

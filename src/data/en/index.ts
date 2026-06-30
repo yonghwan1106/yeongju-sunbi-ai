@@ -373,6 +373,25 @@ const coursesEn: Record<string, CourseEnOv> = {
         "detail": "Finish by viewing the academy's layout—where the lecture hall, the shrine, and the east and west dormitories come together—and comparing it with the hyanggyo."
       }
     ]
+  },
+  "grand-immersion-4day": {
+    "name": "Yeongju in Full — 3 Nights, 4 Days",
+    "duration": "3 nights, 4 days",
+    "description": "An unhurried, in-depth journey that takes in all eight of Yeongju's cultural treasures over four days. Day 1 builds the framework with the two UNESCO World Heritage Sites—Buseoksa Temple and Sosu Seowon—and the Sosu Museum. Day 2 lives a day in a Seonbichon hanok and traces a Joseon scholar's daily life through to Yeongju Hyanggyo. Day 3 leans into nature along the Sobaeksan ridgeline, the Punggi Ginseng Museum and a hot spring, and the final day closes with the slow-village mood of the single-log bridge at Museom Village, cradled by the Naeseongcheon Stream. World Heritage, architecture, the Sunbi spirit, nature and old villages woven into one—the most complete way to see Yeongju, slowly and deeply.",
+    "bestFor": "Long-stay, study-minded travelers who want to experience everything Yeongju offers in depth—from its UNESCO World Heritage to Sunbi culture, nature and historic villages.",
+    "transport": "A rental car is most convenient given the wide travel area. Using Yeongju Station as a base, it is best to group Buseoksa, Sunheung (Sosu Seowon & Seonbichon), Punggi (Sobaeksan) and Museom Village by day.",
+    "highlights": [
+      "All eight heritage sites in four days—a complete route that leaves nothing out",
+      "A day in the life of a Joseon scholar: a night in a Seonbichon hanok through to Yeongju Hyanggyo",
+      "A nature-healing day along the Sobaeksan ridge, with Punggi ginseng and a hot spring",
+      "From the two UNESCO World Heritage Sites (Buseoksa & Sosu Seowon) to the single-log bridge at Museom"
+    ],
+    "itinerary": [
+      { "time": "Day 1", "title": "Buseoksa → Sosu Seowon → Sosu Museum", "detail": "Begin at Buseoksa Temple—founded by the Silla monk Uisang—with Muryangsujeon Hall and Anyangnu Pavilion, then trace the Yeongnam Neo-Confucian lineage (An Hyang → Ju Se-bung → Yi Hwang) at Korea's first chartered academy, Sosu Seowon, and the Sosu Museum." },
+      { "time": "Day 2", "title": "A night in a Seonbichon hanok → Yeongju Hyanggyo", "detail": "Try hanbok, calligraphy and the tea ceremony at Seonbichon and spend a night in a hanok. The next day, read the 'study-front, shrine-rear' spatial hierarchy at Yeongju Hyanggyo's Myeongnyundang Hall and Daeseongjeon Shrine." },
+      { "time": "Day 3", "title": "Sobaeksan → Punggi Ginseng Museum → hot spring", "detail": "Walk the Sobaeksan ridge at your own pace (royal azaleas and yew groves in May–June), trace 600 years of ginseng at the Punggi Ginseng Museum, then ease tired legs at a nearby hot spring." },
+      { "time": "Day 4", "title": "Museom Village — the single-log bridge", "detail": "On the last day, cross the single-log footbridge at Museom Village along the Naeseongcheon sandbars and close the journey amid the rural scenery of the Haeudang and Manjukjae old houses." }
+    ]
   }
 };
 const quizEn: Record<string, QuizEnOv> = {
