@@ -15,7 +15,7 @@ export const andongCity: CityConfig = {
   id: "andong",
   name: "안동",
   brand: {
-    title: "안동선비AI",
+    title: "안동 유교문화 AI",
     description:
       "안동 유교문화 AI 해설 & 선비문화 체험 플랫폼. 도산서원·하회마을 등 유네스코 세계유산과 퇴계 이황·류성룡의 학맥을 AI가 생생하게 안내합니다.",
     keywords: [
@@ -30,7 +30,7 @@ export const andongCity: CityConfig = {
     ],
     contestLabel: "안동 유교문화 AI 해설 플랫폼",
   },
-  persona: "안동선비AI 에이전트",
+  persona: "안동 유교문화 AI 에이전트",
   weatherGrid: { nx: 91, ny: 106 },
   areaCode: "35",
   sigunguCode: "11",

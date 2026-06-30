@@ -56,7 +56,11 @@ export default function Footer() {
                 <Landmark size={18} strokeWidth={1.8} />
               </span>
               <span className="text-lg font-bold text-white">
-                {city.name}<span className="text-[var(--color-primary-400)]">선비</span>AI
+                {city.id === "andong" ? (
+                  <>안동 <span className="text-[var(--color-primary-400)]">유교문화</span> AI</>
+                ) : (
+                  <>{city.name}<span className="text-[var(--color-primary-400)]">선비</span>AI</>
+                )}
               </span>
             </Link>
             <p className="text-sm text-[var(--color-earth-300)] leading-relaxed max-w-xs">
