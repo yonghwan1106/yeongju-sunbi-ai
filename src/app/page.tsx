@@ -86,7 +86,8 @@ export default function HomePage() {
         <div className="absolute bottom-20 left-[6%] w-96 h-96 rounded-full bg-[var(--color-accent-200)]/15 blur-3xl pointer-events-none" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24">
-          <div className="max-w-3xl">
+          <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-12 items-center">
+            <div className="max-w-2xl">
             {/* Contest Badge */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
@@ -119,11 +120,11 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.18] tracking-tight text-[var(--color-ink)] mb-6"
             >
-              {city.name}의 천년 문화유산,
+              안내판을 넘어,
               <br />
-              <span className="text-[var(--color-primary-500)]">AI</span>가 들려주는
+              <span className="text-[var(--color-primary-500)]">지역 경제</span>를 살리는
               <br />
-              숨겨진 이야기
+              AI 에이전트
             </motion.h1>
 
             {/* Subtitle */}
@@ -133,9 +134,9 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-base sm:text-lg text-[var(--color-earth-600)] leading-relaxed mb-10 max-w-xl"
             >
-              {top2.join("·")} 등 유네스코 세계유산과 선비 문화의 고장 {city.name}을(를)
-              <strong className="font-semibold text-[var(--color-charcoal)]"> 공공데이터 기반 AI 해설사</strong>가
-              생생하게 안내합니다.
+              유네스코 세계유산을 보유한 {city.name}의 짧은 관광 체류 문제를
+              <strong className="font-semibold text-[var(--color-charcoal)]"> AI로 해결</strong>하고,
+              서비스의 완성도와 확장 가능성을 보여줍니다.
             </motion.p>
 
             {/* CTA buttons */}
@@ -170,15 +171,37 @@ export default function HomePage() {
               className="mt-12 flex flex-wrap gap-6"
             >
               {[
-                { value: "2개", label: "유네스코 세계유산" },
-                { value: "5개소", label: "스탬프투어 명소" },
-                { value: "5개", label: "공공데이터 기관" },
+                { value: "+30%", label: "체류시간 향상 목표" },
+                { value: "9개", label: "라이브 라우트" },
+                { value: "5종", label: "실시간 공공데이터" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center sm:text-left">
                   <p className="text-2xl font-black text-[var(--color-primary-500)]">{stat.value}</p>
                   <p className="text-xs text-[var(--color-earth-500)] font-medium">{stat.label}</p>
                 </div>
               ))}
+            </motion.div>
+            </div>
+
+            {/* Hero illustration */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7, delay: 0.25 }}
+              className="relative hidden lg:block"
+            >
+              <Image
+                src="/ai/agentic.jpg"
+                alt="공공데이터를 자율로 활용하는 영주선비 AI 에이전트 일러스트"
+                width={1200}
+                height={675}
+                priority
+                className="w-full h-auto rounded-3xl border border-[var(--color-parchment)] shadow-[var(--shadow-warm-xl)]"
+              />
+              <div className="absolute -bottom-4 -left-4 rounded-2xl bg-white/90 backdrop-blur-sm border border-[var(--color-parchment)] px-4 py-2.5 shadow-[var(--shadow-warm-md)]">
+                <p className="text-xs font-bold text-[var(--color-primary-700)]">5종 공공데이터 · 7개 도구</p>
+                <p className="text-[11px] text-[var(--color-earth-500)]">Agentic RAG로 스스로 호출·답변</p>
+              </div>
             </motion.div>
           </div>
         </div>
@@ -232,6 +255,53 @@ export default function HomePage() {
                     바로가기 <ArrowRight size={13} strokeWidth={2.5} />
                   </div>
                 </Link>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── 왜 다른가 · 작동 원리 (일러스트) ── */}
+      <section className="bg-[var(--color-cream)] py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-80px" }}
+            className="text-center mb-14"
+          >
+            <motion.p variants={fadeUp} custom={0} className="text-sm font-semibold text-[var(--color-primary-500)] uppercase tracking-widest mb-3">
+              왜 다른가
+            </motion.p>
+            <motion.h2 variants={fadeUp} custom={1} className="text-3xl sm:text-4xl font-black text-[var(--color-ink)] leading-tight">
+              단순 안내가 아니라,<br />스스로 일하는 AI 에이전트
+            </motion.h2>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-60px" }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          >
+            {[
+              { src: "/ai/path.jpg", title: "정해진 길이 아닌, 대화형 추론", desc: "정적 안내가 아니라 질문에 따라 스스로 길을 찾는 Agentic RAG. 최대 5단계 자율 추론으로 답합니다." },
+              { src: "/ai/loop.jpg", title: "공공데이터가 시민가치로", desc: "국가 데이터 → AI 해설 → 시민 경험 → 익명 이용기록이 다시 데이터가 되는 공공가치 선순환." },
+              { src: "/ai/expansion.jpg", title: "데이터팩 교체로 전국 확장", desc: "같은 엔진·도구는 그대로, 도시 데이터만 교체. 안동 2호 도시를 라이브로 실증했습니다." },
+            ].map((c, i) => (
+              <motion.div
+                key={c.src}
+                variants={fadeUp}
+                custom={i}
+                className="rounded-2xl bg-white border border-[var(--color-parchment)] overflow-hidden shadow-[var(--shadow-warm-sm)] hover:shadow-[var(--shadow-warm-lg)] hover:-translate-y-1 transition-all duration-200"
+              >
+                <div className="relative aspect-[16/9] bg-[var(--color-ivory)]">
+                  <Image src={c.src} alt={c.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+                </div>
+                <div className="p-5">
+                  <h3 className="text-base font-bold text-[var(--color-ink)] mb-1.5">{c.title}</h3>
+                  <p className="text-sm text-[var(--color-earth-600)] leading-relaxed">{c.desc}</p>
+                </div>
               </motion.div>
             ))}
           </motion.div>
@@ -343,6 +413,46 @@ export default function HomePage() {
               </motion.div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* ── 한 장으로 보는 영주선비AI (인포그래픽) ── */}
+      <section className="bg-[var(--color-ivory)] py-20 sm:py-28">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-80px" }}
+            className="text-center mb-10"
+          >
+            <motion.p variants={fadeUp} custom={0} className="text-sm font-semibold text-[var(--color-primary-500)] uppercase tracking-widest mb-3">
+              한눈에 보기
+            </motion.p>
+            <motion.h2 variants={fadeUp} custom={1} className="text-3xl sm:text-4xl font-black text-[var(--color-ink)] leading-tight">
+              한 장으로 보는 영주선비AI
+            </motion.h2>
+            <motion.p variants={fadeUp} custom={2} className="mt-3 text-sm text-[var(--color-earth-600)] max-w-2xl mx-auto">
+              문제 정의부터 해결 방식, 기술 신뢰도, 기대효과와 전국 확장까지 — 프로젝트의 전체 그림을 한 장에 담았습니다.
+            </motion.p>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="rounded-2xl overflow-hidden border border-[var(--color-parchment)] shadow-[var(--shadow-warm-xl)] bg-white"
+          >
+            <Image
+              src="/infographic.jpg"
+              alt="영주선비AI 한 장 요약 인포그래픽 — 문제, 해결, 기술 신뢰도와 공공가치, 기대효과, 전국 확장"
+              width={1920}
+              height={1072}
+              className="w-full h-auto"
+            />
+          </motion.div>
+          <p className="mt-3 text-center text-xs text-[var(--color-earth-500)]">
+            출처: 통계청 · 영주시(2025.12), 한국관광 데이터랩
+          </p>
         </div>
       </section>
 
