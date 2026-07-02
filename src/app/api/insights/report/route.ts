@@ -156,6 +156,8 @@ export async function POST(req: Request) {
     const { object } = await generateObject({
       model: anthropic(MODEL_ID),
       schema: ReportSchema,
+      // 심층 리포트는 출력이 길어 기본 한도에서 JSON이 잘리면 스키마 검증 실패 → 여유 있게 상향
+      maxOutputTokens: 8000,
       prompt: [
         `당신은 ${cityName}시 관광정책을 자문하는 데이터 기반 정책 애널리스트입니다.`,
         `아래는 ${cityName} 관광 AI 도슨트(공공데이터 5종 연동)에 익명으로 누적된 관광객·학습자 질문(총 ${totalCount}건 기준)과 1차 분석입니다.`,
