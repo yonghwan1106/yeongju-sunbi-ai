@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { ArrowRight, Bot, Target, Map, BookOpen, Globe, Award, ChevronRight } from "lucide-react";
+import { ArrowRight, Bot, Target, Map, BookOpen, Globe, Award, ChevronRight, ShieldCheck, Network, Sparkles, Check, X, Triangle } from "lucide-react";
 import { heritageData } from "@/data/active";
 import { getActiveCity } from "@/config/city";
 import { t, cityLabel } from "@/i18n/ui";
@@ -25,6 +25,63 @@ const categoryColors: Record<string, string> = {
   민속문화재: "bg-[var(--color-primary-100)] text-[var(--color-primary-700)]",
   명승: "bg-emerald-100 text-emerald-700",
 };
+
+// ── 경쟁 비교(차별성) — 영주 PT 슬라이드 반영 ──
+const edgeColumns = [
+  "대화형 AI 해설",
+  "5종 공공데이터 실시간",
+  "영주 특화 콘텐츠",
+  "게이미피케이션·현장유도",
+];
+
+type EdgeMarkType = "o" | "x" | "tri";
+interface EdgeCell {
+  mark: EdgeMarkType;
+  note?: string;
+}
+interface EdgeRow {
+  name: string;
+  tag?: string;
+  cells: EdgeCell[];
+}
+
+const edgeCompetitors: EdgeRow[] = [
+  { name: "대한민국 구석구석", tag: "한국관광공사", cells: [{ mark: "x" }, { mark: "x" }, { mark: "tri", note: "전국 범용" }, { mark: "x" }] },
+  { name: "해설이 있는 여행", tag: "오디오 가이드", cells: [{ mark: "x" }, { mark: "x" }, { mark: "x", note: "영주 미지원" }, { mark: "x" }] },
+  { name: "문화재청 앱", tag: "공식 앱", cells: [{ mark: "x" }, { mark: "tri", note: "정보 열람" }, { mark: "x" }, { mark: "x" }] },
+  { name: "ChatGPT 직접 질문", tag: "범용 AI", cells: [{ mark: "tri", note: "대화만" }, { mark: "x", note: "미연동" }, { mark: "x" }, { mark: "x" }] },
+];
+
+const edgeOurs: EdgeRow = {
+  name: "영주선비AI",
+  cells: [{ mark: "o" }, { mark: "o", note: "5종" }, { mark: "o" }, { mark: "o" }],
+};
+
+const edgeHighlights = [
+  {
+    icon: <ShieldCheck size={22} strokeWidth={1.8} />,
+    title: "Agentic RAG · 출처 명시",
+    desc: "5종 공공데이터를 도구로 자율 연쇄 호출하고 출처를 붙여, 환각을 구조적으로 차단합니다.",
+  },
+  {
+    icon: <Network size={22} strokeWidth={1.8} />,
+    title: "천 년 학맥 지식그래프",
+    desc: "신라~조선 인물·유산을 도통(道統)으로 연결한 영주 고유 자산 — 코드만으로는 복제 불가.",
+  },
+  {
+    icon: <Sparkles size={22} strokeWidth={1.8} />,
+    title: "교육+관광+게이미피케이션 융합",
+    desc: "해설·퀴즈·GPS 스탬프·코스를 한 곳에서 — 배우며 즐기는 체험으로 체류·재방문을 높입니다.",
+  },
+];
+
+function EdgeMark({ mark }: { mark: EdgeMarkType }) {
+  if (mark === "o")
+    return <Check size={18} strokeWidth={3} className="text-[var(--color-primary-600)]" aria-hidden />;
+  if (mark === "tri")
+    return <Triangle size={13} strokeWidth={2.5} className="text-[var(--color-earth-400)]" aria-hidden />;
+  return <X size={16} strokeWidth={2.4} className="text-[var(--color-earth-400)]" aria-hidden />;
+}
 
 export default function HomePage() {
   const city = getActiveCity();
@@ -331,6 +388,115 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+
+      {/* ── 차별성 · 경쟁 비교 (영주 전용) ── */}
+      {city.id === "yeongju" && (
+      <section id="competitive-edge" className="scroll-mt-24 bg-[var(--color-ivory)] py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-80px" }}
+            className="text-center mb-12"
+          >
+            <motion.p variants={fadeUp} custom={0} className="text-sm font-semibold text-[var(--color-primary-500)] uppercase tracking-widest mb-3">
+              차별성 · Competitive Edge
+            </motion.p>
+            <motion.h2 variants={fadeUp} custom={1} className="text-3xl sm:text-4xl font-black text-[var(--color-ink)] leading-tight">
+              경쟁 서비스와의 <span className="text-[var(--color-primary-500)]">결정적 차이</span>{" "}
+              <span className="text-[var(--color-earth-400)]">—</span> 왜{" "}
+              <span className="rounded-md bg-[var(--color-primary-100)] px-2 py-0.5 text-[var(--color-primary-800)]">영주선비AI</span>인가
+            </motion.h2>
+            <motion.p variants={fadeUp} custom={2} className="mt-4 text-sm sm:text-base text-[var(--color-earth-600)] max-w-2xl mx-auto leading-relaxed">
+              정해진 코스가 한 방향 안내라면, 영주선비AI는 <strong className="font-semibold text-[var(--color-charcoal)]">질문 따라 분기하는 대화</strong>입니다. 기존 넷은 각자 한계가 뚜렷합니다.
+            </motion.p>
+          </motion.div>
+
+          {/* 경쟁 비교표 */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6 }}
+            className="overflow-x-auto rounded-2xl border border-[var(--color-parchment)] shadow-[var(--shadow-warm-lg)] bg-white"
+          >
+            <table className="w-full min-w-[720px] border-collapse text-sm">
+              <thead>
+                <tr className="bg-[var(--color-ink)] text-white">
+                  <th className="text-left font-semibold px-5 py-4 w-[26%]">서비스</th>
+                  {edgeColumns.map((col) => (
+                    <th key={col} className="font-semibold px-3 py-4 text-center leading-snug">{col}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {edgeCompetitors.map((row, ri) => (
+                  <tr
+                    key={row.name}
+                    className={`border-t border-[var(--color-parchment)] ${ri % 2 === 1 ? "bg-[var(--color-cream)]/50" : ""}`}
+                  >
+                    <td className="px-5 py-3.5">
+                      <span className="font-semibold text-[var(--color-charcoal)]">{row.name}</span>
+                      {row.tag && <span className="ml-1.5 text-xs text-[var(--color-earth-400)]">{row.tag}</span>}
+                    </td>
+                    {row.cells.map((cell, ci) => (
+                      <td key={ci} className="px-3 py-3.5 text-center">
+                        <div className="flex flex-col items-center justify-center gap-0.5">
+                          <EdgeMark mark={cell.mark} />
+                          {cell.note && <span className="text-[11px] text-[var(--color-earth-500)] leading-none">{cell.note}</span>}
+                        </div>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+                {/* 영주선비AI — 강조 행 */}
+                <tr className="border-t-2 border-[var(--color-primary-300)] bg-[var(--color-primary-50)]">
+                  <td className="px-5 py-4">
+                    <span className="font-black text-[var(--color-primary-700)]">{edgeOurs.name}</span>
+                  </td>
+                  {edgeOurs.cells.map((cell, ci) => (
+                    <td key={ci} className="px-3 py-4 text-center">
+                      <div className="flex flex-col items-center justify-center gap-0.5">
+                        <EdgeMark mark={cell.mark} />
+                        {cell.note && <span className="text-[11px] font-semibold text-[var(--color-primary-600)] leading-none">{cell.note}</span>}
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </motion.div>
+
+          {/* 범례 */}
+          <p className="mt-3 text-center text-xs text-[var(--color-earth-400)]">
+            <span className="font-semibold text-[var(--color-primary-600)]">✓</span> 지원 · <span className="text-[var(--color-earth-500)]">△</span> 부분 지원 · <span className="text-[var(--color-earth-500)]">✕</span> 미지원 — 공개 정보 기준 비교
+          </p>
+
+          {/* 3대 차별 포인트 */}
+          <motion.div
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-60px" }}
+            className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5"
+          >
+            {edgeHighlights.map((h, i) => (
+              <motion.div
+                key={h.title}
+                variants={fadeUp}
+                custom={i}
+                className="rounded-2xl bg-white border border-[var(--color-parchment)] p-6 shadow-[var(--shadow-warm-sm)] hover:shadow-[var(--shadow-warm-lg)] hover:-translate-y-1 transition-all duration-200"
+              >
+                <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--color-primary-50)] text-[var(--color-primary-600)]">
+                  {h.icon}
+                </div>
+                <h3 className="text-base font-bold text-[var(--color-ink)] mb-2 leading-snug">{h.title}</h3>
+                <p className="text-sm text-[var(--color-earth-600)] leading-relaxed">{h.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+      )}
 
       {/* ── Heritage Preview ── */}
       <section className="py-20 sm:py-28 pattern-bg">

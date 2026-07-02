@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Link from "next/link";
 import {
   Landmark,
   CloudSun,
@@ -30,13 +29,20 @@ interface DataSource {
   icon: React.ReactNode;
   iconBg: string;
   accentColor: string;
-  usage: string;
+  usage: React.ReactNode;
   tools: string[];
   example: string;
 }
 
 const _top1 = _dsCity.dataPack.heritage[0]?.name ?? _dsCity.name;
 const _fig1 = _dsCity.dataPack.figures[0]?.name ?? "주요 인물";
+
+// 강조(밑줄) 표시용 — 각 데이터 출처 카드의 핵심 실시간 호출 문구 강조
+const Em = ({ children }: { children: React.ReactNode }) => (
+  <u className="font-medium underline decoration-[var(--color-primary-500)] decoration-2 underline-offset-4">
+    {children}
+  </u>
+);
 
 const sources: DataSource[] = [
   {
@@ -49,8 +55,13 @@ const sources: DataSource[] = [
     icon: <Landmark className="w-6 h-6" />,
     iconBg: "bg-amber-100 text-amber-700",
     accentColor: "border-amber-400",
-    usage:
-      `${_dsCity.name} 지역 문화유산을 문화재청 국가문화유산포털 OpenAPI(무인증)로 실시간 조회합니다. AI 해설사가 유산 검색 시 공식 지정문화유산 목록을 실시간 호출하고, 큐레이션 해설과 함께 문화재청을 출처로 표기합니다.`,
+    usage: (
+      <>
+        {`${_dsCity.name} 지역 문화유산을 문화재청 국가문화유산포털 OpenAPI(무인증)로 실시간 조회합니다. AI 해설사가 `}
+        <Em>유산 검색 시 공식 지정문화유산 목록을 실시간 호출</Em>
+        {`하고, 큐레이션 해설과 함께 문화재청을 출처로 표기합니다.`}
+      </>
+    ),
     tools: ["searchHeritage"],
     example: `${_top1} 관련 국보 지정 정보를 알려주세요`,
   },
@@ -64,8 +75,12 @@ const sources: DataSource[] = [
     icon: <MapPin className="w-6 h-6" />,
     iconBg: "bg-emerald-100 text-emerald-700",
     accentColor: "border-emerald-400",
-    usage:
-      `${_dsCity.name} 시내 관광지·맛집·숙박·축제 5개 콘텐츠 타입을 실시간으로 검색합니다. 코스 추천 시 인접 명소를 자동 보강하며, 최신 행사·축제 정보를 반영하여 계절별 맞춤 추천을 제공합니다.`,
+    usage: (
+      <>
+        <Em>{`${_dsCity.name} 시내 관광지·맛집·숙박·축제 5개 콘텐츠 타입을 실시간으로 검색`}</Em>
+        {`합니다. 코스 추천 시 인접 명소를 자동 보강하며, 최신 행사·축제 정보를 반영하여 계절별 맞춤 추천을 제공합니다.`}
+      </>
+    ),
     tools: ["searchTourSpots", "planTourCourse"],
     example: `${_top1} 근처 한식당 추천`,
   },
@@ -80,8 +95,13 @@ const sources: DataSource[] = [
     icon: <CloudSun className="w-6 h-6" />,
     iconBg: "bg-sky-100 text-sky-700",
     accentColor: "border-sky-400",
-    usage:
-      `${_dsCity.name}(NX=${_dsCity.weatherGrid.nx}, NY=${_dsCity.weatherGrid.ny}) 좌표 기준 3시간 단위 단기예보를 실시간으로 조회합니다. 방문 추천 코스에 날씨 변수를 반영하여 우천·강설 시 실내 대안 코스를 자동 제시합니다.`,
+    usage: (
+      <>
+        {`${_dsCity.name}(NX=${_dsCity.weatherGrid.nx}, NY=${_dsCity.weatherGrid.ny}) `}
+        <Em>좌표 기준 3시간 단위 단기예보를 실시간으로 조회</Em>
+        {`합니다. 방문 추천 코스에 날씨 변수를 반영하여 우천·강설 시 실내 대안 코스를 자동 제시합니다.`}
+      </>
+    ),
     tools: ["getWeather"],
     example: `오늘 ${_dsCity.name} 날씨 어때요? ${_top1} 가도 될까요`,
   },
@@ -95,8 +115,12 @@ const sources: DataSource[] = [
     icon: <Library className="w-6 h-6" />,
     iconBg: "bg-violet-100 text-violet-700",
     accentColor: "border-violet-400",
-    usage:
-      `${_dsCity.name} 출토 또는 관련 유물을 국립중앙박물관 e-Museum OpenAPI(data.go.kr 인증)로 실시간 조회합니다. searchMuseum이 소장품을 실시간 검색해 출처와 함께 제공하며, API 장애 시 검증된 정적 데이터로 안전 폴백합니다.`,
+    usage: (
+      <>
+        <Em>{`${_dsCity.name} 출토 또는 관련 유물을 국립중앙박물관 e-Museum OpenAPI(data.go.kr 인증)로 실시간 조회`}</Em>
+        {`합니다. searchMuseum이 소장품을 실시간 검색해 출처와 함께 제공하며, API 장애 시 검증된 정적 데이터로 안전 폴백합니다.`}
+      </>
+    ),
     tools: ["searchMuseum"],
     example: `${_top1}과 관련된 박물관 유물을 찾아주세요`,
   },
@@ -110,8 +134,12 @@ const sources: DataSource[] = [
     icon: <BookOpen className="w-6 h-6" />,
     iconBg: "bg-rose-100 text-rose-700",
     accentColor: "border-rose-400",
-    usage:
-      `${_dsCity.name} 관련 인물·역사·풍속 항목을 한국학중앙연구원 민족문화대백과 OpenAPI(헤더 인증)로 실시간 검색합니다. 한국학 전문 출처로 AI 답변의 학술적 신뢰성을 보강하며, 장애 시 검증된 정적 항목으로 폴백합니다.`,
+    usage: (
+      <>
+        <Em>{`${_dsCity.name} 관련 인물·역사·풍속 항목을 한국학중앙연구원 민족문화대백과 OpenAPI(헤더 인증)로 실시간 검색`}</Em>
+        {`합니다. 한국학 전문 출처로 AI 답변의 학술적 신뢰성을 보강하며, 장애 시 검증된 정적 항목으로 폴백합니다.`}
+      </>
+    ),
     tools: ["searchEncyclopedia"],
     example: `${_fig1}이 누구인가요?`,
   },
@@ -285,28 +313,6 @@ export default function DataSourcesPage() {
             </ul>
           </div>
         )}
-
-        {/* Footer CTA */}
-        <div className="mt-12 rounded-2xl bg-[var(--color-earth-800)] text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/15">
-            <Database className="w-6 h-6" />
-          </div>
-          <div className="flex-1 text-center sm:text-left">
-            <p className="font-semibold text-white">{t("공공데이터포털 인증키 발급")}</p>
-            <p className="text-sm text-white/70 mt-0.5">
-              {t("기상청·한국관광공사·국립중앙박물관 API는 공공데이터포털(data.go.kr)에서 무료로 인증키를 발급받아 사용할 수 있습니다. 누구나 신청 가능합니다.")}
-            </p>
-          </div>
-          <Link
-            href="https://www.data.go.kr"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="shrink-0 inline-flex items-center gap-2 bg-[var(--color-primary-500)] hover:bg-[var(--color-primary-400)] transition-colors text-white font-semibold text-sm px-5 py-2.5 rounded-xl"
-          >
-            data.go.kr
-            <ExternalLink className="w-4 h-4" />
-          </Link>
-        </div>
       </section>
     </main>
   );
