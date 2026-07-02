@@ -3,7 +3,7 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useRef, useEffect, useState, useMemo } from "react";
-import { Send, Bot, Loader2, Database, Cpu, Trash2, Mic, MicOff } from "lucide-react";
+import { Send, Bot, Loader2, Database, Cpu, Trash2, Mic, MicOff, Presentation } from "lucide-react";
 import ChatMessage from "@/components/chat/ChatMessage";
 import SuggestedQuestions from "@/components/chat/SuggestedQuestions";
 import ToolInvocationDisplay from "@/components/chat/ToolInvocationDisplay";
@@ -61,6 +61,7 @@ export default function ChatPage() {
   });
   const [input, setInput] = useState("");
   const [isOptedOut, setIsOptedOut] = useState(false);
+  const [demoMode, setDemoMode] = useState(false);
   const isLoading = status === "submitted" || status === "streaming";
 
   // 음성 입력(STT) — 인식 결과를 입력창에 주입
@@ -80,6 +81,15 @@ export default function ChatPage() {
       sessionId: getSessionId(),
       classCode: getClassCode(),
     };
+  }, []);
+
+  // ?demo=1 — PT 시연 런처 노출 (일반 사용자·심사위원에겐 숨김)
+  useEffect(() => {
+    try {
+      setDemoMode(new URLSearchParams(window.location.search).get("demo") === "1");
+    } catch {
+      /* noop */
+    }
   }, []);
 
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -321,6 +331,42 @@ export default function ChatPage() {
 
       {/* Input area */}
       <footer className="flex-shrink-0 bg-white border-t border-stone-200 px-4 py-3">
+        {/* ?demo=1 시연 런처 — 추천 질문과 구분되는 별도 emerald 패널, 대화 중에도 항상 노출 */}
+        {demoMode && city.demoQuestions && city.demoQuestions.length > 0 && (
+          <div className="max-w-2xl mx-auto mb-2.5 rounded-xl border border-emerald-300 bg-emerald-50/80 px-3 py-2.5">
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-800 mb-2">
+              <Presentation size={13} aria-hidden="true" />
+              <span>시연 바로가기 · 3종 API 동시 호출</span>
+              <span className="ml-auto text-[10px] font-normal text-emerald-600/80">클릭 즉시 전송</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {city.demoQuestions.map((dq, i) => (
+                <button
+                  key={dq.label}
+                  type="button"
+                  onClick={() => handleSuggestedQuestion(dq.text)}
+                  disabled={isLoading}
+                  title={dq.text}
+                  className="group text-left rounded-lg border border-emerald-300 bg-white px-3 py-2
+                    hover:bg-emerald-600 hover:border-emerald-600 transition-colors
+                    disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]"
+                >
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-emerald-900 group-hover:text-white">
+                    <span className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white text-[10px] group-hover:bg-white group-hover:text-emerald-700">
+                      {i + 1}
+                    </span>
+                    {dq.label}
+                  </span>
+                  {dq.sublabel && (
+                    <span className="mt-0.5 block pl-5 text-[10px] text-emerald-700/80 group-hover:text-emerald-50">
+                      {dq.sublabel}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         <form
           onSubmit={handleSubmit}
           className="max-w-2xl mx-auto flex gap-2 items-end"
