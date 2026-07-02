@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { ArrowRight } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -49,13 +51,23 @@ function EmptyState() {
   );
 }
 
-function SummaryCard({ summary }: { summary: string }) {
+function SummaryCard({ summary, onDetail }: { summary: string; onDetail: () => void }) {
   return (
     <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6">
       <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-2">
         {t("정책 담당자 요약")}
       </p>
       <p className="text-[var(--color-ink)] text-sm leading-relaxed">{summary}</p>
+      <button
+        onClick={onDetail}
+        className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-stone-800 hover:bg-stone-900 text-white text-sm font-semibold px-4 py-2.5 transition-colors active:scale-[0.98]"
+      >
+        {t("상세보기 — 지자체 담당자용 심층 리포트")}
+        <ArrowRight size={15} strokeWidth={2.2} />
+      </button>
+      <p className="mt-2 text-[11px] text-amber-700/80 leading-relaxed">
+        {t("Claude Sonnet 5가 수요 신호 해석 · 우선순위 정책 제언 · 성과지표(KPI)를 생성합니다.")}
+      </p>
     </div>
   );
 }
@@ -73,6 +85,7 @@ export default function InsightsPage() {
   const [data, setData] = useState<InsightsData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   async function handleGenerate() {
     setLoading(true);
@@ -87,6 +100,16 @@ export default function InsightsPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleDetail() {
+    if (!data) return;
+    try {
+      sessionStorage.setItem(`insights:base:${city.id}`, JSON.stringify(data));
+    } catch {
+      /* sessionStorage 불가 시 무시 — 리포트 페이지가 DB에서 직접 조회 */
+    }
+    router.push("/insights/report");
   }
 
   const hasData = data && data.count > 0;
@@ -164,7 +187,7 @@ export default function InsightsPage() {
             </section>
 
             {/* ── 정책 요약 ── */}
-            {data.summary && <SummaryCard summary={data.summary} />}
+            {data.summary && <SummaryCard summary={data.summary} onDetail={handleDetail} />}
 
             {/* ── 주제 군집 BarChart ── */}
             {data.themes.length > 0 && (
