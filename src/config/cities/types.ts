@@ -15,6 +15,16 @@ export interface CityDataPack {
   encyData: EncykoreaEntry[];
 }
 
+/** PT 시연용 원클릭 질문 (?demo=1에서만 노출) */
+export interface DemoQuestion {
+  /** 버튼 대표 라벨 (짧게) */
+  label: string;
+  /** 보조 설명 (호출되는 도구 등) */
+  sublabel?: string;
+  /** 실제 전송되는 질문 전문 */
+  text: string;
+}
+
 /** 도시 설정 전체 */
 export interface CityConfig {
   id: string;
@@ -41,5 +51,7 @@ export interface CityConfig {
   govUrl?: string;
   /** AI 채팅 추천 질문 목록 */
   suggestedQuestions: string[];
+  /** PT 시연용 원클릭 질문 (?demo=1에서만 노출, 선택) */
+  demoQuestions?: DemoQuestion[];
   dataPack: CityDataPack;
 }

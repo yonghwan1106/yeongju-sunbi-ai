@@ -63,6 +63,20 @@ export const yeongjuCity: CityConfig = {
         "소백산 철쭉 명소와 등산 정보를 알려주세요",
         "부석사와 소수서원 하루 코스 추천해 주세요",
       ],
+  demoQuestions: _en
+    ? undefined
+    : [
+        {
+          label: "부석사 종합 플랜",
+          sublabel: "오늘 날씨 + 근처 맛집 + 관련 유물",
+          text: "이번 주에 부석사 다녀오려는데, 오늘 영주 날씨랑 부석사 근처 맛집이랑 부석사 관련 박물관 유물까지 한꺼번에 알려줘.",
+        },
+        {
+          label: "퇴계 이황 심층",
+          sublabel: "백과 + 유물 + 소수서원 문화재",
+          text: "퇴계 이황이 누구인지 백과사전에서 찾아주고, 이황 관련 박물관 유물이랑 소수서원 문화재 지정 정보도 함께 알려줘.",
+        },
+      ],
   dataPack: {
     heritage: heritageData,
     figures: figuresData,
